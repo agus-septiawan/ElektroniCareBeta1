@@ -1,0 +1,10 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // SUPER PERMISSIVE RULES FOR DEBUGGING
+    // Allow ALL operations for ALL users (even unauthenticated)
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
