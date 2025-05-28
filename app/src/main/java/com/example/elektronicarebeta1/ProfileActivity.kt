@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -138,12 +139,15 @@ class ProfileActivity : AppCompatActivity() {
     
     private fun loadUserProfile() {
         lifecycleScope.launch {
+            Log.d("ProfileActivity", "Loading user profile...")
             val userDoc = FirebaseManager.getUserData()
             
             if (userDoc != null && userDoc.exists()) {
+                Log.d("ProfileActivity", "User document found, parsing...")
                 originalUser = User.fromDocument(userDoc) 
                 
                 originalUser?.let {
+                    Log.d("ProfileActivity", "User parsed successfully: ${it.fullName}")
                     editTextUserName.setText(it.fullName)
                     emailText.text = it.email 
                     editTextPhone.setText(it.phone ?: "")
@@ -169,8 +173,12 @@ class ProfileActivity : AppCompatActivity() {
                             .circleCrop()
                             .into(profileImageView)
                     }
+                } ?: run {
+                    Log.e("ProfileActivity", "Failed to parse user from document")
+                    Toast.makeText(this@ProfileActivity, "Failed to parse profile data", Toast.LENGTH_SHORT).show()
                 }
             } else {
+                Log.e("ProfileActivity", "User document not found or doesn't exist")
                 Toast.makeText(this@ProfileActivity, "Failed to load profile", Toast.LENGTH_SHORT).show()
             }
         }
