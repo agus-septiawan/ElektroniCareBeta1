@@ -1,0 +1,27 @@
+[
+  {
+    "id": "smartphone_repair",
+    "name": "Smartphone Repair",
+    "price": 150000
+  },
+  {
+    "id": "laptop_repair",
+    "name": "Laptop Repair",
+    "price": 300000
+  },
+  {
+    "id": "tablet_repair",
+    "name": "Tablet Repair",
+    "price": 200000
+  },
+  {
+    "id": "smartwatch_repair",
+    "name": "Smartwatch Repair",
+    "price": 100000
+  },
+  {
+    "id": "headphone_repair",
+    "name": "Headphone Repair",
+    "price": 75000
+  }
+]

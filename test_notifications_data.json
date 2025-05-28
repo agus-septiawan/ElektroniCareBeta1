@@ -1,0 +1,100 @@
+[
+  {
+    "id": "f9330274-fce6-4934-9fa8-749110fa6820",
+    "userId": "1rHqzlFFdId0eaWqBohXIs4ex9u2",
+    "type": "booking_confirmed",
+    "title": "Booking Confirmed",
+    "message": "Your repair booking for iPhone 13 Pro has been confirmed.",
+    "repairId": "1fa3f7c9-ba4e-4f11-8dd8-8b48ca2a9687",
+    "isRead": true,
+    "createdAt": "2025-05-07T15:09:40.862788",
+    "data": {
+      "repairId": "1fa3f7c9-ba4e-4f11-8dd8-8b48ca2a9687",
+      "deviceModel": "iPhone 13 Pro"
+    }
+  },
+  {
+    "id": "f60db5fc-93bc-4486-941d-c8a43d370e1f",
+    "userId": "1rHqzlFFdId0eaWqBohXIs4ex9u2",
+    "type": "repair_completed",
+    "title": "Repair Completed",
+    "message": "Your iPhone 13 Pro repair has been completed successfully!",
+    "repairId": "1fa3f7c9-ba4e-4f11-8dd8-8b48ca2a9687",
+    "isRead": false,
+    "createdAt": "2025-05-09T19:09:40.862788",
+    "data": {
+      "repairId": "1fa3f7c9-ba4e-4f11-8dd8-8b48ca2a9687",
+      "deviceModel": "iPhone 13 Pro"
+    }
+  },
+  {
+    "id": "84e81276-9383-4ac1-bfb5-717164a97b71",
+    "userId": "1rHqzlFFdId0eaWqBohXIs4ex9u2",
+    "type": "booking_confirmed",
+    "title": "Booking Confirmed",
+    "message": "Your repair booking for Samsung Galaxy S22 has been confirmed.",
+    "repairId": "b17f52fe-38fc-4bf6-acfe-79e160f5dd3e",
+    "isRead": true,
+    "createdAt": "2025-03-05T15:09:40.862847",
+    "data": {
+      "repairId": "b17f52fe-38fc-4bf6-acfe-79e160f5dd3e",
+      "deviceModel": "Samsung Galaxy S22"
+    }
+  },
+  {
+    "id": "d40d46ba-88bb-45b8-8332-5c4c8652a91e",
+    "userId": "1rHqzlFFdId0eaWqBohXIs4ex9u2",
+    "type": "booking_confirmed",
+    "title": "Booking Confirmed",
+    "message": "Your repair booking for MacBook Air M1 has been confirmed.",
+    "repairId": "3c9626c2-afd1-4f8d-b2ab-b1bc39385ccd",
+    "isRead": true,
+    "createdAt": "2025-05-05T15:09:40.862875",
+    "data": {
+      "repairId": "3c9626c2-afd1-4f8d-b2ab-b1bc39385ccd",
+      "deviceModel": "MacBook Air M1"
+    }
+  },
+  {
+    "id": "f58f1371-4732-4325-95de-a7b000c020ed",
+    "userId": "1rHqzlFFdId0eaWqBohXIs4ex9u2",
+    "type": "booking_confirmed",
+    "title": "Booking Confirmed",
+    "message": "Your repair booking for iPad Pro 11 has been confirmed.",
+    "repairId": "4c1bb89a-ac29-4d43-b61f-fbd06de7a3f0",
+    "isRead": true,
+    "createdAt": "2025-03-25T15:09:40.862898",
+    "data": {
+      "repairId": "4c1bb89a-ac29-4d43-b61f-fbd06de7a3f0",
+      "deviceModel": "iPad Pro 11"
+    }
+  },
+  {
+    "id": "7cb78c0e-be51-4eac-b735-91b6566069e1",
+    "userId": "1rHqzlFFdId0eaWqBohXIs4ex9u2",
+    "type": "booking_confirmed",
+    "title": "Booking Confirmed",
+    "message": "Your repair booking for OnePlus 9 Pro has been confirmed.",
+    "repairId": "c868fc2c-df5b-4c58-a1f9-515402f037fd",
+    "isRead": true,
+    "createdAt": "2025-05-21T15:09:40.862923",
+    "data": {
+      "repairId": "c868fc2c-df5b-4c58-a1f9-515402f037fd",
+      "deviceModel": "OnePlus 9 Pro"
+    }
+  },
+  {
+    "id": "3120a816-3556-4322-a9ff-0b47790f20ca",
+    "userId": "1rHqzlFFdId0eaWqBohXIs4ex9u2",
+    "type": "repair_completed",
+    "title": "Repair Completed",
+    "message": "Your OnePlus 9 Pro repair has been completed successfully!",
+    "repairId": "c868fc2c-df5b-4c58-a1f9-515402f037fd",
+    "isRead": false,
+    "createdAt": "2025-05-28T21:09:40.862923",
+    "data": {
+      "repairId": "c868fc2c-df5b-4c58-a1f9-515402f037fd",
+      "deviceModel": "OnePlus 9 Pro"
+    }
+  }
+]

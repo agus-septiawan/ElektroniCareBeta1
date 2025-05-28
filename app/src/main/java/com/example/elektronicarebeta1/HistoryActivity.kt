@@ -10,6 +10,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.example.elektronicarebeta1.firebase.FirebaseManager
 import com.example.elektronicarebeta1.models.Repair
 import kotlinx.coroutines.launch
@@ -20,6 +22,9 @@ class HistoryActivity : AppCompatActivity() {
     
     private lateinit var repairsContainer: LinearLayout
     private lateinit var noRepairsView: View
+    private lateinit var statusFilterChips: ChipGroup
+    private var allRepairs: List<Repair> = emptyList()
+    private var currentFilter = "all"
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +33,10 @@ class HistoryActivity : AppCompatActivity() {
         // Initialize views
         repairsContainer = findViewById(R.id.repairs_container)
         noRepairsView = findViewById(R.id.no_repairs_view)
+        statusFilterChips = findViewById(R.id.status_filter_chips)
+        
+        // Setup filter chips
+        setupFilterChips()
         
         // Set up back button
         val backButton = findViewById<ImageView>(R.id.back_button)
@@ -67,6 +76,64 @@ class HistoryActivity : AppCompatActivity() {
         }
     }
     
+    private fun setupFilterChips() {
+        val filters = listOf(
+            "all" to "All",
+            "pending" to "Pending", 
+            "in_progress" to "In Progress",
+            "completed" to "Completed",
+            "cancelled" to "Cancelled"
+        )
+        
+        filters.forEach { (value, label) ->
+            val chip = Chip(this).apply {
+                text = label
+                isCheckable = true
+                isChecked = value == "all"
+                setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        currentFilter = value
+                        filterRepairs()
+                        // Uncheck other chips
+                        for (i in 0 until statusFilterChips.childCount) {
+                            val otherChip = statusFilterChips.getChildAt(i) as Chip
+                            if (otherChip != this) {
+                                otherChip.isChecked = false
+                            }
+                        }
+                    }
+                }
+            }
+            statusFilterChips.addView(chip)
+        }
+    }
+    
+    private fun filterRepairs() {
+        val filteredRepairs = if (currentFilter == "all") {
+            allRepairs
+        } else {
+            allRepairs.filter { it.status == currentFilter }
+        }
+        
+        displayRepairs(filteredRepairs)
+    }
+    
+    private fun displayRepairs(repairs: List<Repair>) {
+        repairsContainer.removeAllViews()
+        
+        if (repairs.isEmpty()) {
+            noRepairsView.visibility = View.VISIBLE
+            repairsContainer.visibility = View.GONE
+        } else {
+            noRepairsView.visibility = View.GONE
+            repairsContainer.visibility = View.VISIBLE
+            
+            repairs.forEach { repair ->
+                addRepairToView(repair)
+            }
+        }
+    }
+    
     private fun loadRepairHistory() {
         lifecycleScope.launch {
             android.util.Log.d("HistoryActivity", "Loading repair history...")
@@ -74,25 +141,27 @@ class HistoryActivity : AppCompatActivity() {
             
             if (repairsSnapshot == null || repairsSnapshot.isEmpty) {
                 android.util.Log.d("HistoryActivity", "No repairs found or snapshot is null")
-                noRepairsView.visibility = View.VISIBLE
-                repairsContainer.visibility = View.GONE
+                allRepairs = emptyList()
+                displayRepairs(allRepairs)
                 return@launch
             }
             
             android.util.Log.d("HistoryActivity", "Found ${repairsSnapshot.size()} repairs")
-            noRepairsView.visibility = View.GONE
-            repairsContainer.visibility = View.VISIBLE
-            repairsContainer.removeAllViews()
+            val repairs = mutableListOf<Repair>()
             
             for (document in repairsSnapshot.documents) {
                 val repair = Repair.fromDocument(document)
                 if (repair != null) {
                     android.util.Log.d("HistoryActivity", "Adding repair: ${repair.deviceModel} - ${repair.status}")
-                    addRepairToView(repair)
+                    repairs.add(repair)
                 } else {
                     android.util.Log.e("HistoryActivity", "Failed to parse repair from document: ${document.id}")
                 }
             }
+            
+            // Sort by date (newest first)
+            allRepairs = repairs.sortedByDescending { it.appointmentTimestamp }
+            filterRepairs()
         }
     }
     
