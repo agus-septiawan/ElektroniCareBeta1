@@ -136,38 +136,10 @@ object CloudinaryManager {
      * @return true if successful, false otherwise
      */
     suspend fun deleteImage(publicId: String): Boolean {
-        return suspendCancellableCoroutine { continuation ->
-            try {
-                MediaManager.get().destroy(publicId)
-                    .callback(object : UploadCallback {
-                        override fun onStart(requestId: String) {
-                            Log.d(TAG, "Delete started for: $publicId")
-                        }
-                        
-                        override fun onProgress(requestId: String, bytes: Long, totalBytes: Long) {
-                            // Not applicable for delete
-                        }
-                        
-                        override fun onSuccess(requestId: String, resultData: Map<*, *>) {
-                            Log.d(TAG, "Image deleted successfully: $publicId")
-                            continuation.resume(true)
-                        }
-                        
-                        override fun onError(requestId: String, error: ErrorInfo) {
-                            Log.e(TAG, "Delete failed: ${error.description}")
-                            continuation.resume(false)
-                        }
-                        
-                        override fun onReschedule(requestId: String, error: ErrorInfo) {
-                            Log.w(TAG, "Delete rescheduled: ${error.description}")
-                        }
-                    })
-                    .dispatch()
-            } catch (e: Exception) {
-                Log.e(TAG, "Error starting delete", e)
-                continuation.resume(false)
-            }
-        }
+        // TODO: Implement proper delete functionality with Cloudinary Admin API
+        // The destroy method is not available in the current SDK version
+        Log.w(TAG, "Delete functionality not implemented yet for: $publicId")
+        return false
     }
     
     /**

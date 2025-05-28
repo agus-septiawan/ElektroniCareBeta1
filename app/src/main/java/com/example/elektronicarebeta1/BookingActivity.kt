@@ -230,8 +230,8 @@ class BookingActivity : AppCompatActivity() {
                     return@launch
                 }
                 
-                imageUrl = CloudinaryManager.uploadRepairImage(selectedImageUri!!, null)
-                if (imageUrl == null) {
+                imageUrl = CloudinaryManager.uploadRepairImage(selectedImageUri!!, null) ?: ""
+                if (imageUrl.isEmpty()) {
                     runOnUiThread {
                         Toast.makeText(this@BookingActivity, "Failed to upload image", Toast.LENGTH_SHORT).show()
                         submitButton.isEnabled = true
