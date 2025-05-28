@@ -2,6 +2,7 @@ package com.example.elektronicarebeta1
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -14,13 +15,22 @@ import kotlinx.coroutines.launch
 
 class DashboardActivity : AppCompatActivity() {
     private lateinit var userNameText: TextView
+    private val TAG = "DashboardActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
         val currentUser = FirebaseManager.getCurrentUser()
+        
+        // DEBUG LOGGING
+        Log.d(TAG, "Current user: $currentUser")
+        Log.d(TAG, "User ID: ${FirebaseManager.getUserId()}")
+        Log.d(TAG, "User email: ${currentUser?.email}")
+        Log.d(TAG, "Is email verified: ${currentUser?.isEmailVerified}")
+        
         if (currentUser == null) {
+            Log.d(TAG, "No current user, redirecting to login")
             startActivity(Intent(this, LoginActivity::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
@@ -30,10 +40,10 @@ class DashboardActivity : AppCompatActivity() {
         userNameText = findViewById<TextView>(R.id.welcome_text)
         val notificationIcon = findViewById<ImageView>(R.id.notification_icon)
 
-        // Seed Firebase with mock data
-        lifecycleScope.launch {
-            FirebaseDataSeeder.seedAllData(this@DashboardActivity)
-        }
+        // TEMPORARY DISABLE DATA SEEDING FOR DEBUGGING
+        // lifecycleScope.launch {
+        //     FirebaseDataSeeder.seedAllData(this@DashboardActivity)
+        // }
 
         loadUserData()
         setupBottomNavigation()
@@ -45,17 +55,28 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     private fun loadUserData() {
-        lifecycleScope.launch {
-            val userDoc = FirebaseManager.getUserData()
-            
-            if (userDoc != null && userDoc.exists()) {
-                val fullName = userDoc.getString("fullName") ?: "User"
-                val firstName = fullName.split(" ").firstOrNull() ?: fullName
-                userNameText.text = "Welcome back, $firstName!"
-            } else {
-                userNameText.text = "Welcome back!"
-            }
-        }
+        // TEMPORARY DISABLE FIRESTORE ACCESS FOR DEBUGGING
+        val currentUser = FirebaseManager.getCurrentUser()
+        val email = currentUser?.email ?: "User"
+        val firstName = email.split("@").firstOrNull()?.split(".")?.firstOrNull() ?: "User"
+        userNameText.text = "Welcome back, $firstName!"
+        
+        // lifecycleScope.launch {
+        //     try {
+        //         val userDoc = FirebaseManager.getUserData()
+        //         
+        //         if (userDoc != null && userDoc.exists()) {
+        //             val fullName = userDoc.getString("fullName") ?: "User"
+        //             val firstName = fullName.split(" ").firstOrNull() ?: fullName
+        //             userNameText.text = "Welcome back, $firstName!"
+        //         } else {
+        //             userNameText.text = "Welcome back!"
+        //         }
+        //     } catch (e: Exception) {
+        //         Log.e(TAG, "Error loading user data: ${e.message}")
+        //         userNameText.text = "Welcome back!"
+        //     }
+        // }
     }
 
     private fun setupBottomNavigation() {
