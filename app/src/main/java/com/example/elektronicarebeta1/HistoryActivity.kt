@@ -3,6 +3,7 @@ package com.example.elektronicarebeta1
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -68,21 +69,29 @@ class HistoryActivity : AppCompatActivity() {
     
     private fun loadRepairHistory() {
         lifecycleScope.launch {
+            android.util.Log.d("HistoryActivity", "Loading repair history...")
             val repairsSnapshot = FirebaseManager.getUserRepairs()
             
             if (repairsSnapshot == null || repairsSnapshot.isEmpty) {
+                android.util.Log.d("HistoryActivity", "No repairs found or snapshot is null")
                 noRepairsView.visibility = View.VISIBLE
                 repairsContainer.visibility = View.GONE
                 return@launch
             }
             
+            android.util.Log.d("HistoryActivity", "Found ${repairsSnapshot.size()} repairs")
             noRepairsView.visibility = View.GONE
             repairsContainer.visibility = View.VISIBLE
             repairsContainer.removeAllViews()
             
             for (document in repairsSnapshot.documents) {
-                val repair = Repair.fromDocument(document) ?: continue
-                addRepairToView(repair)
+                val repair = Repair.fromDocument(document)
+                if (repair != null) {
+                    android.util.Log.d("HistoryActivity", "Adding repair: ${repair.deviceModel} - ${repair.status}")
+                    addRepairToView(repair)
+                } else {
+                    android.util.Log.e("HistoryActivity", "Failed to parse repair from document: ${document.id}")
+                }
             }
         }
     }
@@ -97,6 +106,7 @@ class HistoryActivity : AppCompatActivity() {
         val locationText = repairView.findViewById<TextView>(R.id.repair_location)
         val statusText = repairView.findViewById<TextView>(R.id.repair_status)
         val priceText = repairView.findViewById<TextView>(R.id.repair_price)
+        val cancelButton = repairView.findViewById<Button>(R.id.cancel_button)
         
         deviceNameText.text = repair.deviceModel
         serviceTypeText.text = repair.issueDescription
@@ -128,6 +138,16 @@ class HistoryActivity : AppCompatActivity() {
         val priceString = repair.estimatedCost?.let { "Rp${String.format("%,.0f", it)}" } ?: "TBD"
         priceText.text = priceString
         
+        // Show cancel button only for pending or in_progress repairs
+        if (repair.status == "pending" || repair.status == "in_progress") {
+            cancelButton.visibility = View.VISIBLE
+            cancelButton.setOnClickListener {
+                cancelRepairRequest(repair)
+            }
+        } else {
+            cancelButton.visibility = View.GONE
+        }
+        
         // Set click listener
         repairView.setOnClickListener {
             Toast.makeText(this, "Repair details coming soon", Toast.LENGTH_SHORT).show()
@@ -138,6 +158,24 @@ class HistoryActivity : AppCompatActivity() {
         }
         
         repairsContainer.addView(repairView)
+    }
+    
+    private fun cancelRepairRequest(repair: Repair) {
+        lifecycleScope.launch {
+            try {
+                val success = FirebaseManager.cancelRepairRequest(repair.id)
+                if (success) {
+                    Toast.makeText(this@HistoryActivity, "Repair request cancelled successfully", Toast.LENGTH_SHORT).show()
+                    // Refresh the repair history
+                    loadRepairHistory()
+                } else {
+                    Toast.makeText(this@HistoryActivity, "Failed to cancel repair request", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("HistoryActivity", "Error cancelling repair request", e)
+                Toast.makeText(this@HistoryActivity, "Error cancelling repair request", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun finish() {

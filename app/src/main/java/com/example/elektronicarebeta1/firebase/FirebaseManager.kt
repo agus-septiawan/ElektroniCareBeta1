@@ -41,7 +41,12 @@ object FirebaseManager {
     suspend fun getUserData(): DocumentSnapshot? {
         val userId = getUserId() ?: return null
         return try {
-            db.collection(USERS_COLLECTION).document(userId).get().await()
+            val document = db.collection(USERS_COLLECTION).document(userId).get().await()
+            Log.d(TAG, "getUserData: userId=$userId, exists=${document.exists()}")
+            if (document.exists()) {
+                Log.d(TAG, "User data: ${document.data}")
+            }
+            document
         } catch (e: Exception) {
             Log.e(TAG, "Error getting user data", e)
             null
@@ -63,11 +68,16 @@ object FirebaseManager {
     suspend fun getUserRepairs(): QuerySnapshot? {
         val userId = getUserId() ?: return null
         return try {
-            db.collection(REPAIRS_COLLECTION)
+            val querySnapshot = db.collection(REPAIRS_COLLECTION)
                 .whereEqualTo("userId", userId)
                 .orderBy("createdAt", com.google.firebase.firestore.Query.Direction.DESCENDING)
                 .get()
                 .await()
+            Log.d(TAG, "getUserRepairs: userId=$userId, count=${querySnapshot.size()}")
+            for (doc in querySnapshot.documents) {
+                Log.d(TAG, "Repair: ${doc.id} -> ${doc.data}")
+            }
+            querySnapshot
         } catch (e: Exception) {
             Log.e(TAG, "Error getting user repairs", e)
             null
@@ -96,6 +106,21 @@ object FirebaseManager {
         } catch (e: Exception) {
             Log.e(TAG, "Error creating repair request", e)
             null
+        }
+    }
+    
+    suspend fun cancelRepairRequest(repairId: String): Boolean {
+        return try {
+            val updates = mapOf(
+                "status" to "cancelled",
+                "cancelledAt" to Date()
+            )
+            db.collection(REPAIRS_COLLECTION).document(repairId).update(updates).await()
+            Log.d(TAG, "Repair request cancelled successfully: $repairId")
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "Error cancelling repair request", e)
+            false
         }
     }
     

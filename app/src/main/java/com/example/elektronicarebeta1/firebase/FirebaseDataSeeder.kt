@@ -29,24 +29,31 @@ object FirebaseDataSeeder {
      */
     suspend fun seedAllData(context: Context) {
         try {
+            Log.d(TAG, "Starting Firebase data seeding...")
             // Only seed if collections are empty
             val usersCount = db.collection(USERS_COLLECTION).limit(1).get().await().size()
             val techniciansCount = db.collection(TECHNICIANS_COLLECTION).limit(1).get().await().size()
             val servicesCount = db.collection(SERVICES_COLLECTION).limit(1).get().await().size()
             
+            Log.d(TAG, "Collection counts - Users: $usersCount, Technicians: $techniciansCount, Services: $servicesCount")
+            
             if (usersCount == 0) {
+                Log.d(TAG, "Seeding current user...")
                 seedCurrentUser()
             }
             
             if (techniciansCount == 0) {
+                Log.d(TAG, "Seeding technicians...")
                 seedTechnicians()
             }
             
             if (servicesCount == 0) {
+                Log.d(TAG, "Seeding services...")
                 seedServices()
             }
             
             // Always seed repairs for the current user
+            Log.d(TAG, "Seeding repairs for current user...")
             seedRepairsForCurrentUser()
             
             Log.d(TAG, "Firebase data seeding completed successfully")
@@ -93,7 +100,7 @@ object FirebaseDataSeeder {
                 "profileImageUrl" to "https://randomuser.me/api/portraits/men/1.jpg",
                 "location" to "Jakarta Selatan",
                 "contactNumber" to "+6281234567890",
-                "email" to "ahmad.rizki@example.com",
+                "email" to "satriawiangga200@gmail.com",
                 "availableDays" to listOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday"),
                 "createdAt" to Date()
             ),
@@ -107,7 +114,7 @@ object FirebaseDataSeeder {
                 "profileImageUrl" to "https://randomuser.me/api/portraits/women/2.jpg",
                 "location" to "Jakarta Pusat",
                 "contactNumber" to "+6281234567891",
-                "email" to "siti.nurhayati@example.com",
+                "email" to "satrialingga702@gmail.com",
                 "availableDays" to listOf("Monday", "Wednesday", "Friday", "Saturday"),
                 "createdAt" to Date()
             ),
@@ -281,8 +288,30 @@ object FirebaseDataSeeder {
         }
         
         // Create mock repairs
-        val calendar = Calendar.getInstance()
+        val now = Date()
+        val calendar1 = Calendar.getInstance()
+        calendar1.time = now
+        calendar1.add(Calendar.DAY_OF_MONTH, -10)
+        val appointmentDate1 = calendar1.time
         
+        calendar1.add(Calendar.DAY_OF_MONTH, 1)
+        val completedDate1 = calendar1.time
+        
+        val calendar2 = Calendar.getInstance()
+        calendar2.time = now
+        calendar2.add(Calendar.DAY_OF_MONTH, -12)
+        val createdDate1 = calendar2.time
+        
+        val calendar3 = Calendar.getInstance()
+        calendar3.time = now
+        calendar3.add(Calendar.DAY_OF_MONTH, 1)
+        val appointmentDate2 = calendar3.time
+        
+        val calendar4 = Calendar.getInstance()
+        calendar4.time = now
+        calendar4.add(Calendar.DAY_OF_MONTH, -2)
+        val createdDate2 = calendar4.time
+
         val repairs = listOf(
             hashMapOf<String, Any?>( // Allow nulls for completedDate initially
                 "userId" to currentUser.uid,
@@ -290,13 +319,13 @@ object FirebaseDataSeeder {
                 "deviceModel" to "iPhone 13",
                 "issueDescription" to "Cracked screen needs replacement",
                 "serviceId" to services.find { it.getString("name") == "Screen Replacement" }?.id,
-                "technicianId" to technicians.find { it.getString("specialization")?.contains("Phone") == true }?.id,
+                "technicianEmail" to "satriawiangga200@gmail.com",
                 "status" to "completed",
                 "estimatedCost" to 750000.0,
-                "scheduledDate" to calendar.apply { add(Calendar.DAY_OF_MONTH, -10) }.time,
-                "completedDate" to calendar.apply { add(Calendar.DAY_OF_MONTH, -9) }.time,
-                "location" to "Fresh Teknik Service Center",
-                "createdAt" to calendar.apply { add(Calendar.DAY_OF_MONTH, -12) }.time
+                "appointmentTimestamp" to appointmentDate1,
+                "completedDate" to completedDate1,
+                "location" to "ElektroniCare Service Center",
+                "createdAt" to createdDate1
             ),
             hashMapOf<String, Any?>( // Allow nulls for completedDate initially
                 "userId" to currentUser.uid,
@@ -304,24 +333,35 @@ object FirebaseDataSeeder {
                 "deviceModel" to "MacBook Pro 2022",
                 "issueDescription" to "Battery drains quickly and needs replacement",
                 "serviceId" to services.find { it.getString("name") == "Battery Replacement" }?.id,
-                "technicianId" to technicians.find { it.getString("specialization")?.contains("Laptop") == true }?.id,
+                "technicianEmail" to "satrialingga702@gmail.com",
                 "status" to "in_progress",
                 "estimatedCost" to 950000.0,
-                "scheduledDate" to calendar.apply { 
-                    // Reset to current date
-                    time = Date()
-                    // Set to tomorrow
-                    add(Calendar.DAY_OF_MONTH, 1) 
-                }.time,
+                "appointmentTimestamp" to appointmentDate2,
                 "completedDate" to null,
                 "location" to "ElektroniCare Service Center",
-                "createdAt" to calendar.apply { add(Calendar.DAY_OF_MONTH, -2) }.time
+                "createdAt" to createdDate2
+            ),
+            hashMapOf<String, Any?>( // Pending repair for testing cancel functionality
+                "userId" to currentUser.uid,
+                "deviceType" to "Phone",
+                "deviceModel" to "Samsung Galaxy S23",
+                "issueDescription" to "Battery replacement needed",
+                "serviceId" to services.find { it.getString("name") == "Battery Replacement" }?.id,
+                "technicianEmail" to "satriawiangga200@gmail.com",
+                "status" to "pending",
+                "estimatedCost" to 650000.0,
+                "appointmentTimestamp" to Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, 7) }.time,
+                "completedDate" to null,
+                "location" to "ElektroniCare Service Center",
+                "createdAt" to Date()
             )
         )
         
         try {
             for (repair in repairs) {
-                db.collection(REPAIRS_COLLECTION).add(repair as Map<String, Any?>).await()
+                Log.d(TAG, "Adding repair: ${repair["deviceModel"]} - ${repair["status"]}")
+                val docRef = db.collection(REPAIRS_COLLECTION).add(repair as Map<String, Any?>).await()
+                Log.d(TAG, "Repair added with ID: ${docRef.id}")
             }
             Log.d(TAG, "Repairs data seeded successfully")
         } catch (e: Exception) {
