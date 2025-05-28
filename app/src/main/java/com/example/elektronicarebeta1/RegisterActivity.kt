@@ -241,8 +241,9 @@ class RegisterActivity : AppCompatActivity() {
                 val user = authResult.user
                 val userData: HashMap<String, Any> = hashMapOf(
                     "fullName" to fullName,
-                    "mobile" to formatIndonesianPhoneNumber(mobile),
-                    "email" to email
+                    "phone" to formatIndonesianPhoneNumber(mobile),
+                    "email" to email,
+                    "createdAt" to com.google.firebase.Timestamp.now()
                 )
 
                 user?.let {
@@ -282,7 +283,8 @@ class RegisterActivity : AppCompatActivity() {
                     val userData: HashMap<String, Any> = hashMapOf(
                         "fullName" to (it.displayName ?: ""),
                         "email" to (it.email ?: ""),
-                        "mobile" to ""
+                        "phone" to "",
+                        "createdAt" to com.google.firebase.Timestamp.now()
                     )
 
                     db.collection("users")

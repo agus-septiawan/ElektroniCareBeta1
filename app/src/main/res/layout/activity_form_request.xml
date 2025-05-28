@@ -142,6 +142,18 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <!-- Image Preview Section -->
+            <ImageView
+                android:id="@+id/ivImagePreview"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/bg_rounded_input"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                android:padding="4dp" />
+
             <!-- Date & Time Section -->
             <TextView
                 android:textColor="#374151"

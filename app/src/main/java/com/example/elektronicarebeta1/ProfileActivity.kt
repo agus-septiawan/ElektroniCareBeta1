@@ -22,6 +22,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputLayout
@@ -29,7 +30,9 @@ import com.example.elektronicarebeta1.firebase.FirebaseManager
 import com.example.elektronicarebeta1.models.User
 import com.example.elektronicarebeta1.cloudinary.CloudinaryManager
 import kotlinx.coroutines.launch
+import java.io.File
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 class ProfileActivity : AppCompatActivity() {
@@ -49,6 +52,7 @@ class ProfileActivity : AppCompatActivity() {
     
     companion object {
         private const val STORAGE_PERMISSION_REQUEST_CODE = 100
+        private const val CAMERA_PERMISSION_REQUEST_CODE = 101
     } 
     
     private val pickImageLauncher = registerForActivityResult(
@@ -57,12 +61,17 @@ class ProfileActivity : AppCompatActivity() {
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.data?.let { uri ->
                 selectedImageUri = uri
-                Glide.with(this@ProfileActivity)
-                    .load(uri)
-                    .placeholder(R.drawable.profile_placeholder)
-                    .error(R.drawable.profile_placeholder)
-                    .circleCrop()
-                    .into(profileImageView)
+                updateProfileImage()
+            }
+        }
+    }
+    
+    private val takePictureLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            selectedImageUri?.let { uri ->
+                updateProfileImage()
             }
         }
     }
@@ -89,7 +98,7 @@ class ProfileActivity : AppCompatActivity() {
         }
         
         editPhotoIcon.setOnClickListener {
-            openImagePicker()
+            showImagePickerDialog()
         }
         
         saveProfileButton.setOnClickListener {
@@ -194,6 +203,28 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
     
+    private fun showImagePickerDialog() {
+        val options = arrayOf("Take Photo", "Choose from Gallery")
+        AlertDialog.Builder(this)
+            .setTitle("Select Profile Photo")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> openCamera()
+                    1 -> openImagePicker()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+    
+    private fun openCamera() {
+        if (checkCameraPermission()) {
+            launchCamera()
+        } else {
+            requestCameraPermission()
+        }
+    }
+    
     private fun openImagePicker() {
         // Check for storage permission
         if (checkStoragePermission()) {
@@ -233,6 +264,46 @@ class ProfileActivity : AppCompatActivity() {
         )
     }
     
+    private fun checkCameraPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+    
+    private fun requestCameraPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.CAMERA),
+            CAMERA_PERMISSION_REQUEST_CODE
+        )
+    }
+    
+    private fun launchCamera() {
+        val photoFile = createImageFile()
+        selectedImageUri = FileProvider.getUriForFile(
+            this,
+            "${packageName}.fileprovider",
+            photoFile
+        )
+        
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, selectedImageUri)
+        
+        try {
+            takePictureLauncher.launch(takePictureIntent)
+        } catch (e: Exception) {
+            Toast.makeText(this, "Unable to open camera", Toast.LENGTH_SHORT).show()
+        }
+    }
+    
+    private fun createImageFile(): File {
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val imageFileName = "JPEG_${timeStamp}_"
+        val storageDir = getExternalFilesDir(android.os.Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(imageFileName, ".jpg", storageDir)
+    }
+    
     private fun launchImagePicker() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         pickImageLauncher.launch(intent)
@@ -257,6 +328,28 @@ class ProfileActivity : AppCompatActivity() {
                     ).show()
                 }
             }
+            CAMERA_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    launchCamera()
+                } else {
+                    Toast.makeText(
+                        this,
+                        "Camera permission is required to take photos",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+    }
+    
+    private fun updateProfileImage() {
+        selectedImageUri?.let { uri ->
+            Glide.with(this@ProfileActivity)
+                .load(uri)
+                .placeholder(R.drawable.profile_placeholder)
+                .error(R.drawable.profile_placeholder)
+                .circleCrop()
+                .into(profileImageView)
         }
     }
     
