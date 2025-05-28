@@ -230,7 +230,8 @@ class BookingActivity : AppCompatActivity() {
                     return@launch
                 }
                 
-                imageUrl = CloudinaryManager.uploadRepairImage(selectedImageUri!!, null) ?: ""
+                val uploadResult = CloudinaryManager.uploadRepairImage(selectedImageUri!!, null)
+                imageUrl = uploadResult ?: ""
                 if (imageUrl.isEmpty()) {
                     runOnUiThread {
                         Toast.makeText(this@BookingActivity, "Failed to upload image", Toast.LENGTH_SHORT).show()
