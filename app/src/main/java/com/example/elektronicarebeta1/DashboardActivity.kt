@@ -21,20 +21,22 @@ class DashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
-        val currentUser = FirebaseManager.getCurrentUser()
-        
-        // DEBUG LOGGING
-        Log.d(TAG, "Current user: $currentUser")
-        Log.d(TAG, "User ID: ${FirebaseManager.getUserId()}")
-        Log.d(TAG, "User email: ${currentUser?.email}")
-        Log.d(TAG, "Is email verified: ${currentUser?.isEmailVerified}")
-        
-        if (currentUser == null) {
-            Log.d(TAG, "No current user, redirecting to login")
-            startActivity(Intent(this, LoginActivity::class.java))
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-            finish()
-            return
+        lifecycleScope.launch {
+            val currentUser = FirebaseManager.getCurrentUser()
+            
+            // DEBUG LOGGING
+            Log.d(TAG, "Current user: $currentUser")
+            Log.d(TAG, "User ID: ${FirebaseManager.getUserId()}")
+            Log.d(TAG, "User email: ${currentUser?.email}")
+            Log.d(TAG, "Is email verified: ${currentUser?.isEmailVerified ?: false}")
+            
+            if (currentUser == null) {
+                Log.d(TAG, "No current user, redirecting to login")
+                startActivity(Intent(this@DashboardActivity, LoginActivity::class.java))
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                finish()
+                return@launch
+            }
         }
 
         userNameText = findViewById<TextView>(R.id.welcome_text)
@@ -56,10 +58,14 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun loadUserData() {
         // TEMPORARY DISABLE FIRESTORE ACCESS FOR DEBUGGING
-        val currentUser = FirebaseManager.getCurrentUser()
-        val email = currentUser?.email ?: "User"
-        val firstName = email.split("@").firstOrNull()?.split(".")?.firstOrNull() ?: "User"
-        userNameText.text = "Welcome back, $firstName!"
+        lifecycleScope.launch {
+            val currentUser = FirebaseManager.getCurrentUser()
+            val email = currentUser?.email ?: "User"
+            val firstName = email.split("@").firstOrNull()?.split(".")?.firstOrNull() ?: "User"
+            runOnUiThread {
+                userNameText.text = "Welcome back, $firstName!"
+            }
+        }
         
         // lifecycleScope.launch {
         //     try {
