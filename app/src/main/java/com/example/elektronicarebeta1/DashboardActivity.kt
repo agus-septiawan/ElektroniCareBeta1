@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.elektronicarebeta1.firebase.FirebaseDataSeeder
 import com.example.elektronicarebeta1.firebase.FirebaseManager
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 
 class DashboardActivity : AppCompatActivity() {
