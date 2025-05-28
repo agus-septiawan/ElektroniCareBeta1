@@ -1,8 +1,11 @@
 package com.example.elektronicarebeta1
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
@@ -17,11 +20,14 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputLayout
 import com.example.elektronicarebeta1.firebase.FirebaseManager
 import com.example.elektronicarebeta1.models.User
+import com.example.elektronicarebeta1.cloudinary.CloudinaryManager
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -39,7 +45,11 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var profileSaveProgressBar: ProgressBar 
     
     private var selectedImageUri: Uri? = null
-    private var originalUser: User? = null 
+    private var originalUser: User? = null
+    
+    companion object {
+        private const val STORAGE_PERMISSION_REQUEST_CODE = 100
+    } 
     
     private val pickImageLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -185,8 +195,69 @@ class ProfileActivity : AppCompatActivity() {
     }
     
     private fun openImagePicker() {
+        // Check for storage permission
+        if (checkStoragePermission()) {
+            launchImagePicker()
+        } else {
+            requestStoragePermission()
+        }
+    }
+    
+    private fun checkStoragePermission(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // Android 13+ uses READ_MEDIA_IMAGES
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_MEDIA_IMAGES
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            // Android 12 and below uses READ_EXTERNAL_STORAGE
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+    }
+    
+    private fun requestStoragePermission() {
+        val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            Manifest.permission.READ_MEDIA_IMAGES
+        } else {
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        }
+        
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(permission),
+            STORAGE_PERMISSION_REQUEST_CODE
+        )
+    }
+    
+    private fun launchImagePicker() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         pickImageLauncher.launch(intent)
+    }
+    
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        
+        when (requestCode) {
+            STORAGE_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    launchImagePicker()
+                } else {
+                    Toast.makeText(
+                        this,
+                        "Storage permission is required to select profile image",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
     }
     
     private fun handleSaveChanges() {
@@ -221,9 +292,17 @@ class ProfileActivity : AppCompatActivity() {
             try {
                 var uploadedImageUrl: String? = null // Will store the URL of a newly uploaded image.
 
-                // Image Upload Handling
+                // Image Upload Handling using Cloudinary
                 if (selectedImageUri != null) {
-                    val resultUrl = FirebaseManager.uploadProfileImage(selectedImageUri!!)
+                    val userId = FirebaseManager.getUserId()
+                    if (userId == null) {
+                        Toast.makeText(this@ProfileActivity, "User not authenticated", Toast.LENGTH_LONG).show()
+                        profileSaveProgressBar.visibility = View.GONE
+                        saveProfileButton.isEnabled = true
+                        return@launch
+                    }
+                    
+                    val resultUrl = CloudinaryManager.uploadProfileImage(selectedImageUri!!, userId)
                     if (resultUrl == null) {
                         Toast.makeText(this@ProfileActivity, "Profile image upload failed. Please try again.", Toast.LENGTH_LONG).show()
                         profileSaveProgressBar.visibility = View.GONE

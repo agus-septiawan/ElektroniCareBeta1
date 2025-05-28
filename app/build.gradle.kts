@@ -51,12 +51,18 @@ dependencies {
     implementation(libs.androidx.material3.android)
     implementation("androidx.viewpager2:viewpager2:1.0.0")
 
-    // Firebase BoM
+    // Firebase BoM (removed firebase-storage)
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
-    implementation("com.google.firebase:firebase-storage")
     implementation("com.google.firebase:firebase-analytics")
+    
+    // Cloudinary for image upload
+    implementation("com.cloudinary:cloudinary-android:2.8.0")
+    
+    // OkHttp for network requests
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
     // Google Sign-In
     implementation("com.google.android.gms:play-services-auth:21.0.0")

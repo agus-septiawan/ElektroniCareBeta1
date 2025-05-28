@@ -20,6 +20,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.elektronicarebeta1.firebase.FirebaseManager
+import com.example.elektronicarebeta1.cloudinary.CloudinaryManager
+import com.example.elektronicarebeta1.utils.EmailManager
+import com.example.elektronicarebeta1.utils.WhatsAppManager
+import com.example.elektronicarebeta1.models.User
 import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
@@ -214,10 +218,19 @@ class BookingActivity : AppCompatActivity() {
         submitButton.isEnabled = false
 
         lifecycleScope.launch {
-            // First upload image if selected
+            // First upload image if selected using Cloudinary
             var imageUrl: String? = null
             if (selectedImageUri != null) {
-                imageUrl = FirebaseManager.uploadRepairImage(selectedImageUri!!)
+                val userId = FirebaseManager.getUserId()
+                if (userId == null) {
+                    runOnUiThread {
+                        Toast.makeText(this@BookingActivity, "User not authenticated", Toast.LENGTH_SHORT).show()
+                        submitButton.isEnabled = true
+                    }
+                    return@launch
+                }
+                
+                imageUrl = CloudinaryManager.uploadRepairImage(selectedImageUri!!, null)
                 if (imageUrl == null) {
                     runOnUiThread {
                         Toast.makeText(this@BookingActivity, "Failed to upload image", Toast.LENGTH_SHORT).show()
@@ -247,7 +260,32 @@ class BookingActivity : AppCompatActivity() {
             val repairId = FirebaseManager.createRepairRequest(repairData)
 
             if (repairId != null) {
-                showSuccessDialog(repairId)
+                // Get user data for email and WhatsApp
+                val currentUser = FirebaseManager.getCurrentUser()
+                if (currentUser != null) {
+                    // Send email notifications
+                    EmailManager.sendBookingNotification(
+                        context = this@BookingActivity,
+                        bookingId = repairId,
+                        user = currentUser,
+                        serviceName = serviceName ?: "Electronic Repair",
+                        issueDescription = issueDescription,
+                        appointmentDate = calendar.time,
+                        estimatedCost = servicePrice,
+                        deviceImageUrl = imageUrl
+                    )
+                    
+                    EmailManager.sendCustomerConfirmation(
+                        context = this@BookingActivity,
+                        bookingId = repairId,
+                        user = currentUser,
+                        serviceName = serviceName ?: "Electronic Repair",
+                        appointmentDate = calendar.time,
+                        estimatedCost = servicePrice
+                    )
+                }
+                
+                showSuccessDialog(repairId, currentUser)
             } else {
                 runOnUiThread {
                     Toast.makeText(this@BookingActivity, "Failed to submit booking", Toast.LENGTH_SHORT).show()
@@ -257,7 +295,7 @@ class BookingActivity : AppCompatActivity() {
         }
     }
 
-    private fun showSuccessDialog(repairId: String) {
+    private fun showSuccessDialog(repairId: String, user: User? = null) {
         runOnUiThread {
             val builder = AlertDialog.Builder(this)
             val dialogView = layoutInflater.inflate(R.layout.dialog_submission_success, null)
@@ -273,18 +311,32 @@ class BookingActivity : AppCompatActivity() {
             dialog.setCancelable(false)
 
             whatsappButton.setOnClickListener {
-                val message = "Hello, I've submitted a repair request through ElektroniCare.\n" +
-                        "My Repair ID: $repairId\n" +
-                        "Issue: ${issueDescriptionEdit.text}\n\n" +
-                        "Please provide assistance."
-
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse("https://api.whatsapp.com/send?text=${Uri.encode(message)}")
-
-                if (intent.resolveActivity(packageManager) != null) {
-                    startActivity(intent)
+                if (user != null) {
+                    WhatsAppManager.sendBookingToTechnician(
+                        context = this@BookingActivity,
+                        bookingId = repairId,
+                        customerName = user.fullName,
+                        serviceName = serviceName ?: "Electronic Repair",
+                        issueDescription = issueDescriptionEdit.text.toString(),
+                        appointmentDate = calendar.time,
+                        estimatedCost = servicePrice,
+                        customerPhone = user.phone
+                    )
                 } else {
-                    Toast.makeText(this, "WhatsApp is not installed.", Toast.LENGTH_SHORT).show()
+                    // Fallback to old method if user data not available
+                    val message = "Hello, I've submitted a repair request through ElektroniCare.\n" +
+                            "My Repair ID: $repairId\n" +
+                            "Issue: ${issueDescriptionEdit.text}\n\n" +
+                            "Please provide assistance."
+
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.data = Uri.parse("https://api.whatsapp.com/send?text=${Uri.encode(message)}")
+
+                    if (intent.resolveActivity(packageManager) != null) {
+                        startActivity(intent)
+                    } else {
+                        Toast.makeText(this@BookingActivity, "WhatsApp is not installed.", Toast.LENGTH_SHORT).show()
+                    }
                 }
 
                 navigateToDashboard()

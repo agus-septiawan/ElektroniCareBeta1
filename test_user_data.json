@@ -1,0 +1,14 @@
+{
+  "id": "1rHqzlFFdId0eaWqBohXIs4ex9u2",
+  "fullName": "John Doe",
+  "email": "john.doe@example.com",
+  "phone": "+6281234567890",
+  "address": "Jl. Sudirman No. 123, Jakarta Pusat, DKI Jakarta",
+  "profileImageUrl": "https://res.cloudinary.com/elektronicare/image/upload/v1/profiles/john_doe.jpg",
+  "createdAt": "2025-01-28T15:09:40.862949",
+  "updatedAt": "2025-05-28T15:09:40.862952",
+  "isVerified": true,
+  "totalRepairs": 5,
+  "completedRepairs": 2,
+  "memberSince": "March 2024"
+}

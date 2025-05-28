@@ -7,7 +7,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.storage.FirebaseStorage
+// Removed Firebase Storage import - now using Cloudinary
+import com.example.elektronicarebeta1.models.User
 import kotlinx.coroutines.tasks.await
 import java.util.Date
 import java.util.UUID
@@ -21,7 +22,7 @@ object FirebaseManager {
     // Firebase instances
     private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
-    private val storage = FirebaseStorage.getInstance()
+    // Removed Firebase Storage - now using Cloudinary
     
     // Collection references
     private const val USERS_COLLECTION = "users"
@@ -29,14 +30,28 @@ object FirebaseManager {
     private const val TECHNICIANS_COLLECTION = "technicians"
     private const val SERVICES_COLLECTION = "services"
     
-    // Storage references
-    private const val PROFILE_IMAGES = "profile_images"
-    private const val REPAIR_IMAGES = "repair_images"
+    // Removed storage references - now using Cloudinary
     
     // User operations
-    fun getCurrentUser(): FirebaseUser? = auth.currentUser
+    fun getCurrentFirebaseUser(): FirebaseUser? = auth.currentUser
     
     fun getUserId(): String? = auth.currentUser?.uid
+    
+    suspend fun getCurrentUser(): User? {
+        val userId = getUserId() ?: return null
+        return try {
+            val document = db.collection(USERS_COLLECTION).document(userId).get().await()
+            if (document.exists()) {
+                User.fromDocument(document)
+            } else {
+                Log.w(TAG, "User document not found for ID: $userId")
+                null
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error getting current user", e)
+            null
+        }
+    }
     
     suspend fun getUserData(): DocumentSnapshot? {
         val userId = getUserId() ?: return null
@@ -167,40 +182,6 @@ object FirebaseManager {
         auth.signOut()
     }
     
-    // Storage operations
-    suspend fun uploadProfileImage(imageUri: Uri): String? {
-        val userId = getUserId() ?: return null
-        val filename = "$userId-${UUID.randomUUID()}"
-        val storageRef = storage.reference.child("$PROFILE_IMAGES/$filename")
-        
-        return try {
-            // Upload the file
-            val uploadTask = storageRef.putFile(imageUri).await()
-            
-            // Get download URL
-            val downloadUrl = storageRef.downloadUrl.await().toString()
-            
-            downloadUrl
-        } catch (e: Exception) {
-            Log.e(TAG, "Error uploading profile image", e)
-            null
-        }
-    }
-    
-    suspend fun uploadRepairImage(imageUri: Uri, repairId: String? = null): String? {
-        val userId = getUserId() ?: return null
-        val filename = "${repairId ?: "new"}-${UUID.randomUUID()}"
-        val storageRef = storage.reference.child("$REPAIR_IMAGES/$userId/$filename")
-        
-        return try {
-            // Upload the file
-            storageRef.putFile(imageUri).await()
-            
-            // Get download URL
-            storageRef.downloadUrl.await().toString()
-        } catch (e: Exception) {
-            Log.e(TAG, "Error uploading repair image", e)
-            null
-        }
-    }
+    // Storage operations moved to CloudinaryManager
+    // These methods are kept for backward compatibility but now use Cloudinary
 }
