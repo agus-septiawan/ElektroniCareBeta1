@@ -1,0 +1,265 @@
+{
+  "user": {
+    "id": "1rHqzlFFdId0eaWqBohXIs4ex9u2",
+    "fullName": "John Doe",
+    "email": "john.doe@example.com",
+    "phone": "+6281234567890",
+    "address": "Jl. Sudirman No. 123, Jakarta Pusat, DKI Jakarta",
+    "profileImageUrl": "https://res.cloudinary.com/elektronicare/image/upload/v1/profiles/john_doe.jpg",
+    "createdAt": "2025-01-28T15:09:40.862949",
+    "updatedAt": "2025-05-28T15:09:40.862952",
+    "isVerified": true,
+    "totalRepairs": 5,
+    "completedRepairs": 2,
+    "memberSince": "March 2024"
+  },
+  "repairs": [
+    {
+      "id": "1fa3f7c9-ba4e-4f11-8dd8-8b48ca2a9687",
+      "userId": "1rHqzlFFdId0eaWqBohXIs4ex9u2",
+      "serviceId": "tablet_repair",
+      "serviceName": "Tablet Repair",
+      "deviceModel": "iPhone 13 Pro",
+      "issueDescription": "Screen cracked after dropping the device. Touch functionality partially working.",
+      "location": "Home Service - Jl. Sudirman No. 123, Jakarta",
+      "status": "completed",
+      "price": 200000,
+      "appointmentTimestamp": "2025-05-08T15:09:40.862788",
+      "createdAt": "2025-05-07T15:09:40.862788",
+      "updatedAt": "2025-05-08T15:09:40.862788",
+      "customerName": "John Doe",
+      "customerPhone": "+6281234567890",
+      "customerEmail": "john.doe@example.com",
+      "technicianId": "tech_1",
+      "technicianName": "Technician 1",
+      "estimatedDuration": "1 day",
+      "notes": "Repair notes for iPhone 13 Pro - Screen cracked after dropping the device. Touch fu...",
+      "imageUrl": "https://res.cloudinary.com/elektronicare/image/upload/v1/repairs/1fa3f7c9-ba4e-4f11-8dd8-8b48ca2a9687.jpg",
+      "completedAt": "2025-05-09T19:09:40.862788",
+      "rating": 5,
+      "feedback": "Great service! Very professional and quick repair."
+    },
+    {
+      "id": "b17f52fe-38fc-4bf6-acfe-79e160f5dd3e",
+      "userId": "1rHqzlFFdId0eaWqBohXIs4ex9u2",
+      "serviceId": "laptop_repair",
+      "serviceName": "Laptop Repair",
+      "deviceModel": "Samsung Galaxy S22",
+      "issueDescription": "Battery drains very quickly, device shuts down unexpectedly.",
+      "location": "Workshop - ElektroniCare Center",
+      "status": "in_progress",
+      "price": 300000,
+      "appointmentTimestamp": "2025-03-08T15:09:40.862847",
+      "createdAt": "2025-03-05T15:09:40.862847",
+      "updatedAt": "2025-03-08T15:09:40.862847",
+      "customerName": "John Doe",
+      "customerPhone": "+6281234567890",
+      "customerEmail": "john.doe@example.com",
+      "technicianId": "tech_4",
+      "technicianName": "Technician 4",
+      "estimatedDuration": "2-3 days",
+      "notes": "Repair notes for Samsung Galaxy S22 - Battery drains very quickly, device shuts down une...",
+      "imageUrl": "https://res.cloudinary.com/elektronicare/image/upload/v1/repairs/b17f52fe-38fc-4bf6-acfe-79e160f5dd3e.jpg",
+      "startedAt": "2025-03-08T16:09:40.862847",
+      "progress": 44
+    },
+    {
+      "id": "3c9626c2-afd1-4f8d-b2ab-b1bc39385ccd",
+      "userId": "1rHqzlFFdId0eaWqBohXIs4ex9u2",
+      "serviceId": "smartwatch_repair",
+      "serviceName": "Smartwatch Repair",
+      "deviceModel": "MacBook Air M1",
+      "issueDescription": "Laptop won't turn on, power button not responding.",
+      "location": "Home Service - Jl. Thamrin No. 456, Jakarta",
+      "status": "pending",
+      "price": 100000,
+      "appointmentTimestamp": "2025-05-11T15:09:40.862875",
+      "createdAt": "2025-05-05T15:09:40.862875",
+      "updatedAt": "2025-05-11T15:09:40.862875",
+      "customerName": "John Doe",
+      "customerPhone": "+6281234567890",
+      "customerEmail": "john.doe@example.com",
+      "technicianId": "tech_2",
+      "technicianName": "Technician 5",
+      "estimatedDuration": "2-3 days",
+      "notes": "Repair notes for MacBook Air M1 - Laptop won't turn on, power button not responding....",
+      "imageUrl": "https://res.cloudinary.com/elektronicare/image/upload/v1/repairs/3c9626c2-afd1-4f8d-b2ab-b1bc39385ccd.jpg"
+    },
+    {
+      "id": "4c1bb89a-ac29-4d43-b61f-fbd06de7a3f0",
+      "userId": "1rHqzlFFdId0eaWqBohXIs4ex9u2",
+      "serviceId": "laptop_repair",
+      "serviceName": "Laptop Repair",
+      "deviceModel": "iPad Pro 11",
+      "issueDescription": "Water damage, device got wet in rain. Screen flickering.",
+      "location": "Workshop - ElektroniCare Center",
+      "status": "cancelled",
+      "price": 300000,
+      "appointmentTimestamp": "2025-03-29T15:09:40.862898",
+      "createdAt": "2025-03-25T15:09:40.862898",
+      "updatedAt": "2025-03-29T15:09:40.862898",
+      "customerName": "John Doe",
+      "customerPhone": "+6281234567890",
+      "customerEmail": "john.doe@example.com",
+      "technicianId": "tech_5",
+      "technicianName": "Technician 2",
+      "estimatedDuration": "1 day",
+      "notes": "Repair notes for iPad Pro 11 - Water damage, device got wet in rain. Screen flick...",
+      "imageUrl": "https://res.cloudinary.com/elektronicare/image/upload/v1/repairs/4c1bb89a-ac29-4d43-b61f-fbd06de7a3f0.jpg",
+      "cancelledAt": "2025-03-29T20:09:40.862898",
+      "cancellationReason": "Customer requested cancellation"
+    },
+    {
+      "id": "c868fc2c-df5b-4c58-a1f9-515402f037fd",
+      "userId": "1rHqzlFFdId0eaWqBohXIs4ex9u2",
+      "serviceId": "headphone_repair",
+      "serviceName": "Headphone Repair",
+      "deviceModel": "OnePlus 9 Pro",
+      "issueDescription": "Charging port loose, cable keeps disconnecting.",
+      "location": "Home Service - Jl. Gatot Subroto No. 789, Jakarta",
+      "status": "completed",
+      "price": 75000,
+      "appointmentTimestamp": "2025-05-27T15:09:40.862923",
+      "createdAt": "2025-05-21T15:09:40.862923",
+      "updatedAt": "2025-05-27T15:09:40.862923",
+      "customerName": "John Doe",
+      "customerPhone": "+6281234567890",
+      "customerEmail": "john.doe@example.com",
+      "technicianId": "tech_2",
+      "technicianName": "Technician 5",
+      "estimatedDuration": "2-3 days",
+      "notes": "Repair notes for OnePlus 9 Pro - Charging port loose, cable keeps disconnecting....",
+      "imageUrl": "https://res.cloudinary.com/elektronicare/image/upload/v1/repairs/c868fc2c-df5b-4c58-a1f9-515402f037fd.jpg",
+      "completedAt": "2025-05-28T21:09:40.862923",
+      "rating": 4,
+      "feedback": "Great service! Very professional and quick repair."
+    }
+  ],
+  "notifications": [
+    {
+      "id": "f9330274-fce6-4934-9fa8-749110fa6820",
+      "userId": "1rHqzlFFdId0eaWqBohXIs4ex9u2",
+      "type": "booking_confirmed",
+      "title": "Booking Confirmed",
+      "message": "Your repair booking for iPhone 13 Pro has been confirmed.",
+      "repairId": "1fa3f7c9-ba4e-4f11-8dd8-8b48ca2a9687",
+      "isRead": true,
+      "createdAt": "2025-05-07T15:09:40.862788",
+      "data": {
+        "repairId": "1fa3f7c9-ba4e-4f11-8dd8-8b48ca2a9687",
+        "deviceModel": "iPhone 13 Pro"
+      }
+    },
+    {
+      "id": "f60db5fc-93bc-4486-941d-c8a43d370e1f",
+      "userId": "1rHqzlFFdId0eaWqBohXIs4ex9u2",
+      "type": "repair_completed",
+      "title": "Repair Completed",
+      "message": "Your iPhone 13 Pro repair has been completed successfully!",
+      "repairId": "1fa3f7c9-ba4e-4f11-8dd8-8b48ca2a9687",
+      "isRead": false,
+      "createdAt": "2025-05-09T19:09:40.862788",
+      "data": {
+        "repairId": "1fa3f7c9-ba4e-4f11-8dd8-8b48ca2a9687",
+        "deviceModel": "iPhone 13 Pro"
+      }
+    },
+    {
+      "id": "84e81276-9383-4ac1-bfb5-717164a97b71",
+      "userId": "1rHqzlFFdId0eaWqBohXIs4ex9u2",
+      "type": "booking_confirmed",
+      "title": "Booking Confirmed",
+      "message": "Your repair booking for Samsung Galaxy S22 has been confirmed.",
+      "repairId": "b17f52fe-38fc-4bf6-acfe-79e160f5dd3e",
+      "isRead": true,
+      "createdAt": "2025-03-05T15:09:40.862847",
+      "data": {
+        "repairId": "b17f52fe-38fc-4bf6-acfe-79e160f5dd3e",
+        "deviceModel": "Samsung Galaxy S22"
+      }
+    },
+    {
+      "id": "d40d46ba-88bb-45b8-8332-5c4c8652a91e",
+      "userId": "1rHqzlFFdId0eaWqBohXIs4ex9u2",
+      "type": "booking_confirmed",
+      "title": "Booking Confirmed",
+      "message": "Your repair booking for MacBook Air M1 has been confirmed.",
+      "repairId": "3c9626c2-afd1-4f8d-b2ab-b1bc39385ccd",
+      "isRead": true,
+      "createdAt": "2025-05-05T15:09:40.862875",
+      "data": {
+        "repairId": "3c9626c2-afd1-4f8d-b2ab-b1bc39385ccd",
+        "deviceModel": "MacBook Air M1"
+      }
+    },
+    {
+      "id": "f58f1371-4732-4325-95de-a7b000c020ed",
+      "userId": "1rHqzlFFdId0eaWqBohXIs4ex9u2",
+      "type": "booking_confirmed",
+      "title": "Booking Confirmed",
+      "message": "Your repair booking for iPad Pro 11 has been confirmed.",
+      "repairId": "4c1bb89a-ac29-4d43-b61f-fbd06de7a3f0",
+      "isRead": true,
+      "createdAt": "2025-03-25T15:09:40.862898",
+      "data": {
+        "repairId": "4c1bb89a-ac29-4d43-b61f-fbd06de7a3f0",
+        "deviceModel": "iPad Pro 11"
+      }
+    },
+    {
+      "id": "7cb78c0e-be51-4eac-b735-91b6566069e1",
+      "userId": "1rHqzlFFdId0eaWqBohXIs4ex9u2",
+      "type": "booking_confirmed",
+      "title": "Booking Confirmed",
+      "message": "Your repair booking for OnePlus 9 Pro has been confirmed.",
+      "repairId": "c868fc2c-df5b-4c58-a1f9-515402f037fd",
+      "isRead": true,
+      "createdAt": "2025-05-21T15:09:40.862923",
+      "data": {
+        "repairId": "c868fc2c-df5b-4c58-a1f9-515402f037fd",
+        "deviceModel": "OnePlus 9 Pro"
+      }
+    },
+    {
+      "id": "3120a816-3556-4322-a9ff-0b47790f20ca",
+      "userId": "1rHqzlFFdId0eaWqBohXIs4ex9u2",
+      "type": "repair_completed",
+      "title": "Repair Completed",
+      "message": "Your OnePlus 9 Pro repair has been completed successfully!",
+      "repairId": "c868fc2c-df5b-4c58-a1f9-515402f037fd",
+      "isRead": false,
+      "createdAt": "2025-05-28T21:09:40.862923",
+      "data": {
+        "repairId": "c868fc2c-df5b-4c58-a1f9-515402f037fd",
+        "deviceModel": "OnePlus 9 Pro"
+      }
+    }
+  ],
+  "services": [
+    {
+      "id": "smartphone_repair",
+      "name": "Smartphone Repair",
+      "price": 150000
+    },
+    {
+      "id": "laptop_repair",
+      "name": "Laptop Repair",
+      "price": 300000
+    },
+    {
+      "id": "tablet_repair",
+      "name": "Tablet Repair",
+      "price": 200000
+    },
+    {
+      "id": "smartwatch_repair",
+      "name": "Smartwatch Repair",
+      "price": 100000
+    },
+    {
+      "id": "headphone_repair",
+      "name": "Headphone Repair",
+      "price": 75000
+    }
+  ]
+}
