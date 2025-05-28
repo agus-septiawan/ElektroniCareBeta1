@@ -19,6 +19,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.example.elektronicarebeta1.firebase.FirebaseManager
 import com.example.elektronicarebeta1.cloudinary.CloudinaryManager
 import com.example.elektronicarebeta1.utils.EmailManager
@@ -38,6 +39,7 @@ class BookingActivity : AppCompatActivity() {
     private lateinit var selectedTimeText: TextView
     private lateinit var submitButton: Button
     private lateinit var backButton: ImageView
+    private lateinit var imagePreview: ImageView
 
     private var selectedDate: Date? = null
     private var selectedImageUri: Uri? = null
@@ -97,6 +99,7 @@ class BookingActivity : AppCompatActivity() {
         selectedTimeText = findViewById<TextView>(R.id.tvSelectedTime)
         submitButton = findViewById(R.id.btnSubmitRequest)
         backButton = findViewById(R.id.ivBackArrow)
+        imagePreview = findViewById(R.id.ivImagePreview)
 
         // Initialize click listeners for photo options
         val takePhotoLayout = findViewById<LinearLayout>(R.id.takePhotoLayout)
@@ -170,7 +173,7 @@ class BookingActivity : AppCompatActivity() {
         val photoFile = createImageFile()
         selectedImageUri = FileProvider.getUriForFile(
             this,
-            "${packageName}.provider",
+            "${packageName}.fileprovider",
             photoFile
         )
 
@@ -197,8 +200,13 @@ class BookingActivity : AppCompatActivity() {
     }
 
     private fun updateImagePreview() {
-        // Update UI to show selected image
-        // You can add an ImageView to show the preview if needed
+        selectedImageUri?.let { uri ->
+            imagePreview.visibility = View.VISIBLE
+            Glide.with(this)
+                .load(uri)
+                .centerCrop()
+                .into(imagePreview)
+        }
     }
 
     private fun submitBooking() {
@@ -230,7 +238,7 @@ class BookingActivity : AppCompatActivity() {
                     return@launch
                 }
                 
-                val uploadResult = CloudinaryManager.uploadRepairImage(selectedImageUri!!, null)
+                val uploadResult = CloudinaryManager.uploadRepairImage(selectedImageUri!!, userId, null)
                 imageUrl = uploadResult ?: ""
                 if (imageUrl.isEmpty()) {
                     runOnUiThread {

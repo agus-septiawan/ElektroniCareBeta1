@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.elektronicarebeta1.firebase.FirebaseDataSeeder
 import com.example.elektronicarebeta1.firebase.FirebaseManager
+import com.example.elektronicarebeta1.utils.UserMigrationHelper
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 
@@ -29,7 +30,7 @@ class DashboardActivity : AppCompatActivity() {
             Log.d(TAG, "Current user: $currentUser")
             Log.d(TAG, "User ID: ${FirebaseManager.getUserId()}")
             Log.d(TAG, "User email: ${currentUser?.email}")
-            Log.d(TAG, "Is email verified: ${currentUser?.isEmailVerified ?: false}")
+            Log.d(TAG, "User name: ${currentUser?.fullName ?: "Unknown"}")
             
             if (currentUser == null) {
                 Log.d(TAG, "No current user, redirecting to login")
@@ -37,6 +38,13 @@ class DashboardActivity : AppCompatActivity() {
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 finish()
                 return@launch
+            }
+            
+            // Run user migration for existing users
+            try {
+                UserMigrationHelper.migrateExistingUsers()
+            } catch (e: Exception) {
+                Log.e(TAG, "Error during user migration", e)
             }
         }
 
