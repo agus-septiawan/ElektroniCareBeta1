@@ -261,18 +261,6 @@
                         android:stateListAnimator="@null"/>
 
                     <Button
-                        android:id="@+id/cloudinary_setup_button"
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:text="Setup Image Upload"
-                        android:textSize="16sp"
-                        android:textColor="?attr/colorPrimary"
-                        android:background="@drawable/button_outline"
-                        android:layout_marginBottom="12dp"
-                        android:elevation="0dp"
-                        android:stateListAnimator="@null"/>
-
-                    <Button
                         android:id="@+id/logout_button"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"

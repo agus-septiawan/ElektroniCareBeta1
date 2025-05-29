@@ -39,7 +39,7 @@ import java.util.Date
 import java.util.Locale
 
 class ProfileActivity : AppCompatActivity() {
-    
+
     private lateinit var emailText: TextView
     private lateinit var editTextUserName: com.google.android.material.textfield.TextInputEditText
     private lateinit var editTextPhone: com.google.android.material.textfield.TextInputEditText
@@ -47,17 +47,17 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var saveProfileButton: Button
     private lateinit var profileImageView: ImageView
     private lateinit var editPhotoIcon: ImageView
-    private lateinit var userDateJoinedText: TextView 
-    private lateinit var profileSaveProgressBar: ProgressBar 
-    
+    private lateinit var userDateJoinedText: TextView
+    private lateinit var profileSaveProgressBar: ProgressBar
+
     private var selectedImageUri: Uri? = null
     private var originalUser: User? = null
-    
+
     companion object {
         private const val STORAGE_PERMISSION_REQUEST_CODE = 100
         private const val CAMERA_PERMISSION_REQUEST_CODE = 101
-    } 
-    
+    }
+
     private val pickImageLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -68,7 +68,7 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
     }
-    
+
     private val takePictureLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -78,11 +78,11 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
     }
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
-        
+
         editTextUserName = findViewById(R.id.edit_text_user_name)
         emailText = findViewById(R.id.user_email)
         editTextPhone = findViewById(R.id.edit_text_phone)
@@ -90,37 +90,28 @@ class ProfileActivity : AppCompatActivity() {
         profileImageView = findViewById(R.id.profile_image)
         editPhotoIcon = findViewById(R.id.edit_photo_icon)
         saveProfileButton = findViewById(R.id.save_profile_button)
-        userDateJoinedText = findViewById(R.id.user_date_joined) 
+        userDateJoinedText = findViewById(R.id.user_date_joined)
         profileSaveProgressBar = findViewById(R.id.profile_save_progress_bar)
-        
+
         val backButton = findViewById<ImageView>(R.id.back_button)
         val logoutButton = findViewById<Button>(R.id.logout_button)
-        
+
         backButton.setOnClickListener {
             finish()
         }
-        
+
         editPhotoIcon.setOnClickListener {
             showImagePickerDialog()
         }
-        
+
         saveProfileButton.setOnClickListener {
             handleSaveChanges()
         }
-        
-        val cloudinarySetupButton = findViewById<Button>(R.id.cloudinary_setup_button)
-        cloudinarySetupButton.setOnClickListener {
-            val intent = Intent(this, CloudinarySetupActivity::class.java)
-            startActivity(intent)
-        }
-        
-        // Update button text based on Cloudinary configuration status
-        updateCloudinarySetupButton(cloudinarySetupButton)
-        
+
         logoutButton.setOnClickListener {
             showSignOutConfirmationDialog()
         }
-        
+
         setupBottomNavigation()
         loadUserProfile()
 
@@ -143,7 +134,7 @@ class ProfileActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {}
         })
     }
-    
+
     override fun onResume() {
         super.onResume()
         // Check if user is still authenticated
@@ -156,71 +147,43 @@ class ProfileActivity : AppCompatActivity() {
             finish()
             return
         }
-        
-        // Update Cloudinary setup button
-        val cloudinarySetupButton = findViewById<Button>(R.id.cloudinary_setup_button)
-        updateCloudinarySetupButton(cloudinarySetupButton)
-        
+
         // Force refresh profile data when returning to this activity
         lifecycleScope.launch {
-            // Force data sync first
-            val forceSyncSuccess = FirebaseManager.forceDataSync()
-            Log.d("ProfileActivity", "Force data sync completed: $forceSyncSuccess")
-            
-            // Force sync user data
-            val syncSuccess = FirebaseManager.forceSyncUserData()
-            Log.d("ProfileActivity", "Force sync user data completed: $syncSuccess")
-            
-            val refreshSuccess = DataPersistenceHelper.forceRefreshUserData()
-            Log.d("ProfileActivity", "Force refresh user data completed: $refreshSuccess")
-            
             loadUserProfile()
         }
     }
-    
-    private fun updateCloudinarySetupButton(button: Button) {
-        val isConfigured = CloudinaryConfig.isConfigured(this)
-        if (isConfigured) {
-            button.text = "Update Image Upload Settings"
-        } else {
-            button.text = "Setup Image Upload"
-        }
-    }
-    
+
     private fun setupBottomNavigation() {
         val homeNav = findViewById<View>(R.id.nav_home)
         val historyNav = findViewById<View>(R.id.nav_history)
         val servicesNav = findViewById<View>(R.id.nav_services)
-        
+
         homeNav.setOnClickListener {
             startActivity(Intent(this, DashboardActivity::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         }
-        
+
         historyNav.setOnClickListener {
             startActivity(Intent(this, HistoryActivity::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         }
-        
+
         servicesNav.setOnClickListener {
             startActivity(Intent(this, ServicesActivity::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         }
     }
-    
+
     private fun loadUserProfile() {
         lifecycleScope.launch {
             Log.d("ProfileActivity", "Loading user profile...")
-            
-            // Force data sync first
-            val forceSyncSuccess = FirebaseManager.forceDataSync()
-            Log.d("ProfileActivity", "Force data sync completed: $forceSyncSuccess")
-            
+
             var userDoc = FirebaseManager.getUserData()
-            
+
             // If user document is null, try force refresh
             if (userDoc == null || !userDoc.exists()) {
                 Log.w("ProfileActivity", "User document is null or doesn't exist, attempting force refresh")
@@ -230,26 +193,27 @@ class ProfileActivity : AppCompatActivity() {
                     userDoc = FirebaseManager.getUserData()
                 }
             }
-            
+
             if (userDoc != null && userDoc.exists()) {
                 Log.d("ProfileActivity", "User document found, parsing...")
-                originalUser = User.fromDocument(userDoc) 
-                
+                originalUser = User.fromDocument(userDoc)
+
                 originalUser?.let {
                     Log.d("ProfileActivity", "User parsed successfully: ${it.fullName}")
                     editTextUserName.setText(it.fullName)
-                    emailText.text = it.email 
+                    emailText.text = it.email
                     editTextPhone.setText(it.phone ?: "")
                     editTextAddress.setText(it.address ?: "")
-                    
+
                     it.createdAt?.let { date ->
                         val dateFormat = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
                         userDateJoinedText.text = dateFormat.format(date)
                     } ?: run {
-                        userDateJoinedText.text = "N/A" 
+                        userDateJoinedText.text = "N/A"
                     }
-                    
+
                     if (!it.profileImageUrl.isNullOrEmpty()) {
+                        Log.d("ProfileActivity", "loadUserProfile: Loading profile image with URL: ${it.profileImageUrl}")
                         Glide.with(this@ProfileActivity)
                             .load(it.profileImageUrl)
                             .placeholder(R.drawable.profile_placeholder)
@@ -257,8 +221,9 @@ class ProfileActivity : AppCompatActivity() {
                             .circleCrop()
                             .into(profileImageView)
                     } else {
-                         Glide.with(this@ProfileActivity)
-                            .load(R.drawable.profile_placeholder) 
+                        Log.d("ProfileActivity", "loadUserProfile: profileImageUrl is null or empty, loading placeholder.")
+                        Glide.with(this@ProfileActivity)
+                            .load(R.drawable.profile_placeholder)
                             .circleCrop()
                             .into(profileImageView)
                     }
@@ -272,7 +237,7 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
     }
-    
+
     private fun showImagePickerDialog() {
         val options = arrayOf("Take Photo", "Choose from Gallery")
         AlertDialog.Builder(this)
@@ -286,7 +251,7 @@ class ProfileActivity : AppCompatActivity() {
             .setNegativeButton("Cancel", null)
             .show()
     }
-    
+
     private fun openCamera() {
         if (checkCameraPermission()) {
             launchCamera()
@@ -294,7 +259,7 @@ class ProfileActivity : AppCompatActivity() {
             requestCameraPermission()
         }
     }
-    
+
     private fun openImagePicker() {
         // Check for storage permission
         if (checkStoragePermission()) {
@@ -303,7 +268,7 @@ class ProfileActivity : AppCompatActivity() {
             requestStoragePermission()
         }
     }
-    
+
     private fun checkStoragePermission(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             // Android 13+ uses READ_MEDIA_IMAGES
@@ -319,28 +284,28 @@ class ProfileActivity : AppCompatActivity() {
             ) == PackageManager.PERMISSION_GRANTED
         }
     }
-    
+
     private fun requestStoragePermission() {
         val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             Manifest.permission.READ_MEDIA_IMAGES
         } else {
             Manifest.permission.READ_EXTERNAL_STORAGE
         }
-        
+
         ActivityCompat.requestPermissions(
             this,
             arrayOf(permission),
             STORAGE_PERMISSION_REQUEST_CODE
         )
     }
-    
+
     private fun checkCameraPermission(): Boolean {
         return ContextCompat.checkSelfPermission(
             this,
             Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
     }
-    
+
     private fun requestCameraPermission() {
         ActivityCompat.requestPermissions(
             this,
@@ -348,7 +313,7 @@ class ProfileActivity : AppCompatActivity() {
             CAMERA_PERMISSION_REQUEST_CODE
         )
     }
-    
+
     private fun launchCamera() {
         val photoFile = createImageFile()
         selectedImageUri = FileProvider.getUriForFile(
@@ -356,36 +321,36 @@ class ProfileActivity : AppCompatActivity() {
             "${packageName}.fileprovider",
             photoFile
         )
-        
+
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, selectedImageUri)
-        
+
         try {
             takePictureLauncher.launch(takePictureIntent)
         } catch (e: Exception) {
             Toast.makeText(this, "Unable to open camera", Toast.LENGTH_SHORT).show()
         }
     }
-    
+
     private fun createImageFile(): File {
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
         val imageFileName = "JPEG_${timeStamp}_"
         val storageDir = getExternalFilesDir(android.os.Environment.DIRECTORY_PICTURES)
         return File.createTempFile(imageFileName, ".jpg", storageDir)
     }
-    
+
     private fun launchImagePicker() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         pickImageLauncher.launch(intent)
     }
-    
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        
+
         when (requestCode) {
             STORAGE_PERMISSION_REQUEST_CODE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -411,10 +376,10 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
     }
-    
+
     private fun updateProfileImage() {
         selectedImageUri?.let { uri ->
-            Log.d("ProfileActivity", "Updating profile image with URI: $uri")
+            Log.d("ProfileActivity", "updateProfileImage() called. selectedImageUri: $uri")
             Glide.with(this@ProfileActivity)
                 .load(uri)
                 .placeholder(R.drawable.profile_placeholder)
@@ -423,7 +388,7 @@ class ProfileActivity : AppCompatActivity() {
                 .into(profileImageView)
         }
     }
-    
+
     private fun handleSaveChanges() {
         lifecycleScope.launch {
             saveProfileButton.isEnabled = false
@@ -458,40 +423,66 @@ class ProfileActivity : AppCompatActivity() {
 
                 // Image Upload Handling using Cloudinary
                 if (selectedImageUri != null) {
-                    Log.d("ProfileActivity", "Starting image upload for selected URI: $selectedImageUri")
+                    Log.d("ProfileActivity", "handleSaveChanges: selectedImageUri is $selectedImageUri, proceeding with upload.")
                     val userId = FirebaseManager.getUserId()
                     if (userId == null) {
+                        Log.e("ProfileActivity", "handleSaveChanges: User ID is null, cannot proceed with image upload.")
                         Toast.makeText(this@ProfileActivity, "User not authenticated", Toast.LENGTH_LONG).show()
                         profileSaveProgressBar.visibility = View.GONE
                         saveProfileButton.isEnabled = true
                         return@launch
                     }
-                    
-                    Log.d("ProfileActivity", "Uploading image for user: $userId")
+                    Log.d("ProfileActivity", "handleSaveChanges: userId for image upload: $userId")
+
                     try {
-                        val resultUrl = CloudinaryManager.uploadProfileImage(this@ProfileActivity, selectedImageUri!!, userId)
-                        Log.d("ProfileActivity", "Upload result URL: $resultUrl")
-                        
-                        if (resultUrl.isNullOrEmpty()) {
-                            Log.w("ProfileActivity", "Image upload returned null/empty URL, continuing without image update")
-                            runOnUiThread {
-                                Toast.makeText(this@ProfileActivity, "Image upload failed, but profile data will still be saved", Toast.LENGTH_LONG).show()
+                        // val resultUrl = CloudinaryManager.uploadProfileImage(this@ProfileActivity, selectedImageUri!!, userId)
+                        // Log.d("ProfileActivity", "Upload result URL: $resultUrl")
+
+                        // if (resultUrl.isNullOrEmpty()) {
+                        //     Log.w("ProfileActivity", "Image upload returned null/empty URL, continuing without image update")
+                        //     runOnUiThread {
+                        //         Toast.makeText(this@ProfileActivity, "Image upload failed, but profile data will still be saved", Toast.LENGTH_LONG).show()
+                        //     }
+                        //     // Don't return here - continue with profile update without image
+                        // } else {
+                        //     uploadedImageUrl = resultUrl // Store the new image URL
+                        //     Log.d("ProfileActivity", "Image uploaded successfully: $uploadedImageUrl")
+                        // }
+
+                        val result = CloudinaryManager.uploadProfileImage(this@ProfileActivity, selectedImageUri!!, userId)
+                        Log.d("ProfileActivity", "handleSaveChanges: CloudinaryManager.uploadProfileImage resultUrl: $result")
+                        if (result.isNullOrEmpty()) {
+                            Log.w("ProfileActivity", "handleSaveChanges: Image upload returned null or empty URL. Will not update profileImageUrl.")
+                            // Check if uploadedImageUrl is also null or empty, which means the upload truly failed and wasn't a placeholder
+                            if (uploadedImageUrl.isNullOrEmpty()) {
+                                runOnUiThread {
+                                    Toast.makeText(this@ProfileActivity, "Profile image upload failed. Please try again.", Toast.LENGTH_LONG).show()
+                                }
+                            } else {
+                                // This case implies result was null/empty, but uploadedImageUrl might have been a placeholder
+                                // The existing generic toast is fine here if we decide to show one.
+                                // For now, the more specific one above handles direct failures.
+                                // If CloudinaryManager starts returning placeholder strings directly, this logic might need adjustment.
+                                runOnUiThread {
+                                    Toast.makeText(this@ProfileActivity, "Image upload failed. Profile data will be saved without image update.", Toast.LENGTH_LONG).show()
+                                }
                             }
-                            // Don't return here - continue with profile update without image
+                            // Not assigning to uploadedImageUrl to prevent using a placeholder URL for Firestore.
                         } else {
-                            uploadedImageUrl = resultUrl // Store the new image URL
-                            Log.d("ProfileActivity", "Image uploaded successfully: $uploadedImageUrl")
+                            uploadedImageUrl = result // Store the new image URL if valid
+                            Log.d("ProfileActivity", "handleSaveChanges: Image uploaded successfully. uploadedImageUrl: $uploadedImageUrl")
                         }
                     } catch (e: Exception) {
-                        Log.e("ProfileActivity", "Error uploading image", e)
+                        Log.e("ProfileActivity", "handleSaveChanges: Error during image upload.", e)
                         runOnUiThread {
-                            Toast.makeText(this@ProfileActivity, "Image upload failed, but profile data will still be saved", Toast.LENGTH_LONG).show()
+                            Toast.makeText(this@ProfileActivity, "Error during image upload. Profile data will be saved without image update.", Toast.LENGTH_LONG).show()
                         }
-                        // Continue without image update
+                        // Continue without image update, uploadedImageUrl remains null or its previous value
                     }
-                    
-                    // Update the image view immediately with the new URL if upload was successful
-                    if (!uploadedImageUrl.isNullOrEmpty()) {
+
+                    // Update the image view immediately with the new URL if upload was successful AND result was not a placeholder
+                    if (!uploadedImageUrl.isNullOrEmpty() && !uploadedImageUrl.contains("via.placeholder.com")) {
+                        Log.d("ProfileActivity", "handleSaveChanges: Upload successful, updating ImageView with new URL: $uploadedImageUrl")
                         runOnUiThread {
                             Glide.with(this@ProfileActivity)
                                 .load(uploadedImageUrl)
@@ -500,9 +491,13 @@ class ProfileActivity : AppCompatActivity() {
                                 .circleCrop()
                                 .into(profileImageView)
                         }
+                    } else if (uploadedImageUrl?.contains("via.placeholder.com") == true) {
+                        Log.d("ProfileActivity", "handleSaveChanges: Upload resulted in a placeholder URL. ImageView not updated with this placeholder.")
                     }
-                    
-                    selectedImageUri = null // Clear URI after processing
+
+                    selectedImageUri = null // Clear URI after processing in all cases
+                } else {
+                    Log.d("ProfileActivity", "handleSaveChanges: selectedImageUri is null, no new image to upload.")
                 }
 
                 // Consolidate Data for Update
@@ -520,74 +515,47 @@ class ProfileActivity : AppCompatActivity() {
                     updatedData["address"] = newAddress
                 }
 
-                // If a new image was successfully uploaded, add its URL to updatedData
-                if (uploadedImageUrl != null) {
+                // If a new image was successfully uploaded (and is not an empty string or placeholder), add its URL to updatedData
+                if (!uploadedImageUrl.isNullOrEmpty() && !uploadedImageUrl.contains("via.placeholder.com")) {
                     updatedData["profileImageUrl"] = uploadedImageUrl
+                    Log.d("ProfileActivity", "handleSaveChanges: New profileImageUrl added to updatedData: $uploadedImageUrl")
+                } else {
+                    Log.d("ProfileActivity", "handleSaveChanges: uploadedImageUrl is null, empty, or a placeholder, not changing profileImageUrl in updatedData.")
                 }
 
+
                 // Firestore Update Call
+                Log.d("ProfileActivity", "handleSaveChanges: Current updatedData before Firestore call: $updatedData")
                 if (updatedData.isNotEmpty()) {
-                    Log.d("ProfileActivity", "Updating profile with data: $updatedData")
+                    Log.d("ProfileActivity", "handleSaveChanges: updatedData is not empty, attempting to update Firestore.")
                     val updateSuccess = FirebaseManager.updateUserData(updatedData)
+                    Log.d("ProfileActivity", "handleSaveChanges: FirebaseManager.updateUserData success: $updateSuccess")
                     if (updateSuccess) {
-                        Log.d("ProfileActivity", "Profile update successful")
+                        Log.d("ProfileActivity", "Profile update successful in Firestore.")
                         // Update the original user data to reflect changes
                         originalUser = originalUser?.copy(
                             fullName = newFullName,
                             phone = newPhone,
                             address = newAddress,
-                            profileImageUrl = uploadedImageUrl ?: originalUser?.profileImageUrl
+                            // Only update profileImageUrl in originalUser if it was successfully uploaded and not a placeholder
+                            profileImageUrl = if (uploadedImageUrl != null && !uploadedImageUrl.contains("via.placeholder.com")) uploadedImageUrl else originalUser?.profileImageUrl
                         )
-                        
-                        // Verify data was saved correctly
-                        val verificationSuccess = DataPersistenceHelper.verifyUserDataSaved(updatedData)
-                        if (verificationSuccess) {
-                            Log.d("ProfileActivity", "Data persistence verification successful")
-                        } else {
-                            Log.w("ProfileActivity", "Data persistence verification failed")
-                            // Try to force save again if verification failed
-                            Log.d("ProfileActivity", "Attempting to force save profile data again")
-                            val retrySuccess = FirebaseManager.updateUserData(updatedData)
-                            if (retrySuccess) {
-                                Log.d("ProfileActivity", "Retry save successful")
-                            } else {
-                                Log.e("ProfileActivity", "Retry save also failed")
-                            }
-                        }
-                        
-                        // Debug profile persistence
-                        DebugHelper.debugProfilePersistence(userId)
-                        
-                        // Add delay to ensure data is fully persisted
-                        kotlinx.coroutines.delay(2000)
-                        
-                        // Ensure data persistence
-                        val persistenceEnsured = FirebaseManager.ensureDataPersistence()
-                        Log.d("ProfileActivity", "Data persistence ensured: $persistenceEnsured")
-                        
-                        // Final verification after delay
-                        val finalVerification = DataPersistenceHelper.verifyUserDataSaved(updatedData)
-                        Log.d("ProfileActivity", "Final verification after delay: $finalVerification")
-                        
-                        // Force data sync to ensure consistency
-                        val forceSyncSuccess = FirebaseManager.forceDataSync()
-                        Log.d("ProfileActivity", "Force data sync completed: $forceSyncSuccess")
-                        
+
                         runOnUiThread {
                             Toast.makeText(this@ProfileActivity, "Profile saved successfully!", Toast.LENGTH_LONG).show()
                         }
-                        
+
                         // Refresh data from server to ensure consistency
-                        loadUserProfile()
+                        loadUserProfile() // This will also log the image URL loaded by Glide
                     } else {
-                        Log.e("ProfileActivity", "Profile update failed")
+                        Log.e("ProfileActivity", "Profile update failed in Firestore.")
                         runOnUiThread {
                             Toast.makeText(this@ProfileActivity, "Failed to update profile details.", Toast.LENGTH_LONG).show()
                         }
                     }
                 } else {
-                    // This means no text fields changed and no new image was uploaded.
-                    Log.d("ProfileActivity", "No changes detected to save")
+                    // This means no text fields changed and no new image was uploaded or only a placeholder was generated.
+                    Log.d("ProfileActivity", "handleSaveChanges: No changes in updatedData to save to Firestore.")
                     runOnUiThread {
                         Toast.makeText(this@ProfileActivity, "No changes to save.", Toast.LENGTH_SHORT).show()
                     }
@@ -620,10 +588,10 @@ class ProfileActivity : AppCompatActivity() {
                     Log.d("ProfileActivity", "Force syncing data before logout")
                     val syncSuccess = FirebaseManager.forceSyncUserData()
                     Log.d("ProfileActivity", "Pre-logout sync completed: $syncSuccess")
-                    
+
                     // Add delay to ensure sync is complete
                     kotlinx.coroutines.delay(1000)
-                    
+
                     runOnUiThread {
                         FirebaseManager.signOut()
                         val intent = Intent(this@ProfileActivity, LoginActivity::class.java).apply {
@@ -649,7 +617,7 @@ class ProfileActivity : AppCompatActivity() {
                 }
             }
         }
-        
+
         dialog.setCancelable(true)
         dialog.show()
     }

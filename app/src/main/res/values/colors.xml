@@ -32,4 +32,9 @@
     <color name="text_light_grey">#888888</color>
     <color name="star_yellow">#FFD700</color>
     <color name="red_500">#F44336</color>
+
+    <!-- Missing colors for Cloudinary setup -->
+    <color name="background_color">#F4F5F7</color> <!-- Using existing Athens Gray -->
+    <color name="primary_color">#7C3AED</color> <!-- Using existing purple_primary -->
+    <color name="text_secondary">#6B7280</color> <!-- Using existing Pale_Sky -->
 </resources>

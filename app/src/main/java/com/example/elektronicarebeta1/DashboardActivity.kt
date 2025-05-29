@@ -25,13 +25,13 @@ class DashboardActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             val currentUser = FirebaseManager.getCurrentUser()
-            
+
             // DEBUG LOGGING
             Log.d(TAG, "Current user: $currentUser")
             Log.d(TAG, "User ID: ${FirebaseManager.getUserId()}")
             Log.d(TAG, "User email: ${currentUser?.email}")
             Log.d(TAG, "User name: ${currentUser?.fullName ?: "Unknown"}")
-            
+
             if (currentUser == null) {
                 Log.d(TAG, "No current user, redirecting to login")
                 startActivity(Intent(this@DashboardActivity, LoginActivity::class.java))
@@ -39,7 +39,7 @@ class DashboardActivity : AppCompatActivity() {
                 finish()
                 return@launch
             }
-            
+
             // Run user migration for existing users
             try {
                 UserMigrationHelper.migrateExistingUsers()
@@ -65,10 +65,10 @@ class DashboardActivity : AppCompatActivity() {
             Toast.makeText(this, "Notifications coming soon", Toast.LENGTH_SHORT).show()
         }
     }
-    
+
     override fun onResume() {
         super.onResume()
-        
+
         // Check authentication and force sync data when returning to dashboard
         lifecycleScope.launch {
             val currentUser = FirebaseManager.getCurrentUser()
@@ -78,15 +78,7 @@ class DashboardActivity : AppCompatActivity() {
                 finish()
                 return@launch
             }
-            
-            // Force data sync first
-            val forceSyncSuccess = FirebaseManager.forceDataSync()
-            Log.d(TAG, "Dashboard force data sync completed: $forceSyncSuccess")
-            
-            // Force sync user data
-            val syncSuccess = FirebaseManager.forceSyncUserData()
-            Log.d(TAG, "Dashboard force sync user data completed: $syncSuccess")
-            
+
             // Reload user data and recent repairs
             loadUserData()
             loadRecentRepairs()
@@ -97,22 +89,18 @@ class DashboardActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 Log.d(TAG, "Loading user data from Firestore...")
-                
-                // Force sync data first to ensure we get latest data
-                val forceSyncSuccess = FirebaseManager.forceDataSync()
-                Log.d(TAG, "Force data sync completed: $forceSyncSuccess")
-                
+
                 val userDoc = FirebaseManager.getUserData()
-                
+
                 if (userDoc != null && userDoc.exists()) {
                     Log.d(TAG, "User document found, loading data...")
                     val fullName = userDoc.getString("fullName") ?: "User"
                     val firstName = fullName.split(" ").firstOrNull() ?: fullName
-                    
+
                     runOnUiThread {
                         userNameText.text = "Welcome back, $firstName!"
                     }
-                    
+
                     Log.d(TAG, "User data loaded successfully: $firstName")
                 } else {
                     Log.w(TAG, "User document not found, using fallback")
@@ -120,7 +108,7 @@ class DashboardActivity : AppCompatActivity() {
                     val currentFirebaseUser = FirebaseManager.getCurrentFirebaseUser()
                     val email = currentFirebaseUser?.email ?: "User"
                     val firstName = email.split("@").firstOrNull()?.split(".")?.firstOrNull() ?: "User"
-                    
+
                     runOnUiThread {
                         userNameText.text = "Welcome back, $firstName!"
                     }
@@ -138,15 +126,15 @@ class DashboardActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 Log.d(TAG, "Loading recent repairs from Firestore...")
-                
+
                 val repairsSnapshot = FirebaseManager.getUserRepairs()
-                
+
                 if (repairsSnapshot != null && !repairsSnapshot.isEmpty) {
                     Log.d(TAG, "Found ${repairsSnapshot.size()} repairs")
-                    
+
                     // Get the most recent repairs (limit to 2 for dashboard)
                     val recentRepairs = repairsSnapshot.documents.take(2)
-                    
+
                     runOnUiThread {
                         updateRepairCards(recentRepairs)
                     }
@@ -166,44 +154,44 @@ class DashboardActivity : AppCompatActivity() {
     private fun updateRepairCards(repairs: List<com.google.firebase.firestore.DocumentSnapshot>) {
         val repairCard1 = findViewById<View>(R.id.repair_card_1)
         val repairCard2 = findViewById<View>(R.id.repair_card_2)
-        
+
         // Update first repair card if available
         if (repairs.isNotEmpty()) {
             val repair1 = repairs[0]
             repairCard1.visibility = View.VISIBLE
-            
+
             // Update repair card 1 with data
             val deviceType1 = repair1.getString("deviceType") ?: "Unknown Device"
             val status1 = repair1.getString("status") ?: "Unknown Status"
-            
+
             // Find TextViews in repair card and update them
             val deviceText1 = repairCard1.findViewById<TextView>(R.id.device_type_text)
             val statusText1 = repairCard1.findViewById<TextView>(R.id.status_text)
-            
+
             deviceText1?.text = deviceType1
             statusText1?.text = status1.replaceFirstChar { it.uppercase() }
-            
+
             Log.d(TAG, "Updated repair card 1: $deviceType1 - $status1")
         } else {
             repairCard1.visibility = View.GONE
         }
-        
+
         // Update second repair card if available
         if (repairs.size > 1) {
             val repair2 = repairs[1]
             repairCard2.visibility = View.VISIBLE
-            
+
             // Update repair card 2 with data
             val deviceType2 = repair2.getString("deviceType") ?: "Unknown Device"
             val status2 = repair2.getString("status") ?: "Unknown Status"
-            
+
             // Find TextViews in repair card and update them
             val deviceText2 = repairCard2.findViewById<TextView>(R.id.device_type_text)
             val statusText2 = repairCard2.findViewById<TextView>(R.id.status_text)
-            
+
             deviceText2?.text = deviceType2
             statusText2?.text = status2.replaceFirstChar { it.uppercase() }
-            
+
             Log.d(TAG, "Updated repair card 2: $deviceType2 - $status2")
         } else {
             repairCard2.visibility = View.GONE
@@ -213,10 +201,10 @@ class DashboardActivity : AppCompatActivity() {
     private fun hideRepairCards() {
         val repairCard1 = findViewById<View>(R.id.repair_card_1)
         val repairCard2 = findViewById<View>(R.id.repair_card_2)
-        
+
         repairCard1.visibility = View.GONE
         repairCard2.visibility = View.GONE
-        
+
         Log.d(TAG, "Repair cards hidden - no repairs found")
     }
 

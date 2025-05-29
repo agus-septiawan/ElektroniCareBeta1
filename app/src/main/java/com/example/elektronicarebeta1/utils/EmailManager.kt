@@ -13,11 +13,11 @@ import java.util.*
  * Uses Intent to open email client with pre-filled content
  */
 object EmailManager {
-    
+
     private const val TAG = "EmailManager"
-    private const val TECHNICIAN_EMAIL = "agusseptiawanasep@gmail.com"
-    private const val COMPANY_EMAIL = "elektronicare@gmail.com"
-    
+    private const val TECHNICIAN_EMAIL = "satriawiangga200@gmail.com"
+    private const val COMPANY_EMAIL = "ahmadyasinalazka@gmail.com"
+
     /**
      * Send booking confirmation email to technician
      */
@@ -42,7 +42,7 @@ object EmailManager {
                 estimatedCost = estimatedCost,
                 deviceImageUrl = deviceImageUrl
             )
-            
+
             val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
                 data = Uri.parse("mailto:")
                 putExtra(Intent.EXTRA_EMAIL, arrayOf(TECHNICIAN_EMAIL))
@@ -50,19 +50,23 @@ object EmailManager {
                 putExtra(Intent.EXTRA_SUBJECT, subject)
                 putExtra(Intent.EXTRA_TEXT, body)
             }
-            
+
             if (emailIntent.resolveActivity(context.packageManager) != null) {
                 context.startActivity(Intent.createChooser(emailIntent, "Send booking notification"))
                 Log.d(TAG, "Email intent created successfully for booking: $bookingId")
+                // Add Toast after starting activity
+                android.widget.Toast.makeText(context, "Please complete sending the booking notification via your email app.", android.widget.Toast.LENGTH_LONG).show()
             } else {
-                Log.w(TAG, "No email client available")
+                Log.w(TAG, "No email client available for booking notification")
+                // Add Toast if no email client is found
+                android.widget.Toast.makeText(context, "No email app found to send booking notification. Please install one.", android.widget.Toast.LENGTH_LONG).show()
             }
-            
+
         } catch (e: Exception) {
             Log.e(TAG, "Error creating email intent", e)
         }
     }
-    
+
     /**
      * Send booking confirmation to customer
      */
@@ -83,7 +87,7 @@ object EmailManager {
                 appointmentDate = appointmentDate,
                 estimatedCost = estimatedCost
             )
-            
+
             val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
                 data = Uri.parse("mailto:")
                 putExtra(Intent.EXTRA_EMAIL, arrayOf(user.email))
@@ -91,17 +95,23 @@ object EmailManager {
                 putExtra(Intent.EXTRA_SUBJECT, subject)
                 putExtra(Intent.EXTRA_TEXT, body)
             }
-            
+
             if (emailIntent.resolveActivity(context.packageManager) != null) {
                 context.startActivity(Intent.createChooser(emailIntent, "Send confirmation"))
                 Log.d(TAG, "Customer confirmation email created for booking: $bookingId")
+                // Add Toast after starting activity
+                android.widget.Toast.makeText(context, "Please complete sending the confirmation email via your email app.", android.widget.Toast.LENGTH_LONG).show()
+            } else {
+                Log.w(TAG, "No email client available for customer confirmation")
+                // Add Toast if no email client is found
+                android.widget.Toast.makeText(context, "No email app found to send confirmation. Please install one.", android.widget.Toast.LENGTH_LONG).show()
             }
-            
+
         } catch (e: Exception) {
             Log.e(TAG, "Error creating customer confirmation email", e)
         }
     }
-    
+
     private fun createBookingEmailBody(
         bookingId: String,
         user: User,
@@ -113,7 +123,7 @@ object EmailManager {
     ): String {
         val dateFormat = SimpleDateFormat("EEEE, dd MMMM yyyy 'at' HH:mm", Locale.getDefault())
         val formattedDate = dateFormat.format(appointmentDate)
-        
+
         return """
             🔧 NEW BOOKING REQUEST - ElektroniCare
             
@@ -151,7 +161,7 @@ object EmailManager {
             Generated on: ${SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault()).format(Date())}
         """.trimIndent()
     }
-    
+
     private fun createCustomerConfirmationBody(
         bookingId: String,
         user: User,
@@ -161,7 +171,7 @@ object EmailManager {
     ): String {
         val dateFormat = SimpleDateFormat("EEEE, dd MMMM yyyy 'at' HH:mm", Locale.getDefault())
         val formattedDate = dateFormat.format(appointmentDate)
-        
+
         return """
             ✅ BOOKING CONFIRMATION - ElektroniCare
             

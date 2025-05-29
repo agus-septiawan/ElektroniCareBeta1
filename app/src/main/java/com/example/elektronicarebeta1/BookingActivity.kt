@@ -117,7 +117,7 @@ class BookingActivity : AppCompatActivity() {
         initializeViews()
         setupListeners()
     }
-    
+
     override fun onResume() {
         super.onResume()
         // Check if user is still authenticated
@@ -132,10 +132,6 @@ class BookingActivity : AppCompatActivity() {
         }
         // Force refresh auth token and data sync to ensure valid session
         lifecycleScope.launch {
-            // Force data sync first
-            val forceSyncSuccess = FirebaseManager.forceDataSync()
-            Log.d("BookingActivity", "Force data sync completed: $forceSyncSuccess")
-            
             val tokenRefreshed = FirebaseManager.refreshAuthToken()
             Log.d("BookingActivity", "Auth token refresh: $tokenRefreshed")
         }
@@ -153,13 +149,13 @@ class BookingActivity : AppCompatActivity() {
         val takePhotoLayout = findViewById<LinearLayout>(R.id.takePhotoLayout)
         val uploadLayout = findViewById<LinearLayout>(R.id.llUploadLayout)
 
-        takePhotoLayout.setOnClickListener { 
+        takePhotoLayout.setOnClickListener {
             Log.d("BookingActivity", "Take photo layout clicked")
-            takePhoto() 
+            takePhoto()
         }
-        uploadLayout.setOnClickListener { 
+        uploadLayout.setOnClickListener {
             Log.d("BookingActivity", "Upload layout clicked")
-            selectImageFromGallery() 
+            selectImageFromGallery()
         }
 
         // Initialize date and time selection layouts
@@ -245,7 +241,7 @@ class BookingActivity : AppCompatActivity() {
             Log.d("BookingActivity", "Creating image file...")
             val photoFile = createImageFile()
             Log.d("BookingActivity", "Image file created: ${photoFile.absolutePath}")
-            
+
             selectedImageUri = FileProvider.getUriForFile(
                 this,
                 "${packageName}.fileprovider",
@@ -274,12 +270,12 @@ class BookingActivity : AppCompatActivity() {
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
         val imageFileName = "JPEG_${timeStamp}_"
         val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        
+
         // Create the storage directory if it doesn't exist
         if (storageDir != null && !storageDir.exists()) {
             storageDir.mkdirs()
         }
-        
+
         return File.createTempFile(imageFileName, ".jpg", storageDir)
     }
 
@@ -331,12 +327,12 @@ class BookingActivity : AppCompatActivity() {
                     }
                     return@launch
                 }
-                
+
                 try {
                     val uploadResult = CloudinaryManager.uploadRepairImage(this@BookingActivity, selectedImageUri!!, userId, null)
                     imageUrl = uploadResult
                     Log.d("BookingActivity", "Image upload result: $imageUrl")
-                    
+
                     if (imageUrl.isNullOrEmpty()) {
                         Log.w("BookingActivity", "Image upload failed, continuing without image")
                         // Don't return here - continue with booking without image
@@ -361,7 +357,7 @@ class BookingActivity : AppCompatActivity() {
                 "createdAt" to Date(),
                 "updatedAt" to Date()
             )
-            
+
             Log.d("BookingActivity", "Creating repair request with data: $repairData")
 
             // Add image URL if available
@@ -376,41 +372,7 @@ class BookingActivity : AppCompatActivity() {
 
             if (repairId != null) {
                 Log.d("BookingActivity", "Repair request created successfully with ID: $repairId")
-                
-                // Verify data was saved correctly
-                val verificationSuccess = DataPersistenceHelper.verifyRepairRequestSaved(repairId)
-                if (verificationSuccess) {
-                    Log.d("BookingActivity", "Repair request persistence verification successful")
-                } else {
-                    Log.w("BookingActivity", "Repair request persistence verification failed")
-                    // Try to force save again if verification failed
-                    Log.d("BookingActivity", "Attempting to force save booking data again")
-                    val retryId = FirebaseManager.createRepairRequest(bookingData)
-                    if (retryId != null) {
-                        Log.d("BookingActivity", "Retry booking save successful with ID: $retryId")
-                    } else {
-                        Log.e("BookingActivity", "Retry booking save also failed")
-                    }
-                }
-                
-                // Debug booking persistence
-                DebugHelper.debugBookingPersistence(repairId)
-                
-                // Add delay to ensure data is fully persisted
-                kotlinx.coroutines.delay(2000)
-                
-                // Ensure data persistence
-                val persistenceEnsured = FirebaseManager.ensureDataPersistence()
-                Log.d("BookingActivity", "Data persistence ensured: $persistenceEnsured")
-                
-                // Final verification after delay
-                val finalVerification = DataPersistenceHelper.verifyRepairRequestSaved(repairId)
-                Log.d("BookingActivity", "Final verification after delay: $finalVerification")
-                
-                // Force data sync to ensure consistency
-                val forceSyncSuccess = FirebaseManager.forceDataSync()
-                Log.d("BookingActivity", "Force data sync completed: $forceSyncSuccess")
-                
+
                 // Get user data for email and WhatsApp
                 val currentUser = FirebaseManager.getCurrentUser()
                 if (currentUser != null) {
@@ -427,7 +389,7 @@ class BookingActivity : AppCompatActivity() {
                             estimatedCost = servicePrice,
                             deviceImageUrl = imageUrl
                         )
-                        
+
                         EmailManager.sendCustomerConfirmation(
                             context = this@BookingActivity,
                             bookingId = repairId,
@@ -441,11 +403,11 @@ class BookingActivity : AppCompatActivity() {
                         Log.e("BookingActivity", "Error sending email notifications", e)
                     }
                 }
-                
+
                 runOnUiThread {
                     Toast.makeText(this@BookingActivity, "Booking submitted successfully!", Toast.LENGTH_SHORT).show()
                 }
-                
+
                 showSuccessDialog(repairId, currentUser)
             } else {
                 Log.e("BookingActivity", "Failed to create repair request - repairId is null")
@@ -488,21 +450,18 @@ class BookingActivity : AppCompatActivity() {
                         )
                         Log.d("BookingActivity", "WhatsApp message sent to technician")
                     } else {
-                        // Fallback to old method if user data not available
-                        val message = "Hello, I've submitted a repair request through ElektroniCare.\n" +
-                                "My Repair ID: $repairId\n" +
-                                "Issue: ${issueDescriptionEdit.text}\n\n" +
-                                "Please provide assistance."
-
-                        val intent = Intent(Intent.ACTION_VIEW)
-                        intent.data = Uri.parse("https://api.whatsapp.com/send?text=${Uri.encode(message)}")
-
-                        if (intent.resolveActivity(packageManager) != null) {
-                            startActivity(intent)
-                            Log.d("BookingActivity", "WhatsApp fallback method used")
-                        } else {
-                            Toast.makeText(this@BookingActivity, "WhatsApp is not installed.", Toast.LENGTH_SHORT).show()
-                        }
+                        Log.w("BookingActivity", "User data is null, sending WhatsApp to technician with placeholder info.")
+                        WhatsAppManager.sendBookingToTechnician(
+                            context = this@BookingActivity,
+                            bookingId = repairId,
+                            customerName = "Customer (Details N/A)", // Placeholder
+                            serviceName = serviceName ?: "Electronic Repair",
+                            issueDescription = issueDescriptionEdit.text.toString(),
+                            appointmentDate = calendar.time,
+                            estimatedCost = servicePrice,
+                            customerPhone = "N/A" // Placeholder
+                        )
+                        Log.d("BookingActivity", "WhatsApp message sent to technician (user data was null).")
                     }
                 } catch (e: Exception) {
                     Log.e("BookingActivity", "Error opening WhatsApp", e)
