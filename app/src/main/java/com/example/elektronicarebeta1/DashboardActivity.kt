@@ -78,9 +78,13 @@ class DashboardActivity : AppCompatActivity() {
                 return@launch
             }
             
+            // Force data sync first
+            val forceSyncSuccess = FirebaseManager.forceDataSync()
+            Log.d(TAG, "Dashboard force data sync completed: $forceSyncSuccess")
+            
             // Force sync user data
             val syncSuccess = FirebaseManager.forceSyncUserData()
-            Log.d(TAG, "Dashboard force sync completed: $syncSuccess")
+            Log.d(TAG, "Dashboard force sync user data completed: $syncSuccess")
             
             // Reload user data
             loadUserData()

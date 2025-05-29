@@ -74,6 +74,12 @@ object FirebaseManager {
             Log.d(TAG, "Updating user data for userId: $userId")
             Log.d(TAG, "Update data: $userData")
             
+            // Force sync before updating
+            val syncSuccess = forceSyncUserData()
+            if (!syncSuccess) {
+                Log.w(TAG, "Warning: User sync failed before updating user data")
+            }
+            
             // Add timestamp for tracking
             val dataWithTimestamp = userData.toMutableMap()
             dataWithTimestamp["updatedAt"] = Date()
@@ -82,15 +88,47 @@ object FirebaseManager {
             
             Log.d(TAG, "User data updated successfully")
             
-            // Verify the update by reading back the data
-            val updatedDoc = db.collection(USERS_COLLECTION).document(userId).get().await()
-            if (updatedDoc.exists()) {
-                Log.d(TAG, "Verification: Updated document exists with data: ${updatedDoc.data}")
-                true
-            } else {
-                Log.e(TAG, "Verification failed: Document does not exist after update")
-                false
+            // Wait for write to complete
+            firestore.waitForPendingWrites().await()
+            
+            // Add delay to ensure data propagation
+            kotlinx.coroutines.delay(1000)
+            
+            // Verify the update by reading back the data multiple times
+            var verificationAttempts = 0
+            var updatedDoc: com.google.firebase.firestore.DocumentSnapshot? = null
+            
+            while (verificationAttempts < 3) {
+                updatedDoc = db.collection(USERS_COLLECTION).document(userId).get().await()
+                if (updatedDoc.exists()) {
+                    val docData = updatedDoc.data
+                    // Check if the updated fields are actually present
+                    var allFieldsUpdated = true
+                    for ((key, value) in userData) {
+                        if (docData?.get(key) != value) {
+                            allFieldsUpdated = false
+                            Log.w(TAG, "Field $key not updated correctly. Expected: $value, Got: ${docData?.get(key)}")
+                            break
+                        }
+                    }
+                    
+                    if (allFieldsUpdated) {
+                        Log.d(TAG, "Verification successful on attempt ${verificationAttempts + 1}: All fields updated correctly")
+                        return true
+                    } else {
+                        verificationAttempts++
+                        Log.w(TAG, "Verification attempt $verificationAttempts failed, retrying...")
+                        kotlinx.coroutines.delay(500)
+                    }
+                } else {
+                    verificationAttempts++
+                    Log.w(TAG, "Verification attempt $verificationAttempts failed: Document does not exist")
+                    kotlinx.coroutines.delay(500)
+                }
             }
+            
+            Log.e(TAG, "Verification failed after 3 attempts: User data update not confirmed")
+            false
         } catch (e: Exception) {
             Log.e(TAG, "Error updating user data", e)
             false
@@ -137,17 +175,42 @@ object FirebaseManager {
             Log.d(TAG, "Creating repair request for userId: $userId")
             Log.d(TAG, "Repair data: $repairWithUser")
             
+            // Force sync before creating repair request
+            val syncSuccess = forceSyncUserData()
+            if (!syncSuccess) {
+                Log.w(TAG, "Warning: User sync failed before creating repair request")
+            }
+            
             val docRef = db.collection(REPAIRS_COLLECTION).add(repairWithUser).await()
             
             Log.d(TAG, "Repair request created successfully with ID: ${docRef.id}")
             
-            // Verify the creation by reading back the data
-            val createdDoc = docRef.get().await()
-            if (createdDoc.exists()) {
-                Log.d(TAG, "Verification: Created repair document exists with data: ${createdDoc.data}")
+            // Wait for write to complete
+            firestore.waitForPendingWrites().await()
+            
+            // Add delay to ensure data propagation
+            kotlinx.coroutines.delay(1000)
+            
+            // Verify the creation by reading back the data multiple times
+            var verificationAttempts = 0
+            var createdDoc: com.google.firebase.firestore.DocumentSnapshot? = null
+            
+            while (verificationAttempts < 3) {
+                createdDoc = docRef.get().await()
+                if (createdDoc.exists()) {
+                    Log.d(TAG, "Verification successful on attempt ${verificationAttempts + 1}: Created repair document exists with data: ${createdDoc.data}")
+                    break
+                } else {
+                    verificationAttempts++
+                    Log.w(TAG, "Verification attempt $verificationAttempts failed, retrying...")
+                    kotlinx.coroutines.delay(500)
+                }
+            }
+            
+            if (createdDoc?.exists() == true) {
                 docRef.id
             } else {
-                Log.e(TAG, "Verification failed: Repair document does not exist after creation")
+                Log.e(TAG, "Verification failed after 3 attempts: Repair document does not exist after creation")
                 null
             }
         } catch (e: Exception) {
@@ -289,6 +352,9 @@ object FirebaseManager {
             firestore.waitForPendingWrites().await()
             Log.d(TAG, "All pending writes completed")
             
+            // Add additional delay to ensure data propagation
+            kotlinx.coroutines.delay(1500)
+            
             // Verify user document exists and is accessible
             val userDoc = getUserDocument()
             if (userDoc?.exists() == true) {
@@ -300,6 +366,34 @@ object FirebaseManager {
             }
         } catch (e: Exception) {
             Log.e(TAG, "Error ensuring data persistence", e)
+            false
+        }
+    }
+    
+    suspend fun forceDataSync(): Boolean {
+        return try {
+            Log.d(TAG, "Starting force data sync")
+            
+            // Clear any cached data
+            firestore.clearPersistence()
+            
+            // Force sync user data
+            val syncSuccess = forceSyncUserData()
+            if (!syncSuccess) {
+                Log.w(TAG, "Force data sync failed: user sync failed")
+                return false
+            }
+            
+            // Wait for pending writes
+            firestore.waitForPendingWrites().await()
+            
+            // Enable network to ensure fresh data
+            firestore.enableNetwork().await()
+            
+            Log.d(TAG, "Force data sync completed successfully")
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "Error during force data sync", e)
             false
         }
     }

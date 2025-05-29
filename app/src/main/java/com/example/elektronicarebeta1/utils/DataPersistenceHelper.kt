@@ -79,7 +79,11 @@ object DataPersistenceHelper {
      */
     suspend fun forceRefreshUserData(): Boolean {
         return try {
-            // Force refresh auth token first
+            // Force data sync first
+            val forceSyncSuccess = FirebaseManager.forceDataSync()
+            Log.d(TAG, "Force data sync in refresh user data: $forceSyncSuccess")
+            
+            // Force refresh auth token
             FirebaseManager.refreshAuthToken()
             
             // Get fresh user data
@@ -119,7 +123,11 @@ object DataPersistenceHelper {
         return try {
             Log.d(TAG, "Forcing refresh of repair data")
             
-            // Refresh auth token first
+            // Force data sync first
+            val forceSyncSuccess = FirebaseManager.forceDataSync()
+            Log.d(TAG, "Force data sync in refresh repair data: $forceSyncSuccess")
+            
+            // Refresh auth token
             val tokenRefreshed = FirebaseManager.refreshAuthToken()
             if (!tokenRefreshed) {
                 Log.w(TAG, "Failed to refresh auth token")

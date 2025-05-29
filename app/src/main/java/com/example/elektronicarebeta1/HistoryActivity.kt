@@ -67,12 +67,17 @@ class HistoryActivity : AppCompatActivity() {
         }
         // Force refresh data when returning to this activity
         lifecycleScope.launch {
-            // Force sync user data first
+            // Force data sync first
+            val forceSyncSuccess = FirebaseManager.forceDataSync()
+            Log.d("HistoryActivity", "Force data sync completed: $forceSyncSuccess")
+            
+            // Force sync user data
             val syncSuccess = FirebaseManager.forceSyncUserData()
-            Log.d("HistoryActivity", "Force sync completed: $syncSuccess")
+            Log.d("HistoryActivity", "Force sync user data completed: $syncSuccess")
             
             val refreshCount = DataPersistenceHelper.forceRefreshRepairHistory()
-            Log.d("HistoryActivity", "Force refresh completed: $refreshCount repairs found")
+            Log.d("HistoryActivity", "Force refresh repair history completed: $refreshCount repairs found")
+            
             loadRepairHistory()
         }
     }
@@ -168,6 +173,10 @@ class HistoryActivity : AppCompatActivity() {
             // Debug history loading
             DebugHelper.debugHistoryLoading()
             
+            // Force data sync first
+            val forceSyncSuccess = FirebaseManager.forceDataSync()
+            android.util.Log.d("HistoryActivity", "Force data sync completed: $forceSyncSuccess")
+            
             val repairsSnapshot = FirebaseManager.getUserRepairs()
             
             if (repairsSnapshot == null || repairsSnapshot.isEmpty) {
@@ -178,11 +187,28 @@ class HistoryActivity : AppCompatActivity() {
                 val forceRefreshSuccess = DataPersistenceHelper.forceRefreshRepairData()
                 if (forceRefreshSuccess) {
                     android.util.Log.d("HistoryActivity", "Force refresh completed, retrying data load")
+                    
+                    // Add delay before retry
+                    kotlinx.coroutines.delay(1000)
+                    
                     val retrySnapshot = FirebaseManager.getUserRepairs()
                     if (retrySnapshot != null && !retrySnapshot.isEmpty) {
                         android.util.Log.d("HistoryActivity", "Retry successful, found ${retrySnapshot.size()} repairs")
                         processRepairSnapshot(retrySnapshot)
                         return@launch
+                    } else {
+                        // Try one more time with force sync
+                        android.util.Log.d("HistoryActivity", "Second attempt with force sync")
+                        val secondSyncSuccess = FirebaseManager.forceDataSync()
+                        if (secondSyncSuccess) {
+                            kotlinx.coroutines.delay(1500)
+                            val finalSnapshot = FirebaseManager.getUserRepairs()
+                            if (finalSnapshot != null && !finalSnapshot.isEmpty) {
+                                android.util.Log.d("HistoryActivity", "Final attempt successful, found ${finalSnapshot.size()} repairs")
+                                processRepairSnapshot(finalSnapshot)
+                                return@launch
+                            }
+                        }
                     }
                 }
                 

@@ -163,12 +163,17 @@ class ProfileActivity : AppCompatActivity() {
         
         // Force refresh profile data when returning to this activity
         lifecycleScope.launch {
-            // Force sync user data first
+            // Force data sync first
+            val forceSyncSuccess = FirebaseManager.forceDataSync()
+            Log.d("ProfileActivity", "Force data sync completed: $forceSyncSuccess")
+            
+            // Force sync user data
             val syncSuccess = FirebaseManager.forceSyncUserData()
-            Log.d("ProfileActivity", "Force sync completed: $syncSuccess")
+            Log.d("ProfileActivity", "Force sync user data completed: $syncSuccess")
             
             val refreshSuccess = DataPersistenceHelper.forceRefreshUserData()
-            Log.d("ProfileActivity", "Force refresh completed: $refreshSuccess")
+            Log.d("ProfileActivity", "Force refresh user data completed: $refreshSuccess")
+            
             loadUserProfile()
         }
     }
@@ -209,7 +214,22 @@ class ProfileActivity : AppCompatActivity() {
     private fun loadUserProfile() {
         lifecycleScope.launch {
             Log.d("ProfileActivity", "Loading user profile...")
-            val userDoc = FirebaseManager.getUserData()
+            
+            // Force data sync first
+            val forceSyncSuccess = FirebaseManager.forceDataSync()
+            Log.d("ProfileActivity", "Force data sync completed: $forceSyncSuccess")
+            
+            var userDoc = FirebaseManager.getUserData()
+            
+            // If user document is null, try force refresh
+            if (userDoc == null || !userDoc.exists()) {
+                Log.w("ProfileActivity", "User document is null or doesn't exist, attempting force refresh")
+                val forceRefreshSuccess = DataPersistenceHelper.forceRefreshUserData()
+                if (forceRefreshSuccess) {
+                    kotlinx.coroutines.delay(1000)
+                    userDoc = FirebaseManager.getUserData()
+                }
+            }
             
             if (userDoc != null && userDoc.exists()) {
                 Log.d("ProfileActivity", "User document found, parsing...")
@@ -247,8 +267,8 @@ class ProfileActivity : AppCompatActivity() {
                     Toast.makeText(this@ProfileActivity, "Failed to parse profile data", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Log.e("ProfileActivity", "User document not found or doesn't exist")
-                Toast.makeText(this@ProfileActivity, "Failed to load profile", Toast.LENGTH_SHORT).show()
+                Log.e("ProfileActivity", "User document not found or doesn't exist after all attempts")
+                Toast.makeText(this@ProfileActivity, "Failed to load profile. Please try again.", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -548,6 +568,10 @@ class ProfileActivity : AppCompatActivity() {
                         // Final verification after delay
                         val finalVerification = DataPersistenceHelper.verifyUserDataSaved(updatedData)
                         Log.d("ProfileActivity", "Final verification after delay: $finalVerification")
+                        
+                        // Force data sync to ensure consistency
+                        val forceSyncSuccess = FirebaseManager.forceDataSync()
+                        Log.d("ProfileActivity", "Force data sync completed: $forceSyncSuccess")
                         
                         runOnUiThread {
                             Toast.makeText(this@ProfileActivity, "Profile saved successfully!", Toast.LENGTH_LONG).show()
