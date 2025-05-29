@@ -7,7 +7,6 @@ package com.example.elektronicarebeta1.cloudinary
  * You can find these in your Cloudinary Dashboard at https://cloudinary.com/console
  */
 object CloudinaryConfig {
-    
     // TODO: Replace with your actual Cloudinary credentials
     const val CLOUD_NAME = "dcnsxpyal"
     const val API_KEY = "493695264712621"
@@ -16,6 +15,18 @@ object CloudinaryConfig {
     // Upload presets (these need to be created in Cloudinary Dashboard)
     const val PROFILE_UPLOAD_PRESET = "profile_images"
     const val REPAIR_UPLOAD_PRESET = "repair_images"
+    
+    /**
+     * Check if Cloudinary is properly configured
+     */
+    fun isConfigured(): Boolean {
+        return CLOUD_NAME != "your_cloud_name" && 
+               API_KEY != "your_api_key" && 
+               API_SECRET != "your_api_secret" &&
+               CLOUD_NAME.isNotBlank() &&
+               API_KEY.isNotBlank() &&
+               API_SECRET.isNotBlank()
+    }
     
     // Image transformation settings
     const val PROFILE_IMAGE_WIDTH = 400

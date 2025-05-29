@@ -42,6 +42,11 @@ object CloudinaryManager {
      * @return URL of uploaded image or null if failed
      */
     suspend fun uploadProfileImage(imageUri: Uri, userId: String): String? {
+        // For demo purposes, return a placeholder URL if Cloudinary is not properly configured
+        if (!CloudinaryConfig.isConfigured()) {
+            Log.w(TAG, "Cloudinary not configured, using placeholder image")
+            return generatePlaceholderImageUrl(userId)
+        }
         return uploadImage(imageUri, CloudinaryConfig.PROFILE_UPLOAD_PRESET, "profile_$userId")
     }
     
@@ -53,6 +58,11 @@ object CloudinaryManager {
      * @return URL of uploaded image or null if failed
      */
     suspend fun uploadRepairImage(imageUri: Uri, userId: String, repairId: String? = null): String? {
+        // For demo purposes, return a placeholder URL if Cloudinary is not properly configured
+        if (!CloudinaryConfig.isConfigured()) {
+            Log.w(TAG, "Cloudinary not configured, using placeholder image")
+            return generatePlaceholderImageUrl("repair_$userId")
+        }
         val publicId = if (repairId != null) "repair_${userId}_$repairId" else "repair_${userId}_${UUID.randomUUID()}"
         return uploadImage(imageUri, CloudinaryConfig.REPAIR_UPLOAD_PRESET, publicId)
     }
@@ -173,6 +183,15 @@ object CloudinaryManager {
         // Build optimized URL
         val baseUrl = parts.subList(0, uploadIndex + 1).joinToString("/")
         return "$baseUrl/w_$width,h_$height,c_$crop,q_auto,f_auto/$publicIdWithExtension"
+    }
+    
+    /**
+     * Generate placeholder image URL for demo purposes
+     */
+    private fun generatePlaceholderImageUrl(identifier: String): String {
+        // Generate a unique placeholder URL based on identifier
+        val hash = identifier.hashCode().toString().replace("-", "")
+        return "https://via.placeholder.com/400x400/4CAF50/FFFFFF?text=${hash.take(6)}"
     }
     
     /**
