@@ -50,6 +50,23 @@ class ServicesActivity : AppCompatActivity(), ServiceAdapter.OnItemClickListener
         loadServices()
     }
     
+    override fun onResume() {
+        super.onResume()
+        // Check if user is still authenticated
+        if (!FirebaseManager.isUserAuthenticated()) {
+            android.util.Log.w("ServicesActivity", "User not authenticated, redirecting to login")
+            val intent = Intent(this, LoginActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            startActivity(intent)
+            finish()
+            return
+        }
+        
+        // Reload services when returning to this activity
+        loadServices()
+    }
+    
     private fun setupBottomNavigation() {
         val homeNav = findViewById<View>(R.id.nav_home)
         val historyNav = findViewById<View>(R.id.nav_history)
@@ -77,6 +94,10 @@ class ServicesActivity : AppCompatActivity(), ServiceAdapter.OnItemClickListener
     
     private fun loadServices() {
         lifecycleScope.launch {
+            // Force data sync first to ensure we get latest data
+            val forceSyncSuccess = FirebaseManager.forceDataSync()
+            android.util.Log.d("ServicesActivity", "Force data sync completed: $forceSyncSuccess")
+            
             val servicesSnapshot = FirebaseManager.getAllServices()
             
             if (servicesSnapshot == null || servicesSnapshot.isEmpty) {
