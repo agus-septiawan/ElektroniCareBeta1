@@ -14,6 +14,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.example.elektronicarebeta1.firebase.FirebaseManager
 import com.example.elektronicarebeta1.models.Repair
+import com.example.elektronicarebeta1.utils.DataPersistenceHelper
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -53,8 +54,22 @@ class HistoryActivity : AppCompatActivity() {
     
     override fun onResume() {
         super.onResume()
-        // Refresh data when returning to this activity
-        loadRepairHistory()
+        // Check if user is still authenticated
+        if (!FirebaseManager.isUserAuthenticated()) {
+            Log.w("HistoryActivity", "User not authenticated, redirecting to login")
+            val intent = Intent(this, LoginActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            startActivity(intent)
+            finish()
+            return
+        }
+        // Force refresh data when returning to this activity
+        lifecycleScope.launch {
+            val refreshCount = DataPersistenceHelper.forceRefreshRepairHistory()
+            Log.d("HistoryActivity", "Force refresh completed: $refreshCount repairs found")
+            loadRepairHistory()
+        }
     }
     
     private fun setupBottomNavigation() {

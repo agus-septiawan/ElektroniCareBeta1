@@ -17,7 +17,7 @@ import java.util.*
 object WhatsAppManager {
     
     private const val TAG = "WhatsAppManager"
-    private const val TECHNICIAN_PHONE = "+6281234567890" // Replace with actual technician phone
+    private const val TECHNICIAN_PHONE = "+6285156789012" // Technician phone number
     
     /**
      * Send booking details to technician via WhatsApp

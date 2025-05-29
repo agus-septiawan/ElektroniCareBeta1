@@ -74,10 +74,23 @@ object FirebaseManager {
             Log.d(TAG, "Updating user data for userId: $userId")
             Log.d(TAG, "Update data: $userData")
             
-            db.collection(USERS_COLLECTION).document(userId).update(userData).await()
+            // Add timestamp for tracking
+            val dataWithTimestamp = userData.toMutableMap()
+            dataWithTimestamp["updatedAt"] = Date()
+            
+            db.collection(USERS_COLLECTION).document(userId).update(dataWithTimestamp).await()
             
             Log.d(TAG, "User data updated successfully")
-            true
+            
+            // Verify the update by reading back the data
+            val updatedDoc = db.collection(USERS_COLLECTION).document(userId).get().await()
+            if (updatedDoc.exists()) {
+                Log.d(TAG, "Verification: Updated document exists with data: ${updatedDoc.data}")
+                true
+            } else {
+                Log.e(TAG, "Verification failed: Document does not exist after update")
+                false
+            }
         } catch (e: Exception) {
             Log.e(TAG, "Error updating user data", e)
             false
@@ -127,7 +140,16 @@ object FirebaseManager {
             val docRef = db.collection(REPAIRS_COLLECTION).add(repairWithUser).await()
             
             Log.d(TAG, "Repair request created successfully with ID: ${docRef.id}")
-            docRef.id
+            
+            // Verify the creation by reading back the data
+            val createdDoc = docRef.get().await()
+            if (createdDoc.exists()) {
+                Log.d(TAG, "Verification: Created repair document exists with data: ${createdDoc.data}")
+                docRef.id
+            } else {
+                Log.e(TAG, "Verification failed: Repair document does not exist after creation")
+                null
+            }
         } catch (e: Exception) {
             Log.e(TAG, "Error creating repair request", e)
             null
@@ -190,6 +212,27 @@ object FirebaseManager {
     // Authentication operations
     fun signOut() {
         auth.signOut()
+    }
+    
+    fun isUserAuthenticated(): Boolean {
+        return auth.currentUser != null
+    }
+    
+    suspend fun refreshAuthToken(): Boolean {
+        return try {
+            val user = auth.currentUser
+            if (user != null) {
+                user.getIdToken(true).await()
+                Log.d(TAG, "Auth token refreshed successfully")
+                true
+            } else {
+                Log.w(TAG, "Cannot refresh token: user is null")
+                false
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error refreshing auth token", e)
+            false
+        }
     }
     
     // Storage operations moved to CloudinaryManager

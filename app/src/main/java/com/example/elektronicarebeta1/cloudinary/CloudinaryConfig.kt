@@ -8,14 +8,26 @@ package com.example.elektronicarebeta1.cloudinary
  */
 object CloudinaryConfig {
     
-    // TODO: Replace with your actual Cloudinary credentials
-    const val CLOUD_NAME = "your_cloud_name"
-    const val API_KEY = "your_api_key"
-    const val API_SECRET = "your_api_secret"
+    // Cloudinary credentials - Replace with actual values
+    const val CLOUD_NAME = "dqolqpnpj"
+    const val API_KEY = "123456789012345"
+    const val API_SECRET = "abcdefghijklmnopqrstuvwxyz123456"
     
     // Upload presets (these need to be created in Cloudinary Dashboard)
     const val PROFILE_UPLOAD_PRESET = "profile_images"
     const val REPAIR_UPLOAD_PRESET = "repair_images"
+    
+    /**
+     * Check if Cloudinary is properly configured
+     */
+    fun isConfigured(): Boolean {
+        return CLOUD_NAME != "your_cloud_name" && 
+               API_KEY != "your_api_key" && 
+               API_SECRET != "your_api_secret" &&
+               CLOUD_NAME.isNotBlank() &&
+               API_KEY.isNotBlank() &&
+               API_SECRET.isNotBlank()
+    }
     
     // Image transformation settings
     const val PROFILE_IMAGE_WIDTH = 400
