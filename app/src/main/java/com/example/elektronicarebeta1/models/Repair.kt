@@ -27,8 +27,8 @@ data class Repair(
                 
                 val id = document.id
                 val userId = document.getString("userId") ?: ""
-                val deviceType = document.getString("deviceType") ?: ""
-                val deviceModel = document.getString("deviceModel") ?: ""
+                val deviceType = document.getString("deviceType") ?: "Electronic Device"
+                val deviceModel = document.getString("deviceModel") ?: document.getString("issueDescription") ?: "Unknown Model"
                 val issueDescription = document.getString("issueDescription") ?: ""
                 val serviceId = document.getString("serviceId")
                 val technicianEmail = document.getString("technicianEmail")
