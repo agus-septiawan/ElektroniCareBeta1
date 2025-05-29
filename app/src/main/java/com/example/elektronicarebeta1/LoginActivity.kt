@@ -229,11 +229,15 @@ class LoginActivity : AppCompatActivity() {
 
     private fun navigateToDashboard() {
         try {
-            // Force sync user data after successful login
+            // Force sync data after successful login
             kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO).launch {
                 try {
+                    // Force data sync first
+                    val forceSyncSuccess = com.example.elektronicarebeta1.firebase.FirebaseManager.forceDataSync()
+                    android.util.Log.d("LoginActivity", "Post-login force data sync completed: $forceSyncSuccess")
+                    
                     val syncSuccess = com.example.elektronicarebeta1.firebase.FirebaseManager.forceSyncUserData()
-                    android.util.Log.d("LoginActivity", "Post-login force sync completed: $syncSuccess")
+                    android.util.Log.d("LoginActivity", "Post-login force sync user data completed: $syncSuccess")
                 } catch (e: Exception) {
                     android.util.Log.e("LoginActivity", "Error during post-login sync", e)
                 }

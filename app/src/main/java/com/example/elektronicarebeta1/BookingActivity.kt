@@ -130,8 +130,12 @@ class BookingActivity : AppCompatActivity() {
             finish()
             return
         }
-        // Force refresh auth token to ensure valid session
+        // Force refresh auth token and data sync to ensure valid session
         lifecycleScope.launch {
+            // Force data sync first
+            val forceSyncSuccess = FirebaseManager.forceDataSync()
+            Log.d("BookingActivity", "Force data sync completed: $forceSyncSuccess")
+            
             val tokenRefreshed = FirebaseManager.refreshAuthToken()
             Log.d("BookingActivity", "Auth token refresh: $tokenRefreshed")
         }
@@ -402,6 +406,10 @@ class BookingActivity : AppCompatActivity() {
                 // Final verification after delay
                 val finalVerification = DataPersistenceHelper.verifyRepairRequestSaved(repairId)
                 Log.d("BookingActivity", "Final verification after delay: $finalVerification")
+                
+                // Force data sync to ensure consistency
+                val forceSyncSuccess = FirebaseManager.forceDataSync()
+                Log.d("BookingActivity", "Force data sync completed: $forceSyncSuccess")
                 
                 // Get user data for email and WhatsApp
                 val currentUser = FirebaseManager.getCurrentUser()
