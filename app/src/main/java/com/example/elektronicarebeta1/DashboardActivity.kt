@@ -57,6 +57,7 @@ class DashboardActivity : AppCompatActivity() {
         // }
 
         loadUserData()
+        loadRecentRepairs()
         setupBottomNavigation()
         setupRepairCards()
 
@@ -86,38 +87,137 @@ class DashboardActivity : AppCompatActivity() {
             val syncSuccess = FirebaseManager.forceSyncUserData()
             Log.d(TAG, "Dashboard force sync user data completed: $syncSuccess")
             
-            // Reload user data
+            // Reload user data and recent repairs
             loadUserData()
+            loadRecentRepairs()
         }
     }
 
     private fun loadUserData() {
-        // TEMPORARY DISABLE FIRESTORE ACCESS FOR DEBUGGING
         lifecycleScope.launch {
-            val currentUser = FirebaseManager.getCurrentUser()
-            val email = currentUser?.email ?: "User"
-            val firstName = email.split("@").firstOrNull()?.split(".")?.firstOrNull() ?: "User"
-            runOnUiThread {
-                userNameText.text = "Welcome back, $firstName!"
+            try {
+                Log.d(TAG, "Loading user data from Firestore...")
+                
+                // Force sync data first to ensure we get latest data
+                val forceSyncSuccess = FirebaseManager.forceDataSync()
+                Log.d(TAG, "Force data sync completed: $forceSyncSuccess")
+                
+                val userDoc = FirebaseManager.getUserData()
+                
+                if (userDoc != null && userDoc.exists()) {
+                    Log.d(TAG, "User document found, loading data...")
+                    val fullName = userDoc.getString("fullName") ?: "User"
+                    val firstName = fullName.split(" ").firstOrNull() ?: fullName
+                    
+                    runOnUiThread {
+                        userNameText.text = "Welcome back, $firstName!"
+                    }
+                    
+                    Log.d(TAG, "User data loaded successfully: $firstName")
+                } else {
+                    Log.w(TAG, "User document not found, using fallback")
+                    // Fallback to email-based name if Firestore data not available
+                    val currentFirebaseUser = FirebaseManager.getCurrentFirebaseUser()
+                    val email = currentFirebaseUser?.email ?: "User"
+                    val firstName = email.split("@").firstOrNull()?.split(".")?.firstOrNull() ?: "User"
+                    
+                    runOnUiThread {
+                        userNameText.text = "Welcome back, $firstName!"
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error loading user data: ${e.message}")
+                runOnUiThread {
+                    userNameText.text = "Welcome back!"
+                }
             }
         }
+    }
+
+    private fun loadRecentRepairs() {
+        lifecycleScope.launch {
+            try {
+                Log.d(TAG, "Loading recent repairs from Firestore...")
+                
+                val repairsSnapshot = FirebaseManager.getUserRepairs()
+                
+                if (repairsSnapshot != null && !repairsSnapshot.isEmpty) {
+                    Log.d(TAG, "Found ${repairsSnapshot.size()} repairs")
+                    
+                    // Get the most recent repairs (limit to 2 for dashboard)
+                    val recentRepairs = repairsSnapshot.documents.take(2)
+                    
+                    runOnUiThread {
+                        updateRepairCards(recentRepairs)
+                    }
+                } else {
+                    Log.d(TAG, "No repairs found for user")
+                    runOnUiThread {
+                        // Hide repair cards or show empty state
+                        hideRepairCards()
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error loading recent repairs: ${e.message}")
+            }
+        }
+    }
+
+    private fun updateRepairCards(repairs: List<com.google.firebase.firestore.DocumentSnapshot>) {
+        val repairCard1 = findViewById<View>(R.id.repair_card_1)
+        val repairCard2 = findViewById<View>(R.id.repair_card_2)
         
-        // lifecycleScope.launch {
-        //     try {
-        //         val userDoc = FirebaseManager.getUserData()
-        //         
-        //         if (userDoc != null && userDoc.exists()) {
-        //             val fullName = userDoc.getString("fullName") ?: "User"
-        //             val firstName = fullName.split(" ").firstOrNull() ?: fullName
-        //             userNameText.text = "Welcome back, $firstName!"
-        //         } else {
-        //             userNameText.text = "Welcome back!"
-        //         }
-        //     } catch (e: Exception) {
-        //         Log.e(TAG, "Error loading user data: ${e.message}")
-        //         userNameText.text = "Welcome back!"
-        //     }
-        // }
+        // Update first repair card if available
+        if (repairs.isNotEmpty()) {
+            val repair1 = repairs[0]
+            repairCard1.visibility = View.VISIBLE
+            
+            // Update repair card 1 with data
+            val deviceType1 = repair1.getString("deviceType") ?: "Unknown Device"
+            val status1 = repair1.getString("status") ?: "Unknown Status"
+            
+            // Find TextViews in repair card and update them
+            val deviceText1 = repairCard1.findViewById<TextView>(R.id.device_type_text)
+            val statusText1 = repairCard1.findViewById<TextView>(R.id.status_text)
+            
+            deviceText1?.text = deviceType1
+            statusText1?.text = status1.replaceFirstChar { it.uppercase() }
+            
+            Log.d(TAG, "Updated repair card 1: $deviceType1 - $status1")
+        } else {
+            repairCard1.visibility = View.GONE
+        }
+        
+        // Update second repair card if available
+        if (repairs.size > 1) {
+            val repair2 = repairs[1]
+            repairCard2.visibility = View.VISIBLE
+            
+            // Update repair card 2 with data
+            val deviceType2 = repair2.getString("deviceType") ?: "Unknown Device"
+            val status2 = repair2.getString("status") ?: "Unknown Status"
+            
+            // Find TextViews in repair card and update them
+            val deviceText2 = repairCard2.findViewById<TextView>(R.id.device_type_text)
+            val statusText2 = repairCard2.findViewById<TextView>(R.id.status_text)
+            
+            deviceText2?.text = deviceType2
+            statusText2?.text = status2.replaceFirstChar { it.uppercase() }
+            
+            Log.d(TAG, "Updated repair card 2: $deviceType2 - $status2")
+        } else {
+            repairCard2.visibility = View.GONE
+        }
+    }
+
+    private fun hideRepairCards() {
+        val repairCard1 = findViewById<View>(R.id.repair_card_1)
+        val repairCard2 = findViewById<View>(R.id.repair_card_2)
+        
+        repairCard1.visibility = View.GONE
+        repairCard2.visibility = View.GONE
+        
+        Log.d(TAG, "Repair cards hidden - no repairs found")
     }
 
     private fun setupBottomNavigation() {

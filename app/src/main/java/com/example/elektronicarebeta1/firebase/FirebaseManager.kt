@@ -89,7 +89,7 @@ object FirebaseManager {
             Log.d(TAG, "User data updated successfully")
             
             // Wait for write to complete
-            firestore.waitForPendingWrites().await()
+            db.waitForPendingWrites().await()
             
             // Add delay to ensure data propagation
             kotlinx.coroutines.delay(1000)
@@ -186,7 +186,7 @@ object FirebaseManager {
             Log.d(TAG, "Repair request created successfully with ID: ${docRef.id}")
             
             // Wait for write to complete
-            firestore.waitForPendingWrites().await()
+            db.waitForPendingWrites().await()
             
             // Add delay to ensure data propagation
             kotlinx.coroutines.delay(1000)
@@ -290,7 +290,7 @@ object FirebaseManager {
                 Log.d(TAG, "Auth token refreshed successfully. Token: ${tokenResult.token?.take(20)}...")
                 
                 // Verify the user is still valid
-                val userDoc = getUserDocument()
+                val userDoc = getUserData()
                 if (userDoc?.exists() == true) {
                     Log.d(TAG, "User document verified after token refresh")
                     true
@@ -356,7 +356,7 @@ object FirebaseManager {
             kotlinx.coroutines.delay(1500)
             
             // Verify user document exists and is accessible
-            val userDoc = getUserDocument()
+            val userDoc = getUserData()
             if (userDoc?.exists() == true) {
                 Log.d(TAG, "Data persistence verified successfully")
                 true
@@ -375,7 +375,7 @@ object FirebaseManager {
             Log.d(TAG, "Starting force data sync")
             
             // Clear any cached data
-            firestore.clearPersistence()
+            db.clearPersistence()
             
             // Force sync user data
             val syncSuccess = forceSyncUserData()
@@ -385,10 +385,10 @@ object FirebaseManager {
             }
             
             // Wait for pending writes
-            firestore.waitForPendingWrites().await()
+            db.waitForPendingWrites().await()
             
             // Enable network to ensure fresh data
-            firestore.enableNetwork().await()
+            db.enableNetwork().await()
             
             Log.d(TAG, "Force data sync completed successfully")
             true
