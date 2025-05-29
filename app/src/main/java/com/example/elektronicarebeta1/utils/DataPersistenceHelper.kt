@@ -111,4 +111,29 @@ object DataPersistenceHelper {
             -1
         }
     }
+    
+    /**
+     * Force refresh repair data with auth token refresh
+     */
+    suspend fun forceRefreshRepairData(): Boolean {
+        return try {
+            Log.d(TAG, "Forcing refresh of repair data")
+            
+            // Refresh auth token first
+            val tokenRefreshed = FirebaseManager.refreshAuthToken()
+            if (!tokenRefreshed) {
+                Log.w(TAG, "Failed to refresh auth token")
+                return false
+            }
+            
+            // Add a small delay to ensure token is properly refreshed
+            kotlinx.coroutines.delay(1000)
+            
+            Log.d(TAG, "Force refresh of repair data completed")
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "Error during repair data force refresh", e)
+            false
+        }
+    }
 }

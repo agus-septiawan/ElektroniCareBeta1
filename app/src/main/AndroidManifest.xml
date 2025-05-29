@@ -83,6 +83,11 @@
         <activity
             android:name=".BookingActivity"
             android:exported="false" />
+            
+        <!-- Cloudinary Setup Activity -->
+        <activity
+            android:name=".CloudinarySetupActivity"
+            android:exported="false" />
 
         <!-- FileProvider for camera functionality -->
         <provider

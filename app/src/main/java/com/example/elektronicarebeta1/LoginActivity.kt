@@ -229,6 +229,16 @@ class LoginActivity : AppCompatActivity() {
 
     private fun navigateToDashboard() {
         try {
+            // Force sync user data after successful login
+            kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO).launch {
+                try {
+                    val syncSuccess = com.example.elektronicarebeta1.firebase.FirebaseManager.forceSyncUserData()
+                    android.util.Log.d("LoginActivity", "Post-login force sync completed: $syncSuccess")
+                } catch (e: Exception) {
+                    android.util.Log.e("LoginActivity", "Error during post-login sync", e)
+                }
+            }
+            
             val intent = Intent(this, DashboardActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)

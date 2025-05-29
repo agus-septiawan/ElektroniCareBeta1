@@ -29,7 +29,9 @@ import com.google.android.material.textfield.TextInputLayout
 import com.example.elektronicarebeta1.firebase.FirebaseManager
 import com.example.elektronicarebeta1.models.User
 import com.example.elektronicarebeta1.utils.DataPersistenceHelper
+import com.example.elektronicarebeta1.utils.DebugHelper
 import com.example.elektronicarebeta1.cloudinary.CloudinaryManager
+import com.example.elektronicarebeta1.cloudinary.CloudinaryConfig
 import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
@@ -106,6 +108,15 @@ class ProfileActivity : AppCompatActivity() {
             handleSaveChanges()
         }
         
+        val cloudinarySetupButton = findViewById<Button>(R.id.cloudinary_setup_button)
+        cloudinarySetupButton.setOnClickListener {
+            val intent = Intent(this, CloudinarySetupActivity::class.java)
+            startActivity(intent)
+        }
+        
+        // Update button text based on Cloudinary configuration status
+        updateCloudinarySetupButton(cloudinarySetupButton)
+        
         logoutButton.setOnClickListener {
             showSignOutConfirmationDialog()
         }
@@ -145,11 +156,29 @@ class ProfileActivity : AppCompatActivity() {
             finish()
             return
         }
+        
+        // Update Cloudinary setup button
+        val cloudinarySetupButton = findViewById<Button>(R.id.cloudinary_setup_button)
+        updateCloudinarySetupButton(cloudinarySetupButton)
+        
         // Force refresh profile data when returning to this activity
         lifecycleScope.launch {
+            // Force sync user data first
+            val syncSuccess = FirebaseManager.forceSyncUserData()
+            Log.d("ProfileActivity", "Force sync completed: $syncSuccess")
+            
             val refreshSuccess = DataPersistenceHelper.forceRefreshUserData()
             Log.d("ProfileActivity", "Force refresh completed: $refreshSuccess")
             loadUserProfile()
+        }
+    }
+    
+    private fun updateCloudinarySetupButton(button: Button) {
+        val isConfigured = CloudinaryConfig.isConfigured(this)
+        if (isConfigured) {
+            button.text = "Update Image Upload Settings"
+        } else {
+            button.text = "Setup Image Upload"
         }
     }
     
@@ -420,7 +449,7 @@ class ProfileActivity : AppCompatActivity() {
                     
                     Log.d("ProfileActivity", "Uploading image for user: $userId")
                     try {
-                        val resultUrl = CloudinaryManager.uploadProfileImage(selectedImageUri!!, userId)
+                        val resultUrl = CloudinaryManager.uploadProfileImage(this@ProfileActivity, selectedImageUri!!, userId)
                         Log.d("ProfileActivity", "Upload result URL: $resultUrl")
                         
                         if (resultUrl.isNullOrEmpty()) {
@@ -496,7 +525,29 @@ class ProfileActivity : AppCompatActivity() {
                             Log.d("ProfileActivity", "Data persistence verification successful")
                         } else {
                             Log.w("ProfileActivity", "Data persistence verification failed")
+                            // Try to force save again if verification failed
+                            Log.d("ProfileActivity", "Attempting to force save profile data again")
+                            val retrySuccess = FirebaseManager.updateUserData(updatedData)
+                            if (retrySuccess) {
+                                Log.d("ProfileActivity", "Retry save successful")
+                            } else {
+                                Log.e("ProfileActivity", "Retry save also failed")
+                            }
                         }
+                        
+                        // Debug profile persistence
+                        DebugHelper.debugProfilePersistence(userId)
+                        
+                        // Add delay to ensure data is fully persisted
+                        kotlinx.coroutines.delay(2000)
+                        
+                        // Ensure data persistence
+                        val persistenceEnsured = FirebaseManager.ensureDataPersistence()
+                        Log.d("ProfileActivity", "Data persistence ensured: $persistenceEnsured")
+                        
+                        // Final verification after delay
+                        val finalVerification = DataPersistenceHelper.verifyUserDataSaved(updatedData)
+                        Log.d("ProfileActivity", "Final verification after delay: $finalVerification")
                         
                         runOnUiThread {
                             Toast.makeText(this@ProfileActivity, "Profile saved successfully!", Toast.LENGTH_LONG).show()
@@ -539,14 +590,40 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         signOutButton.setOnClickListener {
-            FirebaseManager.signOut()
-            val intent = Intent(this, LoginActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            // Force sync data before logout to ensure everything is saved
+            lifecycleScope.launch {
+                try {
+                    Log.d("ProfileActivity", "Force syncing data before logout")
+                    val syncSuccess = FirebaseManager.forceSyncUserData()
+                    Log.d("ProfileActivity", "Pre-logout sync completed: $syncSuccess")
+                    
+                    // Add delay to ensure sync is complete
+                    kotlinx.coroutines.delay(1000)
+                    
+                    runOnUiThread {
+                        FirebaseManager.signOut()
+                        val intent = Intent(this@ProfileActivity, LoginActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        }
+                        startActivity(intent)
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                        finish()
+                        dialog.dismiss()
+                    }
+                } catch (e: Exception) {
+                    Log.e("ProfileActivity", "Error during pre-logout sync", e)
+                    runOnUiThread {
+                        FirebaseManager.signOut()
+                        val intent = Intent(this@ProfileActivity, LoginActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        }
+                        startActivity(intent)
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                        finish()
+                        dialog.dismiss()
+                    }
+                }
             }
-            startActivity(intent)
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-            finish()
-            dialog.dismiss()
         }
         
         dialog.setCancelable(true)
