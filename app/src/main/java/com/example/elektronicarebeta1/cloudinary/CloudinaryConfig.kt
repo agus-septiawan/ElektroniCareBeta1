@@ -13,9 +13,9 @@ object CloudinaryConfig {
     private const val TAG = "CloudinaryConfig"
     
     // Default Cloudinary credentials - UPDATE THESE WITH YOUR ACTUAL VALUES
-    private const val DEFAULT_CLOUD_NAME = "dqolqpnpj"
-    private const val DEFAULT_API_KEY = "123456789012345"
-    private const val DEFAULT_API_SECRET = "abcdefghijklmnopqrstuvwxyz123456"
+    private const val DEFAULT_CLOUD_NAME = "dcnsxpyal"
+    private const val DEFAULT_API_KEY = "493695264712621"
+    private const val DEFAULT_API_SECRET = "8QeRSl6aCwIwacw8NvacwMOiRpk"
     
     // Upload presets (these need to be created in Cloudinary Dashboard)
     const val PROFILE_UPLOAD_PRESET = "profile_images"
