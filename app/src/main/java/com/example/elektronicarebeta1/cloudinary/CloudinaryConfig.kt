@@ -7,11 +7,10 @@ package com.example.elektronicarebeta1.cloudinary
  * You can find these in your Cloudinary Dashboard at https://cloudinary.com/console
  */
 object CloudinaryConfig {
-    
-    // Cloudinary credentials - Replace with actual values
-    const val CLOUD_NAME = "dqolqpnpj"
-    const val API_KEY = "123456789012345"
-    const val API_SECRET = "abcdefghijklmnopqrstuvwxyz123456"
+    // TODO: Replace with your actual Cloudinary credentials
+    const val CLOUD_NAME = "dcnsxpyal"
+    const val API_KEY = "493695264712621"
+    const val API_SECRET = "8QeRSl6aCwIwacw8NvacwMOiRpk"
     
     // Upload presets (these need to be created in Cloudinary Dashboard)
     const val PROFILE_UPLOAD_PRESET = "profile_images"
