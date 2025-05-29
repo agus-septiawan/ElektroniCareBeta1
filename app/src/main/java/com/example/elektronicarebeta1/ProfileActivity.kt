@@ -132,6 +132,12 @@ class ProfileActivity : AppCompatActivity() {
         })
     }
     
+    override fun onResume() {
+        super.onResume()
+        // Refresh profile data when returning to this activity
+        loadUserProfile()
+    }
+    
     private fun setupBottomNavigation() {
         val homeNav = findViewById<View>(R.id.nav_home)
         val historyNav = findViewById<View>(R.id.nav_history)
@@ -428,9 +434,20 @@ class ProfileActivity : AppCompatActivity() {
 
                 // Firestore Update Call
                 if (updatedData.isNotEmpty()) {
-                    if (FirebaseManager.updateUserData(updatedData)) {
+                    val updateSuccess = FirebaseManager.updateUserData(updatedData)
+                    if (updateSuccess) {
+                        // Update the original user data to reflect changes
+                        originalUser = originalUser?.copy(
+                            fullName = newFullName,
+                            phone = newPhone,
+                            address = newAddress,
+                            profileImageUrl = uploadedImageUrl ?: originalUser?.profileImageUrl
+                        )
+                        
                         Toast.makeText(this@ProfileActivity, "Profile saved successfully!", Toast.LENGTH_LONG).show()
-                        loadUserProfile() // Refresh data
+                        
+                        // Refresh data from server to ensure consistency
+                        loadUserProfile()
                     } else {
                         Toast.makeText(this@ProfileActivity, "Failed to update profile details.", Toast.LENGTH_LONG).show()
                     }

@@ -317,15 +317,18 @@ class BookingActivity : AppCompatActivity() {
                 }
             }
 
-            // Create repair request data
+            // Create repair request data with proper structure for Repair model
             val repairData = hashMapOf(
                 "issueDescription" to issueDescription,
                 "serviceId" to serviceId,
-                "status" to "pending_confirmation",
+                "status" to "pending", // Changed from "pending_confirmation" to "pending" for consistency
                 "estimatedCost" to servicePrice,
                 "appointmentTimestamp" to calendar.time,
                 "location" to "ElektroniCare Service Center",
-                "technicianEmail" to "agusseptiawanasep@gmail.com"
+                "technicianEmail" to "agusseptiawanasep@gmail.com",
+                "deviceType" to (serviceName ?: "Electronic Device"), // Add deviceType field
+                "deviceModel" to (serviceName ?: "Unknown Model"), // Add deviceModel field
+                "createdAt" to Date() // Add createdAt timestamp
             )
 
             // Add image URL if available
@@ -360,6 +363,10 @@ class BookingActivity : AppCompatActivity() {
                         appointmentDate = calendar.time,
                         estimatedCost = servicePrice
                     )
+                }
+                
+                runOnUiThread {
+                    Toast.makeText(this@BookingActivity, "Booking submitted successfully!", Toast.LENGTH_SHORT).show()
                 }
                 
                 showSuccessDialog(repairId, currentUser)

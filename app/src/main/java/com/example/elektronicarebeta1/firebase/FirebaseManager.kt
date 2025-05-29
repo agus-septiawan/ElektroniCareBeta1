@@ -71,7 +71,12 @@ object FirebaseManager {
     suspend fun updateUserData(userData: Map<String, Any>): Boolean {
         val userId = getUserId() ?: return false
         return try {
+            Log.d(TAG, "Updating user data for userId: $userId")
+            Log.d(TAG, "Update data: $userData")
+            
             db.collection(USERS_COLLECTION).document(userId).update(userData).await()
+            
+            Log.d(TAG, "User data updated successfully")
             true
         } catch (e: Exception) {
             Log.e(TAG, "Error updating user data", e)
@@ -116,7 +121,12 @@ object FirebaseManager {
         repairWithUser["userId"] = userId // Current user's ID always takes precedence
         
         return try {
+            Log.d(TAG, "Creating repair request for userId: $userId")
+            Log.d(TAG, "Repair data: $repairWithUser")
+            
             val docRef = db.collection(REPAIRS_COLLECTION).add(repairWithUser).await()
+            
+            Log.d(TAG, "Repair request created successfully with ID: ${docRef.id}")
             docRef.id
         } catch (e: Exception) {
             Log.e(TAG, "Error creating repair request", e)

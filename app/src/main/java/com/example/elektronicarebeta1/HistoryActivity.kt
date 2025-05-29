@@ -51,6 +51,12 @@ class HistoryActivity : AppCompatActivity() {
         loadRepairHistory()
     }
     
+    override fun onResume() {
+        super.onResume()
+        // Refresh data when returning to this activity
+        loadRepairHistory()
+    }
+    
     private fun setupBottomNavigation() {
         val homeNav = findViewById<View>(R.id.nav_home)
         val historyNav = findViewById<View>(R.id.nav_history)
@@ -80,6 +86,7 @@ class HistoryActivity : AppCompatActivity() {
         val filters = listOf(
             "all" to "All",
             "pending" to "Pending", 
+            "pending_confirmation" to "Pending Confirmation",
             "in_progress" to "In Progress",
             "completed" to "Completed",
             "cancelled" to "Cancelled"
@@ -191,6 +198,7 @@ class HistoryActivity : AppCompatActivity() {
             "completed" -> "Completed"
             "in_progress" -> "In Progress"
             "cancelled" -> "Cancelled"
+            "pending_confirmation" -> "Pending Confirmation"
             else -> "Pending"
         }
         
@@ -199,6 +207,7 @@ class HistoryActivity : AppCompatActivity() {
                 "completed" -> R.drawable.status_completed_bg
                 "in_progress" -> R.drawable.status_inprogress_bg
                 "cancelled" -> R.drawable.status_cancelled_bg
+                "pending_confirmation" -> R.drawable.status_inprogress_bg
                 else -> R.drawable.status_inprogress_bg
             }
         )
@@ -207,8 +216,8 @@ class HistoryActivity : AppCompatActivity() {
         val priceString = repair.estimatedCost?.let { "Rp${String.format("%,.0f", it)}" } ?: "TBD"
         priceText.text = priceString
         
-        // Show cancel button only for pending or in_progress repairs
-        if (repair.status == "pending" || repair.status == "in_progress") {
+        // Show cancel button only for pending, pending_confirmation, or in_progress repairs
+        if (repair.status == "pending" || repair.status == "pending_confirmation" || repair.status == "in_progress") {
             cancelButton.visibility = View.VISIBLE
             cancelButton.setOnClickListener {
                 cancelRepairRequest(repair)
