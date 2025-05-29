@@ -64,6 +64,28 @@ class DashboardActivity : AppCompatActivity() {
             Toast.makeText(this, "Notifications coming soon", Toast.LENGTH_SHORT).show()
         }
     }
+    
+    override fun onResume() {
+        super.onResume()
+        
+        // Check authentication and force sync data when returning to dashboard
+        lifecycleScope.launch {
+            val currentUser = FirebaseManager.getCurrentUser()
+            if (currentUser == null) {
+                Log.d(TAG, "No current user in onResume, redirecting to login")
+                startActivity(Intent(this@DashboardActivity, LoginActivity::class.java))
+                finish()
+                return@launch
+            }
+            
+            // Force sync user data
+            val syncSuccess = FirebaseManager.forceSyncUserData()
+            Log.d(TAG, "Dashboard force sync completed: $syncSuccess")
+            
+            // Reload user data
+            loadUserData()
+        }
+    }
 
     private fun loadUserData() {
         // TEMPORARY DISABLE FIRESTORE ACCESS FOR DEBUGGING

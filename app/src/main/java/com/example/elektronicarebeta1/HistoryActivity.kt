@@ -15,6 +15,7 @@ import com.google.android.material.chip.ChipGroup
 import com.example.elektronicarebeta1.firebase.FirebaseManager
 import com.example.elektronicarebeta1.models.Repair
 import com.example.elektronicarebeta1.utils.DataPersistenceHelper
+import com.example.elektronicarebeta1.utils.DebugHelper
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -66,6 +67,10 @@ class HistoryActivity : AppCompatActivity() {
         }
         // Force refresh data when returning to this activity
         lifecycleScope.launch {
+            // Force sync user data first
+            val syncSuccess = FirebaseManager.forceSyncUserData()
+            Log.d("HistoryActivity", "Force sync completed: $syncSuccess")
+            
             val refreshCount = DataPersistenceHelper.forceRefreshRepairHistory()
             Log.d("HistoryActivity", "Force refresh completed: $refreshCount repairs found")
             loadRepairHistory()
@@ -159,32 +164,54 @@ class HistoryActivity : AppCompatActivity() {
     private fun loadRepairHistory() {
         lifecycleScope.launch {
             android.util.Log.d("HistoryActivity", "Loading repair history...")
+            
+            // Debug history loading
+            DebugHelper.debugHistoryLoading()
+            
             val repairsSnapshot = FirebaseManager.getUserRepairs()
             
             if (repairsSnapshot == null || repairsSnapshot.isEmpty) {
                 android.util.Log.d("HistoryActivity", "No repairs found or snapshot is null")
+                
+                // Try force refresh if no data found
+                android.util.Log.d("HistoryActivity", "Attempting force refresh of repair data")
+                val forceRefreshSuccess = DataPersistenceHelper.forceRefreshRepairData()
+                if (forceRefreshSuccess) {
+                    android.util.Log.d("HistoryActivity", "Force refresh completed, retrying data load")
+                    val retrySnapshot = FirebaseManager.getUserRepairs()
+                    if (retrySnapshot != null && !retrySnapshot.isEmpty) {
+                        android.util.Log.d("HistoryActivity", "Retry successful, found ${retrySnapshot.size()} repairs")
+                        processRepairSnapshot(retrySnapshot)
+                        return@launch
+                    }
+                }
+                
                 allRepairs = emptyList()
                 displayRepairs(allRepairs)
                 return@launch
             }
             
-            android.util.Log.d("HistoryActivity", "Found ${repairsSnapshot.size()} repairs")
-            val repairs = mutableListOf<Repair>()
-            
-            for (document in repairsSnapshot.documents) {
-                val repair = Repair.fromDocument(document)
-                if (repair != null) {
-                    android.util.Log.d("HistoryActivity", "Adding repair: ${repair.deviceModel} - ${repair.status}")
-                    repairs.add(repair)
-                } else {
-                    android.util.Log.e("HistoryActivity", "Failed to parse repair from document: ${document.id}")
-                }
-            }
-            
-            // Sort by date (newest first)
-            allRepairs = repairs.sortedByDescending { it.appointmentTimestamp }
-            filterRepairs()
+            processRepairSnapshot(repairsSnapshot)
         }
+    }
+    
+    private fun processRepairSnapshot(repairsSnapshot: com.google.firebase.firestore.QuerySnapshot) {
+        android.util.Log.d("HistoryActivity", "Processing ${repairsSnapshot.size()} repairs")
+        val repairs = mutableListOf<Repair>()
+        
+        for (document in repairsSnapshot.documents) {
+            val repair = Repair.fromDocument(document)
+            if (repair != null) {
+                android.util.Log.d("HistoryActivity", "Adding repair: ${repair.deviceModel} - ${repair.status}")
+                repairs.add(repair)
+            } else {
+                android.util.Log.e("HistoryActivity", "Failed to parse repair from document: ${document.id}")
+            }
+        }
+        
+        // Sort by date (newest first)
+        allRepairs = repairs.sortedByDescending { it.appointmentTimestamp }
+        filterRepairs()
     }
     
     private fun addRepairToView(repair: Repair) {

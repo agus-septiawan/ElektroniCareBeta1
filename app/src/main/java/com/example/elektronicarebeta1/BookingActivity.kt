@@ -29,6 +29,7 @@ import com.bumptech.glide.Glide
 import com.example.elektronicarebeta1.firebase.FirebaseManager
 import com.example.elektronicarebeta1.cloudinary.CloudinaryManager
 import com.example.elektronicarebeta1.utils.DataPersistenceHelper
+import com.example.elektronicarebeta1.utils.DebugHelper
 import com.example.elektronicarebeta1.utils.EmailManager
 import com.example.elektronicarebeta1.utils.WhatsAppManager
 import com.example.elektronicarebeta1.models.User
@@ -328,7 +329,7 @@ class BookingActivity : AppCompatActivity() {
                 }
                 
                 try {
-                    val uploadResult = CloudinaryManager.uploadRepairImage(selectedImageUri!!, userId, null)
+                    val uploadResult = CloudinaryManager.uploadRepairImage(this@BookingActivity, selectedImageUri!!, userId, null)
                     imageUrl = uploadResult
                     Log.d("BookingActivity", "Image upload result: $imageUrl")
                     
@@ -378,7 +379,30 @@ class BookingActivity : AppCompatActivity() {
                     Log.d("BookingActivity", "Repair request persistence verification successful")
                 } else {
                     Log.w("BookingActivity", "Repair request persistence verification failed")
+                    // Try to force save again if verification failed
+                    Log.d("BookingActivity", "Attempting to force save booking data again")
+                    val retryId = FirebaseManager.createRepairRequest(bookingData)
+                    if (retryId != null) {
+                        Log.d("BookingActivity", "Retry booking save successful with ID: $retryId")
+                    } else {
+                        Log.e("BookingActivity", "Retry booking save also failed")
+                    }
                 }
+                
+                // Debug booking persistence
+                DebugHelper.debugBookingPersistence(repairId)
+                
+                // Add delay to ensure data is fully persisted
+                kotlinx.coroutines.delay(2000)
+                
+                // Ensure data persistence
+                val persistenceEnsured = FirebaseManager.ensureDataPersistence()
+                Log.d("BookingActivity", "Data persistence ensured: $persistenceEnsured")
+                
+                // Final verification after delay
+                val finalVerification = DataPersistenceHelper.verifyRepairRequestSaved(repairId)
+                Log.d("BookingActivity", "Final verification after delay: $finalVerification")
+                
                 // Get user data for email and WhatsApp
                 val currentUser = FirebaseManager.getCurrentUser()
                 if (currentUser != null) {

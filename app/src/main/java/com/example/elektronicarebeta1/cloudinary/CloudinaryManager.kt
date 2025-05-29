@@ -27,7 +27,9 @@ object CloudinaryManager {
         if (isInitialized) return
         
         try {
-            MediaManager.init(context, CloudinaryConfig.getConfigMap())
+            val configMap = CloudinaryConfig.getConfigMap(context)
+            Log.d(TAG, "Initializing Cloudinary with cloud_name: ${configMap["cloud_name"]}")
+            MediaManager.init(context, configMap)
             isInitialized = true
             Log.d(TAG, "Cloudinary initialized successfully")
         } catch (e: Exception) {
@@ -37,32 +39,46 @@ object CloudinaryManager {
     
     /**
      * Upload profile image to Cloudinary
+     * @param context Application context
      * @param imageUri URI of the image to upload
      * @param userId User ID for organizing uploads
      * @return URL of uploaded image or null if failed
      */
-    suspend fun uploadProfileImage(imageUri: Uri, userId: String): String? {
-        // For demo purposes, return a placeholder URL if Cloudinary is not properly configured
-        if (!CloudinaryConfig.isConfigured()) {
+    suspend fun uploadProfileImage(context: Context, imageUri: Uri, userId: String): String? {
+        // Check if Cloudinary is properly configured
+        if (!CloudinaryConfig.isConfigured(context)) {
             Log.w(TAG, "Cloudinary not configured, using placeholder image")
             return generatePlaceholderImageUrl(userId)
         }
+        
+        // Initialize if not already done
+        if (!isInitialized) {
+            initialize(context)
+        }
+        
         return uploadImage(imageUri, CloudinaryConfig.PROFILE_UPLOAD_PRESET, "profile_$userId")
     }
     
     /**
      * Upload repair image to Cloudinary
+     * @param context Application context
      * @param imageUri URI of the image to upload
      * @param userId User ID for organizing uploads
      * @param repairId Repair ID for organizing uploads
      * @return URL of uploaded image or null if failed
      */
-    suspend fun uploadRepairImage(imageUri: Uri, userId: String, repairId: String? = null): String? {
-        // For demo purposes, return a placeholder URL if Cloudinary is not properly configured
-        if (!CloudinaryConfig.isConfigured()) {
+    suspend fun uploadRepairImage(context: Context, imageUri: Uri, userId: String, repairId: String? = null): String? {
+        // Check if Cloudinary is properly configured
+        if (!CloudinaryConfig.isConfigured(context)) {
             Log.w(TAG, "Cloudinary not configured, using placeholder image")
             return generatePlaceholderImageUrl("repair_$userId")
         }
+        
+        // Initialize if not already done
+        if (!isInitialized) {
+            initialize(context)
+        }
+        
         val publicId = if (repairId != null) "repair_${userId}_$repairId" else "repair_${userId}_${UUID.randomUUID()}"
         return uploadImage(imageUri, CloudinaryConfig.REPAIR_UPLOAD_PRESET, publicId)
     }
@@ -197,7 +213,7 @@ object CloudinaryManager {
     /**
      * Check if Cloudinary is properly configured
      */
-    fun isConfigured(): Boolean {
-        return CloudinaryConfig.isConfigured() && isInitialized
+    fun isConfigured(context: Context? = null): Boolean {
+        return CloudinaryConfig.isConfigured(context) && isInitialized
     }
 }

@@ -130,7 +130,7 @@ object FirebaseManager {
         val userId = getUserId() ?: return null
         val repairWithUser = repairData.toMutableMap()
         repairWithUser.putIfAbsent("createdAt", Date()) // Default if not provided
-        repairWithUser.putIfAbsent("status", "pending") // Default status if not in repairData
+        // Don't override status if it's already provided in repairData
         repairWithUser["userId"] = userId // Current user's ID always takes precedence
         
         return try {
@@ -222,15 +222,84 @@ object FirebaseManager {
         return try {
             val user = auth.currentUser
             if (user != null) {
-                user.getIdToken(true).await()
-                Log.d(TAG, "Auth token refreshed successfully")
-                true
+                // Force refresh the token
+                val tokenResult = user.getIdToken(true).await()
+                Log.d(TAG, "Auth token refreshed successfully. Token: ${tokenResult.token?.take(20)}...")
+                
+                // Verify the user is still valid
+                val userDoc = getUserDocument()
+                if (userDoc?.exists() == true) {
+                    Log.d(TAG, "User document verified after token refresh")
+                    true
+                } else {
+                    Log.w(TAG, "User document not found after token refresh")
+                    false
+                }
             } else {
                 Log.w(TAG, "Cannot refresh token: user is null")
                 false
             }
         } catch (e: Exception) {
             Log.e(TAG, "Error refreshing auth token", e)
+            false
+        }
+    }
+    
+    suspend fun forceSyncUserData(): Boolean {
+        return try {
+            val currentUser = auth.currentUser
+            if (currentUser != null) {
+                Log.d(TAG, "Force syncing user data for: ${currentUser.uid}")
+                
+                // Force reload user from Firebase Auth
+                currentUser.reload().await()
+                Log.d(TAG, "User reloaded successfully")
+                
+                // Refresh auth token
+                val tokenRefreshed = refreshAuthToken()
+                if (tokenRefreshed) {
+                    Log.d(TAG, "Force sync completed successfully")
+                    true
+                } else {
+                    Log.w(TAG, "Force sync failed: token refresh failed")
+                    false
+                }
+            } else {
+                Log.w(TAG, "No current user to sync")
+                false
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error force syncing user data", e)
+            false
+        }
+    }
+    
+    suspend fun ensureDataPersistence(): Boolean {
+        return try {
+            Log.d(TAG, "Ensuring data persistence")
+            
+            // Force sync first
+            val syncSuccess = forceSyncUserData()
+            if (!syncSuccess) {
+                Log.w(TAG, "Data persistence check failed: sync failed")
+                return false
+            }
+            
+            // Wait for any pending writes to complete
+            firestore.waitForPendingWrites().await()
+            Log.d(TAG, "All pending writes completed")
+            
+            // Verify user document exists and is accessible
+            val userDoc = getUserDocument()
+            if (userDoc?.exists() == true) {
+                Log.d(TAG, "Data persistence verified successfully")
+                true
+            } else {
+                Log.w(TAG, "Data persistence check failed: user document not found")
+                false
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error ensuring data persistence", e)
             false
         }
     }
