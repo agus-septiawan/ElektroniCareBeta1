@@ -185,11 +185,26 @@ object FirebaseManager {
         }
     }
 
-    suspend fun getRepairById(repairId: String): DocumentSnapshot? {
+    suspend fun getRepairById(repairId: String): com.example.elektronicarebeta1.models.Repair? {
+        return try {
+            val document = db.collection(REPAIRS_COLLECTION).document(repairId).get().await()
+            if (document.exists()) {
+                com.example.elektronicarebeta1.models.Repair.fromDocument(document)
+            } else {
+                Log.w(TAG, "Repair document not found for ID: $repairId")
+                null
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error getting repair by id", e)
+            null
+        }
+    }
+
+    suspend fun getRepairDocumentById(repairId: String): DocumentSnapshot? {
         return try {
             db.collection(REPAIRS_COLLECTION).document(repairId).get().await()
         } catch (e: Exception) {
-            Log.e(TAG, "Error getting repair by id", e)
+            Log.e(TAG, "Error getting repair document by id", e)
             null
         }
     }
@@ -226,6 +241,29 @@ object FirebaseManager {
             true
         } catch (e: Exception) {
             Log.e(TAG, "Error cancelling repair request", e)
+            false
+        }
+    }
+
+    suspend fun updateRepairStatus(repairId: String, status: String): Boolean {
+        return try {
+            val updates = mutableMapOf<String, Any>(
+                "status" to status,
+                "updatedAt" to Date()
+            )
+
+            // Add specific timestamp for certain statuses
+            when (status) {
+                "cancelled" -> updates["cancelledAt"] = Date()
+                "completed" -> updates["completedDate"] = Date()
+                "in_progress" -> updates["startedAt"] = Date()
+            }
+
+            db.collection(REPAIRS_COLLECTION).document(repairId).update(updates).await()
+            Log.d(TAG, "Repair status updated successfully: $repairId -> $status")
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "Error updating repair status", e)
             false
         }
     }

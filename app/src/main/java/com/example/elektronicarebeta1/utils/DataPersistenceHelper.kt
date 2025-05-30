@@ -59,10 +59,10 @@ object DataPersistenceHelper {
             // Wait a bit for data to propagate
             delay(1000)
 
-            val repairDoc = FirebaseManager.getRepairById(repairId)
-            if (repairDoc?.exists() == true) {
+            val repair = FirebaseManager.getRepairById(repairId)
+            if (repair != null) {
                 Log.d(TAG, "Repair request verification successful: $repairId")
-                Log.d(TAG, "Repair data: ${repairDoc.data}")
+                Log.d(TAG, "Repair data: ${repair.id}")
                 true
             } else {
                 Log.e(TAG, "Repair request verification failed: document does not exist")

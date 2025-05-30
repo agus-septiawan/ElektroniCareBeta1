@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_localhost_Athens_Gray"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_localhost_White"
+            android:elevation="4dp"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/back_button"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_arrow_left"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="4dp"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Repair Details"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/color_localhost_Ebony"
+                android:gravity="center"
+                android:layout_marginEnd="24dp" />
+
+        </LinearLayout>
+
+        <!-- Device Image Section -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="8dp"
+            app:cardUseCompatPadding="false">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp"
+                android:background="@color/color_localhost_White">
+
+                <!-- Device Image -->
+                <ImageView
+                    android:id="@+id/device_image"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/rounded_gray_bg"
+                    android:padding="16dp"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Device Name -->
+                <TextView
+                    android:id="@+id/device_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="iPhone 13"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_localhost_Ebony"
+                    android:layout_marginBottom="8dp" />
+
+                <!-- Device Type -->
+                <TextView
+                    android:id="@+id/device_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Smartphone"
+                    android:textSize="16sp"
+                    android:textColor="@color/color_localhost_Pale_Sky"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Status Chip -->
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/status_chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="⏰ Pending"
+                    android:textColor="@color/color_localhost_White"
+                    android:textStyle="bold"
+                    app:chipBackgroundColor="@color/color_localhost_Pale_Sky"
+                    app:chipCornerRadius="20dp"
+                    app:chipMinHeight="40dp"
+                    android:paddingHorizontal="16dp" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Issue Description Section -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="false">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:background="@color/color_localhost_White">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Issue Description"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_localhost_Ebony"
+                    android:layout_marginBottom="12dp" />
+
+                <TextView
+                    android:id="@+id/issue_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Screen is cracked and touch is not responsive"
+                    android:textSize="16sp"
+                    android:textColor="@color/color_localhost_Ebony_Clay"
+                    android:lineSpacingExtra="4dp" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Cost and Schedule Section -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="false">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:background="@color/color_localhost_White">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cost &amp; Schedule"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_localhost_Ebony"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Estimated Cost -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_analytics"
+                        android:layout_marginEnd="12dp"
+                        app:tint="@color/purple_primary" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Estimated Cost"
+                            android:textSize="14sp"
+                            android:textColor="@color/color_localhost_Pale_Sky" />
+
+                        <TextView
+                            android:id="@+id/estimated_cost"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Rp 750,000"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/purple_primary" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Appointment Date -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_calendar2"
+                        android:layout_marginEnd="12dp"
+                        app:tint="@color/purple_primary" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Appointment Date"
+                            android:textSize="14sp"
+                            android:textColor="@color/color_localhost_Pale_Sky" />
+
+                        <TextView
+                            android:id="@+id/appointment_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="March 15, 2025"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_localhost_Ebony" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Location and Technician Section -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="false">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:background="@color/color_localhost_White">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Service Details"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_localhost_Ebony"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Location -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_location_pin"
+                        android:layout_marginEnd="12dp"
+                        app:tint="@color/purple_primary" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Service Location"
+                            android:textSize="14sp"
+                            android:textColor="@color/color_localhost_Pale_Sky" />
+
+                        <TextView
+                            android:id="@+id/location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Fresh Teknik Service Center"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_localhost_Ebony" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Technician -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_technician"
+                        android:layout_marginEnd="12dp"
+                        app:tint="@color/purple_primary" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Assigned Technician"
+                            android:textSize="14sp"
+                            android:textColor="@color/color_localhost_Pale_Sky" />
+
+                        <TextView
+                            android:id="@+id/technician_email"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="technician@freshtech.com"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_localhost_Ebony" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Timeline Section -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="false">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:background="@color/color_localhost_White">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Timeline"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_localhost_Ebony"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Created At -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_clock"
+                        android:layout_marginEnd="12dp"
+                        app:tint="@color/color_localhost_Jewel" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Request Created"
+                            android:textSize="14sp"
+                            android:textColor="@color/color_localhost_Pale_Sky" />
+
+                        <TextView
+                            android:id="@+id/created_at"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Monday, March 10, 2025 at 14:30"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_localhost_Ebony" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Updated At -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_recent"
+                        android:layout_marginEnd="12dp"
+                        app:tint="@color/color_localhost_Flamingo" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Last Updated"
+                            android:textSize="14sp"
+                            android:textColor="@color/color_localhost_Pale_Sky" />
+
+                        <TextView
+                            android:id="@+id/updated_at"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tuesday, March 11, 2025 at 09:15"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_localhost_Ebony" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Action Buttons Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
+
+            <!-- Contact Technician Button -->
+            <Button
+                android:id="@+id/contact_technician_button"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Contact Technician"
+                android:textColor="@color/color_localhost_White"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:background="@drawable/button_primary_background"
+                android:layout_marginBottom="12dp"
+                android:drawableStart="@drawable/ic_email"
+                android:drawablePadding="12dp"
+                android:gravity="center"
+                android:elevation="4dp" />
+
+            <!-- Cancel Button -->
+            <Button
+                android:id="@+id/cancel_button"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Cancel Repair Request"
+                android:textColor="@color/destructive_red_fg"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:background="@drawable/button_destructive_background"
+                android:drawableStart="@drawable/ic_important"
+                android:drawablePadding="12dp"
+                android:gravity="center"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

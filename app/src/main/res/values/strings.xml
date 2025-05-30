@@ -10,4 +10,13 @@
     <string name="see_all">See All</string>
     <string name="view_details">View Details</string>
     <string name="default_web_client_id">23815238785-sranla25dutsbj57ig2vltbik652mqt3.apps.googleusercontent.com</string>
+    <string name="device_image">Device Image</string>
+    <string name="device_name_model">Device Name/Model:</string>
+    <string name="issue_description">Issue Description:</string>
+    <string name="service_type">Service Type:</string>
+    <string name="appointment_date_time">Appointment Date/Time:</string>
+    <string name="status">Status:</string>
+    <string name="estimated_cost">Estimated Cost:</string>
+    <string name="location">Location:</string>
+    <string name="technician_information">Technician Information:</string>
 </resources>

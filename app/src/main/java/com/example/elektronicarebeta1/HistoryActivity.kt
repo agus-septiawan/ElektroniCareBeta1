@@ -384,9 +384,12 @@ class HistoryActivity : AppCompatActivity() {
             cancelButton.visibility = View.GONE
         }
 
-        // Set click listener
+        // Set click listener to open repair details
         repairView.setOnClickListener {
-            Toast.makeText(this, "Repair details coming soon", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, RepairDetailsActivity::class.java).apply {
+                putExtra(RepairDetailsActivity.EXTRA_REPAIR_ID, repair.id)
+            }
+            startActivity(intent)
         }
 
         repairsContainer.addView(repairView)

@@ -2,12 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-<uses-permission android:name="android.permission.CAMERA" />
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".ElektroniCareApplication"
@@ -41,7 +41,7 @@
         <activity
             android:name=".WelcomeActivity"
             android:exported="false"
-             />
+            />
 
         <!-- Authentication Activities -->
         <activity
@@ -54,36 +54,41 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
-<!--        <activity-->
-<!--            android:name=".NotificationActivity"-->
-<!--            android:exported="false"-->
-<!--            android:screenOrientation="portrait" />-->
+        <!--        <activity-->
+        <!--            android:name=".NotificationActivity"-->
+        <!--            android:exported="false"-->
+        <!--            android:screenOrientation="portrait" />-->
 
         <!-- Dashboard Activity -->
         <activity
             android:name=".DashboardActivity"
             android:exported="false" />
-            
+
         <!-- History Activity -->
         <activity
             android:name=".HistoryActivity"
             android:exported="false" />
-            
+
+        <!-- Repair Details Activity -->
+        <activity
+            android:name=".RepairDetailsActivity"
+            android:exported="false" />
+
         <!-- Services Activity -->
         <activity
             android:name=".ServicesActivity"
             android:exported="false" />
-            
+
         <!-- Profile Activity -->
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />
-            
+
         <!-- Booking Activity -->
         <activity
             android:name=".BookingActivity"
             android:exported="false" />
-            
+
         <!-- Cloudinary Setup Activity -->
         <activity
             android:name=".CloudinarySetupActivity"
