@@ -2,6 +2,7 @@ package com.example.elektronicarebeta1.models
 
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.Timestamp
 import java.util.Date
 
 data class User(
@@ -18,15 +19,20 @@ data class User(
             return try {
                 Log.d("User", "Parsing user document: ${document.id}")
                 Log.d("User", "Document data: ${document.data}")
-                
+
                 val id = document.id
                 val fullName = document.getString("fullName") ?: ""
                 val email = document.getString("email") ?: ""
                 val phone = document.getString("phone")
                 val address = document.getString("address")
                 val profileImageUrl = document.getString("profileImageUrl")
-                val createdAt = document.getDate("createdAt")
-                
+
+                // Handle both Date and Timestamp for createdAt
+                val createdAt = document.getDate("createdAt") ?: run {
+                    val timestamp = document.getTimestamp("createdAt")
+                    timestamp?.toDate()
+                }
+
                 val user = User(
                     id = id,
                     fullName = fullName,
@@ -36,7 +42,7 @@ data class User(
                     profileImageUrl = profileImageUrl,
                     createdAt = createdAt
                 )
-                
+
                 Log.d("User", "Successfully parsed user: $fullName")
                 user
             } catch (e: Exception) {
@@ -45,7 +51,7 @@ data class User(
             }
         }
     }
-    
+
     fun toMap(): Map<String, Any?> {
         return mapOf(
             "fullName" to fullName,

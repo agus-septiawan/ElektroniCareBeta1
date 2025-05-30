@@ -102,6 +102,7 @@ object CloudinaryManager {
                     .option("quality", "auto")
                     .option("fetch_format", "auto")
                     .option("overwrite", true) // Allow overwriting existing images
+                    .option("timeout", 60) // 60 seconds timeout
                     .callback(object : UploadCallback {
                         override fun onStart(requestId: String) {
                             Log.d(TAG, "Upload started with requestId: $requestId")
@@ -113,19 +114,23 @@ object CloudinaryManager {
                         }
 
                         override fun onSuccess(requestId: String, resultData: Map<*, *>) {
+                            Log.d(TAG, "Upload successful. Full response: $resultData")
                             val secureUrl = resultData["secure_url"] as? String
-                            if (secureUrl != null) {
-                                Log.d(TAG, "Upload successful. Secure URL: $secureUrl")
-                                continuation.resume(secureUrl)
+                            val url = resultData["url"] as? String
+
+                            val finalUrl = secureUrl ?: url
+                            if (finalUrl != null) {
+                                Log.d(TAG, "Upload successful. URL: $finalUrl")
+                                continuation.resume(finalUrl)
                             } else {
-                                Log.e(TAG, "Upload successful but no secure_url in response")
-                                Log.d(TAG, "Response data: $resultData")
+                                Log.e(TAG, "Upload successful but no URL in response")
+                                Log.d(TAG, "Response data keys: ${resultData.keys}")
                                 continuation.resume(null)
                             }
                         }
 
                         override fun onError(requestId: String, error: ErrorInfo) {
-                            Log.e(TAG, "Upload failed. Error: ${error.description}")
+                            Log.e(TAG, "Upload failed. Error code: ${error.code}, description: ${error.description}")
                             continuation.resume(null)
                         }
 

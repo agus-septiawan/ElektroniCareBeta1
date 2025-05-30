@@ -26,11 +26,17 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.DataSource
 import com.google.android.material.textfield.TextInputLayout
 import com.example.elektronicarebeta1.firebase.FirebaseManager
 import com.example.elektronicarebeta1.models.User
 import com.example.elektronicarebeta1.cloudinary.CloudinaryManager
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.Dispatchers
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -175,53 +181,70 @@ class ProfileActivity : AppCompatActivity() {
 
                 val userDoc = FirebaseManager.getUserData()
                 if (userDoc != null && userDoc.exists()) {
+                    Log.d(TAG, "User document data: ${userDoc.data}")
                     currentUser = User.fromDocument(userDoc)
                     if (currentUser != null) {
+                        Log.d(TAG, "Successfully parsed user: ${currentUser!!.fullName}")
                         displayUserData(currentUser!!)
                     } else {
                         Log.e(TAG, "Failed to parse user document")
-                        Toast.makeText(this@ProfileActivity, "Failed to load profile data", Toast.LENGTH_SHORT).show()
+                        runOnUiThread {
+                            Toast.makeText(this@ProfileActivity, "Failed to load profile data", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 } else {
-                    Log.e(TAG, "User document not found")
-                    Toast.makeText(this@ProfileActivity, "Failed to load profile data", Toast.LENGTH_SHORT).show()
+                    Log.e(TAG, "User document not found or doesn't exist")
+                    runOnUiThread {
+                        Toast.makeText(this@ProfileActivity, "User profile not found", Toast.LENGTH_SHORT).show()
+                    }
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error loading user profile", e)
-                Toast.makeText(this@ProfileActivity, "Error loading profile: ${e.message}", Toast.LENGTH_SHORT).show()
+                runOnUiThread {
+                    Toast.makeText(this@ProfileActivity, "Error loading profile: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
 
     private fun displayUserData(user: User) {
         runOnUiThread {
+            Log.d(TAG, "Displaying user data for: ${user.fullName}")
+
             editTextUserName.setText(user.fullName)
             emailText.text = user.email
             editTextPhone.setText(user.phone ?: "")
             editTextAddress.setText(user.address ?: "")
 
-            // Display join date
+            // Display join date with better formatting
             user.createdAt?.let { date ->
+                Log.d(TAG, "User created at: $date")
                 val dateFormat = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
-                userDateJoinedText.text = dateFormat.format(date)
+                userDateJoinedText.text = "Joined ${dateFormat.format(date)}"
             } ?: run {
-                userDateJoinedText.text = "N/A"
+                Log.w(TAG, "No createdAt date found for user")
+                userDateJoinedText.text = "Join date not available"
             }
 
             // Load profile image with proper cache handling
+            Log.d(TAG, "Loading profile image: ${user.profileImageUrl}")
             loadProfileImage(user.profileImageUrl)
         }
     }
 
     private fun loadProfileImage(imageUrl: String?) {
+        Log.d(TAG, "loadProfileImage called with URL: $imageUrl")
+
         // Clear Glide cache first to ensure fresh image load
         Glide.with(this).clear(profileImageView)
 
-        val imageToLoad = if (!imageUrl.isNullOrEmpty() && !imageUrl.contains("placeholder")) {
+        val imageToLoad = if (!imageUrl.isNullOrEmpty() &&
+            !imageUrl.contains("placeholder") &&
+            imageUrl.startsWith("http")) {
             Log.d(TAG, "Loading profile image from URL: $imageUrl")
             imageUrl
         } else {
-            Log.d(TAG, "Using placeholder image")
+            Log.d(TAG, "Using placeholder image (URL was: $imageUrl)")
             R.drawable.profile_placeholder
         }
 
@@ -229,9 +252,31 @@ class ProfileActivity : AppCompatActivity() {
             .load(imageToLoad)
             .placeholder(R.drawable.profile_placeholder)
             .error(R.drawable.profile_placeholder)
-            .diskCacheStrategy(DiskCacheStrategy.NONE) // Disable disk cache
+            .diskCacheStrategy(DiskCacheStrategy.NONE) // Disable disk cache for fresh reload
             .skipMemoryCache(true) // Skip memory cache to force reload
             .circleCrop()
+            .listener(object : RequestListener<android.graphics.drawable.Drawable> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<android.graphics.drawable.Drawable>,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    Log.e(TAG, "Failed to load profile image: $e")
+                    return false
+                }
+
+                override fun onResourceReady(
+                    resource: android.graphics.drawable.Drawable,
+                    model: Any,
+                    target: Target<android.graphics.drawable.Drawable>,
+                    dataSource: DataSource,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    Log.d(TAG, "Profile image loaded successfully")
+                    return false
+                }
+            })
             .into(profileImageView)
     }
 
@@ -374,16 +419,30 @@ class ProfileActivity : AppCompatActivity() {
                     Log.d(TAG, "Uploading profile image...")
 
                     try {
+                        // Check if Cloudinary is configured
+                        if (!CloudinaryManager.isConfigured(this@ProfileActivity)) {
+                            Log.w(TAG, "Cloudinary not configured, skipping image upload")
+                            runOnUiThread {
+                                Toast.makeText(this@ProfileActivity, "Image upload not configured", Toast.LENGTH_SHORT).show()
+                            }
+                            return@let
+                        }
+
                         imageUrl = CloudinaryManager.uploadProfileImage(this@ProfileActivity, uri, userId)
                         Log.d(TAG, "Upload result: $imageUrl")
 
                         if (imageUrl.isNullOrEmpty()) {
-                            Log.w(TAG, "Image upload failed")
+                            Log.w(TAG, "Image upload failed, using local URI as fallback")
+                            // Use the local URI as fallback if cloud upload fails
+                            imageUrl = uri.toString()
                             runOnUiThread {
-                                Toast.makeText(this@ProfileActivity, "Failed to upload image", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@ProfileActivity, "Image saved locally (cloud upload failed)", Toast.LENGTH_SHORT).show()
                             }
                         } else {
                             Log.d(TAG, "Image uploaded successfully: $imageUrl")
+                            runOnUiThread {
+                                Toast.makeText(this@ProfileActivity, "Image uploaded successfully", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     } catch (e: Exception) {
                         Log.e(TAG, "Error uploading image", e)
@@ -440,8 +499,14 @@ class ProfileActivity : AppCompatActivity() {
                         // Force reload profile image if new image was uploaded
                         if (!imageUrl.isNullOrEmpty()) {
                             runOnUiThread {
+                                Log.d(TAG, "Reloading profile image after successful upload")
                                 loadProfileImage(imageUrl)
                             }
+                        }
+
+                        // Reload the entire profile to ensure all data is fresh
+                        runOnUiThread {
+                            loadUserProfile()
                         }
                     } else {
                         Log.e(TAG, "Failed to update profile")
@@ -516,13 +581,20 @@ class ProfileActivity : AppCompatActivity() {
         signOutButton.setOnClickListener {
             // Clear Glide cache before sign out
             Glide.get(this).clearMemory()
-            lifecycleScope.launch {
-                Glide.get(this@ProfileActivity).clearDiskCache()
-            }
+            lifecycleScope.launch(Dispatchers.IO) {
+                try {
+                    Glide.get(this@ProfileActivity).clearDiskCache()
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error clearing disk cache: $e")
+                }
 
-            FirebaseManager.signOut()
-            redirectToLogin()
-            dialog.dismiss()
+                // Switch back to main thread for UI operations
+                withContext(Dispatchers.Main) {
+                    FirebaseManager.signOut()
+                    redirectToLogin()
+                    dialog.dismiss()
+                }
+            }
         }
 
         dialog.setCancelable(true)

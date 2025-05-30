@@ -19,6 +19,11 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
+import com.example.elektronicarebeta1.firebase.FirebaseManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.Date
 import java.util.regex.Pattern
 
 class RegisterActivity : AppCompatActivity() {
@@ -239,24 +244,25 @@ class RegisterActivity : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnSuccessListener { authResult ->
                 val user = authResult.user
+                // Don't include createdAt here - let FirebaseManager handle it
+                // This ensures consistent date handling
                 val userData: HashMap<String, Any> = hashMapOf(
                     "fullName" to fullName,
                     "phone" to formatIndonesianPhoneNumber(mobile),
-                    "email" to email,
-                    "createdAt" to com.google.firebase.Timestamp.now()
+                    "email" to email
                 )
 
                 user?.let {
-                    db.collection("users")
-                        .document(it.uid)
-                        .set(userData as Map<String, Any>)
-                        .addOnSuccessListener {
+                    // Use FirebaseManager for consistent data handling
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val success = FirebaseManager.createOrUpdateUserData(userData)
+                        if (success) {
                             Toast.makeText(this@RegisterActivity, "Registration successful", Toast.LENGTH_SHORT).show()
                             navigateToDashboard()
+                        } else {
+                            Toast.makeText(this@RegisterActivity, "Error saving user data", Toast.LENGTH_LONG).show()
                         }
-                        .addOnFailureListener { e ->
-                            Toast.makeText(this@RegisterActivity, "Error saving data: ${e.message}", Toast.LENGTH_LONG).show()
-                        }
+                    }
                 }
             }
             .addOnFailureListener { e ->
@@ -280,23 +286,29 @@ class RegisterActivity : AppCompatActivity() {
             .addOnSuccessListener { authResult ->
                 val user = authResult.user
                 user?.let {
+                    // Don't include createdAt here - let FirebaseManager handle it
+                    // This way, existing users keep their original createdAt
                     val userData: HashMap<String, Any> = hashMapOf(
                         "fullName" to (it.displayName ?: ""),
                         "email" to (it.email ?: ""),
-                        "phone" to "",
-                        "createdAt" to com.google.firebase.Timestamp.now()
+                        "phone" to ""
                     )
 
-                    db.collection("users")
-                        .document(it.uid)
-                        .set(userData as Map<String, Any>)
-                        .addOnSuccessListener {
+                    // Add profile image URL if available from Google
+                    it.photoUrl?.let { photoUrl ->
+                        userData["profileImageUrl"] = photoUrl.toString()
+                    }
+
+                    // Use FirebaseManager for consistent data handling
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val success = FirebaseManager.createOrUpdateUserData(userData)
+                        if (success) {
                             Toast.makeText(this@RegisterActivity, "Google sign-in successful", Toast.LENGTH_SHORT).show()
                             navigateToDashboard()
+                        } else {
+                            Toast.makeText(this@RegisterActivity, "Error saving user data", Toast.LENGTH_LONG).show()
                         }
-                        .addOnFailureListener { e ->
-                            Toast.makeText(this@RegisterActivity, "Error saving user data: ${e.message}", Toast.LENGTH_LONG).show()
-                        }
+                    }
                 }
             }
             .addOnFailureListener { e ->

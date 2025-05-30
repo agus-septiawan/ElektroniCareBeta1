@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Status text padding -->
+    <dimen name="status_padding_horizontal">16dp</dimen>
+    <dimen name="status_padding_vertical">8dp</dimen>
+
+    <!-- Card margins and paddings -->
+    <dimen name="card_margin_horizontal">16dp</dimen>
+    <dimen name="card_margin_bottom">12dp</dimen>
+    <dimen name="card_padding">20dp</dimen>
+    <dimen name="card_corner_radius">16dp</dimen>
+
+    <!-- Icon sizes -->
+    <dimen name="device_icon_size">48dp</dimen>
+    <dimen name="small_icon_size">20dp</dimen>
+
+    <!-- Text sizes -->
+    <dimen name="device_name_text_size">16sp</dimen>
+    <dimen name="service_type_text_size">14sp</dimen>
+    <dimen name="detail_text_size">13sp</dimen>
+    <dimen name="price_text_size">16sp</dimen>
+    <dimen name="status_text_size">12sp</dimen>
+    <dimen name="button_text_size">12sp</dimen>
+</resources>
