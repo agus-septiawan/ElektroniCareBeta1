@@ -15,8 +15,6 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.example.elektronicarebeta1.firebase.FirebaseManager
 import com.example.elektronicarebeta1.models.Repair
-import com.example.elektronicarebeta1.utils.DataPersistenceHelper
-import com.example.elektronicarebeta1.utils.DebugHelper
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -66,11 +64,8 @@ class HistoryActivity : AppCompatActivity() {
             finish()
             return
         }
-        // Force refresh data when returning to this activity
+        // Refresh data when returning to this activity
         lifecycleScope.launch {
-            val refreshCount = DataPersistenceHelper.forceRefreshRepairHistory()
-            Log.d("HistoryActivity", "Force refresh repair history completed: $refreshCount repairs found")
-
             loadRepairHistory()
         }
     }
@@ -161,42 +156,29 @@ class HistoryActivity : AppCompatActivity() {
 
     private fun loadRepairHistory() {
         lifecycleScope.launch {
-            android.util.Log.d("HistoryActivity", "Loading repair history...")
-
-            // Debug history loading
-            DebugHelper.debugHistoryLoading()
+            Log.d("HistoryActivity", "Loading repair history...")
 
             var repairsSnapshot = FirebaseManager.getUserRepairs()
 
-            if (repairsSnapshot == null || repairsSnapshot.isEmpty) {
-                android.util.Log.d("HistoryActivity", "No repairs found or snapshot is null on first attempt")
+            if (repairsSnapshot == null || repairsSnapshot.isEmpty()) {
+                Log.d("HistoryActivity", "No repairs found or snapshot is null on first attempt")
 
-                // Try force refresh if no data found
-                android.util.Log.d("HistoryActivity", "Attempting force refresh of repair data")
-                val forceRefreshSuccess = DataPersistenceHelper.forceRefreshRepairData()
-                if (forceRefreshSuccess) {
-                    android.util.Log.d("HistoryActivity", "Force refresh completed, retrying data load after delay")
+                // Add delay before retry
+                kotlinx.coroutines.delay(1000)
 
-                    // Add delay before retry
-                    kotlinx.coroutines.delay(1000)
-
-                    repairsSnapshot = FirebaseManager.getUserRepairs() // Assign to the same variable
-                    if (repairsSnapshot != null && !repairsSnapshot.isEmpty) {
-                        android.util.Log.d("HistoryActivity", "Retry successful, found ${repairsSnapshot.size()} repairs")
-                        // Proceed to processRepairSnapshot outside this block
-                    } else {
-                        android.util.Log.d("HistoryActivity", "Retry also failed to fetch repairs.")
-                    }
+                repairsSnapshot = FirebaseManager.getUserRepairs()
+                if (repairsSnapshot != null && !repairsSnapshot.isEmpty()) {
+                    Log.d("HistoryActivity", "Retry successful, found ${repairsSnapshot.size()} repairs")
                 } else {
-                    android.util.Log.d("HistoryActivity", "Force refresh itself failed.")
+                    Log.d("HistoryActivity", "Retry also failed to fetch repairs.")
                 }
             }
 
             // Process the snapshot if it's valid, otherwise handle empty state
-            if (repairsSnapshot != null && !repairsSnapshot.isEmpty) {
+            if (repairsSnapshot != null && !repairsSnapshot.isEmpty()) {
                 processRepairSnapshot(repairsSnapshot)
             } else {
-                android.util.Log.d("HistoryActivity", "Ultimately no repairs found, displaying empty state.")
+                Log.d("HistoryActivity", "Ultimately no repairs found, displaying empty state.")
                 allRepairs = emptyList()
                 displayRepairs(allRepairs)
             }
@@ -204,16 +186,16 @@ class HistoryActivity : AppCompatActivity() {
     }
 
     private fun processRepairSnapshot(repairsSnapshot: com.google.firebase.firestore.QuerySnapshot) {
-        android.util.Log.d("HistoryActivity", "Processing ${repairsSnapshot.size()} repairs")
+        Log.d("HistoryActivity", "Processing ${repairsSnapshot.size()} repairs")
         val repairs = mutableListOf<Repair>()
 
         for (document in repairsSnapshot.documents) {
             val repair = Repair.fromDocument(document)
             if (repair != null) {
-                android.util.Log.d("HistoryActivity", "Adding repair: ${repair.deviceModel} - ${repair.status}")
+                Log.d("HistoryActivity", "Adding repair: ${repair.deviceModel} - ${repair.status}")
                 repairs.add(repair)
             } else {
-                android.util.Log.e("HistoryActivity", "Failed to parse repair from document: ${document.id}")
+                Log.e("HistoryActivity", "Failed to parse repair from document: ${document.id}")
             }
         }
 
@@ -279,10 +261,6 @@ class HistoryActivity : AppCompatActivity() {
         // Set click listener
         repairView.setOnClickListener {
             Toast.makeText(this, "Repair details coming soon", Toast.LENGTH_SHORT).show()
-            // TODO: Navigate to repair details
-            // val intent = Intent(this, RepairDetailsActivity::class.java)
-            // intent.putExtra("REPAIR_ID", repair.id)
-            // startActivity(intent)
         }
 
         repairsContainer.addView(repairView)
@@ -300,7 +278,7 @@ class HistoryActivity : AppCompatActivity() {
                     Toast.makeText(this@HistoryActivity, "Failed to cancel repair request", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
-                android.util.Log.e("HistoryActivity", "Error cancelling repair request", e)
+                Log.e("HistoryActivity", "Error cancelling repair request", e)
                 Toast.makeText(this@HistoryActivity, "Error cancelling repair request", Toast.LENGTH_SHORT).show()
             }
         }

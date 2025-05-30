@@ -9,10 +9,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.elektronicarebeta1.firebase.FirebaseDataSeeder
 import com.example.elektronicarebeta1.firebase.FirebaseManager
-import com.example.elektronicarebeta1.utils.UserMigrationHelper
-import com.google.firebase.auth.FirebaseUser
+import com.example.elektronicarebeta1.firebase.FirebaseDataSeeder
 import kotlinx.coroutines.launch
 
 class DashboardActivity : AppCompatActivity() {
@@ -23,38 +21,20 @@ class DashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
+        // Force check authentication first
         lifecycleScope.launch {
-            val currentUser = FirebaseManager.getCurrentUser()
-
-            // DEBUG LOGGING
-            Log.d(TAG, "Current user: $currentUser")
-            Log.d(TAG, "User ID: ${FirebaseManager.getUserId()}")
-            Log.d(TAG, "User email: ${currentUser?.email}")
-            Log.d(TAG, "User name: ${currentUser?.fullName ?: "Unknown"}")
-
-            if (currentUser == null) {
+            if (!FirebaseManager.isUserAuthenticated()) {
                 Log.d(TAG, "No current user, redirecting to login")
-                startActivity(Intent(this@DashboardActivity, LoginActivity::class.java))
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                finish()
+                redirectToLogin()
                 return@launch
             }
 
-            // Run user migration for existing users
-            try {
-                UserMigrationHelper.migrateExistingUsers()
-            } catch (e: Exception) {
-                Log.e(TAG, "Error during user migration", e)
-            }
+            // Seed data if needed
+            FirebaseDataSeeder.seedAllData(this@DashboardActivity)
         }
 
         userNameText = findViewById<TextView>(R.id.welcome_text)
         val notificationIcon = findViewById<ImageView>(R.id.notification_icon)
-
-        // TEMPORARY DISABLE DATA SEEDING FOR DEBUGGING
-        // lifecycleScope.launch {
-        //     FirebaseDataSeeder.seedAllData(this@DashboardActivity)
-        // }
 
         loadUserData()
         loadRecentRepairs()
@@ -68,18 +48,15 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
-        // Check authentication and force sync data when returning to dashboard
+        // Always force refresh data when returning to dashboard
         lifecycleScope.launch {
-            val currentUser = FirebaseManager.getCurrentUser()
-            if (currentUser == null) {
+            if (!FirebaseManager.isUserAuthenticated()) {
                 Log.d(TAG, "No current user in onResume, redirecting to login")
-                startActivity(Intent(this@DashboardActivity, LoginActivity::class.java))
-                finish()
+                redirectToLogin()
                 return@launch
             }
 
-            // Reload user data and recent repairs
+            // Force refresh all data
             loadUserData()
             loadRecentRepairs()
         }
@@ -91,7 +68,6 @@ class DashboardActivity : AppCompatActivity() {
                 Log.d(TAG, "Loading user data from Firestore...")
 
                 val userDoc = FirebaseManager.getUserData()
-
                 if (userDoc != null && userDoc.exists()) {
                     Log.d(TAG, "User document found, loading data...")
                     val fullName = userDoc.getString("fullName") ?: "User"
@@ -128,7 +104,6 @@ class DashboardActivity : AppCompatActivity() {
                 Log.d(TAG, "Loading recent repairs from Firestore...")
 
                 val repairsSnapshot = FirebaseManager.getUserRepairs()
-
                 if (repairsSnapshot != null && !repairsSnapshot.isEmpty) {
                     Log.d(TAG, "Found ${repairsSnapshot.size()} repairs")
 
@@ -247,6 +222,15 @@ class DashboardActivity : AppCompatActivity() {
         repairCard2.setOnClickListener {
             Toast.makeText(this, "Repair details coming soon", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun redirectToLogin() {
+        val intent = Intent(this, LoginActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        startActivity(intent)
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        finish()
     }
 
     override fun finish() {

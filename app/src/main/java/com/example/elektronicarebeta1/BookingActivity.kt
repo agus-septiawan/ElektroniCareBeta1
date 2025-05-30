@@ -21,16 +21,14 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.elektronicarebeta1.firebase.FirebaseManager
 import com.example.elektronicarebeta1.cloudinary.CloudinaryManager
-import com.example.elektronicarebeta1.utils.DataPersistenceHelper
-import com.example.elektronicarebeta1.utils.DebugHelper
-import com.example.elektronicarebeta1.utils.EmailManager
+import com.example.elektronicarebeta1.utils.EmailService
 import com.example.elektronicarebeta1.utils.WhatsAppManager
 import com.example.elektronicarebeta1.models.User
 import kotlinx.coroutines.launch
@@ -57,6 +55,10 @@ class BookingActivity : AppCompatActivity() {
 
     private val calendar = Calendar.getInstance()
 
+    companion object {
+        private const val TAG = "BookingActivity"
+    }
+
     // Activity result launcher for image selection from gallery
     private val pickImageLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -64,7 +66,6 @@ class BookingActivity : AppCompatActivity() {
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.data?.let { uri ->
                 selectedImageUri = uri
-                // Update UI to show selected image
                 updateImagePreview()
             }
         }
@@ -74,17 +75,17 @@ class BookingActivity : AppCompatActivity() {
     private val takePictureLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        Log.d("BookingActivity", "Camera result: ${result.resultCode}")
+        Log.d(TAG, "Camera result: ${result.resultCode}")
         if (result.resultCode == Activity.RESULT_OK) {
-            Log.d("BookingActivity", "Camera photo taken successfully")
+            Log.d(TAG, "Camera photo taken successfully")
             selectedImageUri?.let { uri ->
-                Log.d("BookingActivity", "Photo saved to: $uri")
+                Log.d(TAG, "Photo saved to: $uri")
                 updateImagePreview()
             } ?: run {
-                Log.e("BookingActivity", "selectedImageUri is null after taking photo")
+                Log.e(TAG, "selectedImageUri is null after taking photo")
             }
         } else {
-            Log.d("BookingActivity", "Camera cancelled or failed")
+            Log.d(TAG, "Camera cancelled or failed")
         }
     }
 
@@ -102,6 +103,9 @@ class BookingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form_request)
+
+        // Initialize Cloudinary
+        CloudinaryManager.initialize(this)
 
         // Get service details from intent
         serviceId = intent.getStringExtra("SERVICE_ID")
@@ -122,25 +126,16 @@ class BookingActivity : AppCompatActivity() {
         super.onResume()
         // Check if user is still authenticated
         if (!FirebaseManager.isUserAuthenticated()) {
-            Log.w("BookingActivity", "User not authenticated, redirecting to login")
-            val intent = Intent(this, LoginActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-            startActivity(intent)
-            finish()
+            Log.w(TAG, "User not authenticated, redirecting to login")
+            redirectToLogin()
             return
-        }
-        // Force refresh auth token and data sync to ensure valid session
-        lifecycleScope.launch {
-            val tokenRefreshed = FirebaseManager.refreshAuthToken()
-            Log.d("BookingActivity", "Auth token refresh: $tokenRefreshed")
         }
     }
 
     private fun initializeViews() {
         issueDescriptionEdit = findViewById(R.id.etProblemDescription)
-        selectedDateText = findViewById<TextView>(R.id.tvSelectedDate)
-        selectedTimeText = findViewById<TextView>(R.id.tvSelectedTime)
+        selectedDateText = findViewById(R.id.tvSelectedDate)
+        selectedTimeText = findViewById(R.id.tvSelectedTime)
         submitButton = findViewById(R.id.btnSubmitRequest)
         backButton = findViewById(R.id.ivBackArrow)
         imagePreview = findViewById(R.id.ivImagePreview)
@@ -150,11 +145,11 @@ class BookingActivity : AppCompatActivity() {
         val uploadLayout = findViewById<LinearLayout>(R.id.llUploadLayout)
 
         takePhotoLayout.setOnClickListener {
-            Log.d("BookingActivity", "Take photo layout clicked")
+            Log.d(TAG, "Take photo layout clicked")
             takePhoto()
         }
         uploadLayout.setOnClickListener {
-            Log.d("BookingActivity", "Upload layout clicked")
+            Log.d(TAG, "Upload layout clicked")
             selectImageFromGallery()
         }
 
@@ -168,7 +163,6 @@ class BookingActivity : AppCompatActivity() {
 
     private fun setupListeners() {
         backButton.setOnClickListener { finish() }
-
         submitButton.setOnClickListener { submitBooking() }
     }
 
@@ -220,17 +214,17 @@ class BookingActivity : AppCompatActivity() {
     }
 
     private fun takePhoto() {
-        Log.d("BookingActivity", "takePhoto() called")
+        Log.d(TAG, "takePhoto() called")
         when {
             ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.CAMERA
             ) == PackageManager.PERMISSION_GRANTED -> {
-                Log.d("BookingActivity", "Camera permission granted, opening camera")
+                Log.d(TAG, "Camera permission granted, opening camera")
                 openCamera()
             }
             else -> {
-                Log.d("BookingActivity", "Requesting camera permission")
+                Log.d(TAG, "Requesting camera permission")
                 cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
             }
         }
@@ -238,30 +232,31 @@ class BookingActivity : AppCompatActivity() {
 
     private fun openCamera() {
         try {
-            Log.d("BookingActivity", "Creating image file...")
+            Log.d(TAG, "Creating image file...")
             val photoFile = createImageFile()
-            Log.d("BookingActivity", "Image file created: ${photoFile.absolutePath}")
+            Log.d(TAG, "Image file created: ${photoFile.absolutePath}")
 
             selectedImageUri = FileProvider.getUriForFile(
                 this,
                 "${packageName}.fileprovider",
                 photoFile
             )
-            Log.d("BookingActivity", "FileProvider URI: $selectedImageUri")
+
+            Log.d(TAG, "FileProvider URI: $selectedImageUri")
 
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, selectedImageUri)
 
             // Check if camera app is available
             if (takePictureIntent.resolveActivity(packageManager) != null) {
-                Log.d("BookingActivity", "Launching camera intent")
+                Log.d(TAG, "Launching camera intent")
                 takePictureLauncher.launch(takePictureIntent)
             } else {
-                Log.e("BookingActivity", "No camera app found")
+                Log.e(TAG, "No camera app found")
                 Toast.makeText(this, "No camera app found", Toast.LENGTH_SHORT).show()
             }
         } catch (e: Exception) {
-            Log.e("BookingActivity", "Error opening camera", e)
+            Log.e(TAG, "Error opening camera", e)
             Toast.makeText(this, "Unable to open camera: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
@@ -286,15 +281,17 @@ class BookingActivity : AppCompatActivity() {
 
     private fun updateImagePreview() {
         selectedImageUri?.let { uri ->
-            Log.d("BookingActivity", "Updating image preview with URI: $uri")
+            Log.d(TAG, "Updating image preview with URI: $uri")
             imagePreview.visibility = View.VISIBLE
             Glide.with(this)
                 .load(uri)
                 .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .into(imagePreview)
-            Log.d("BookingActivity", "Image preview updated successfully")
+            Log.d(TAG, "Image preview updated successfully")
         } ?: run {
-            Log.d("BookingActivity", "No image URI to preview")
+            Log.d(TAG, "No image URI to preview")
         }
     }
 
@@ -313,108 +310,135 @@ class BookingActivity : AppCompatActivity() {
 
         // Disable submit button to prevent multiple submissions
         submitButton.isEnabled = false
+        submitButton.text = "Submitting..."
 
         lifecycleScope.launch {
-            // First upload image if selected using Cloudinary
-            var imageUrl: String? = null
-            if (selectedImageUri != null) {
-                Log.d("BookingActivity", "Uploading device image...")
+            try {
+                Log.d(TAG, "Starting booking submission process")
+
+                // Get user ID first
                 val userId = FirebaseManager.getUserId()
                 if (userId == null) {
                     runOnUiThread {
                         Toast.makeText(this@BookingActivity, "User not authenticated", Toast.LENGTH_SHORT).show()
-                        submitButton.isEnabled = true
+                        resetSubmitButton()
                     }
                     return@launch
                 }
 
-                try {
-                    val uploadResult = CloudinaryManager.uploadRepairImage(this@BookingActivity, selectedImageUri!!, userId, null)
-                    imageUrl = uploadResult
-                    Log.d("BookingActivity", "Image upload result: $imageUrl")
+                // Upload image if selected using Cloudinary
+                var imageUrl: String? = null
+                if (selectedImageUri != null) {
+                    Log.d(TAG, "Uploading device image...")
 
-                    if (imageUrl.isNullOrEmpty()) {
-                        Log.w("BookingActivity", "Image upload failed, continuing without image")
-                        // Don't return here - continue with booking without image
-                    }
-                } catch (e: Exception) {
-                    Log.e("BookingActivity", "Error uploading image", e)
-                    // Continue without image
-                }
-            }
-
-            // Create repair request data with proper structure for Repair model
-            val repairData = hashMapOf(
-                "issueDescription" to issueDescription,
-                "serviceId" to serviceId,
-                "status" to "pending_confirmation", // Use pending_confirmation as initial status
-                "estimatedCost" to servicePrice,
-                "appointmentTimestamp" to calendar.time,
-                "location" to "ElektroniCare Service Center",
-                "technicianEmail" to "agusseptiawanasep@gmail.com",
-                "deviceType" to (serviceName ?: "Electronic Device"),
-                "deviceModel" to (serviceName ?: "Electronic Repair Service"),
-                "createdAt" to Date(),
-                "updatedAt" to Date()
-            )
-
-            Log.d("BookingActivity", "Creating repair request with data: $repairData")
-
-            // Add image URL if available
-            if (imageUrl != null) {
-                repairData["deviceImageUrl"] = imageUrl
-            }
-
-            // Submit repair request
-            Log.d("BookingActivity", "Submitting repair request to Firebase...")
-            val repairId = FirebaseManager.createRepairRequest(repairData)
-            Log.d("BookingActivity", "Firebase response - Repair ID: $repairId")
-
-            if (repairId != null) {
-                Log.d("BookingActivity", "Repair request created successfully with ID: $repairId")
-
-                // Get user data for email and WhatsApp
-                val currentUser = FirebaseManager.getCurrentUser()
-                if (currentUser != null) {
-                    Log.d("BookingActivity", "Sending email notifications for booking: $repairId")
                     try {
-                        // Send email notifications
-                        EmailManager.sendBookingNotification(
-                            context = this@BookingActivity,
-                            bookingId = repairId,
-                            user = currentUser,
-                            serviceName = serviceName ?: "Electronic Repair",
-                            issueDescription = issueDescription,
-                            appointmentDate = calendar.time,
-                            estimatedCost = servicePrice,
-                            deviceImageUrl = imageUrl
-                        )
+                        imageUrl = CloudinaryManager.uploadRepairImage(this@BookingActivity, selectedImageUri!!, userId, null)
+                        Log.d(TAG, "Image upload result: $imageUrl")
 
-                        EmailManager.sendCustomerConfirmation(
-                            context = this@BookingActivity,
-                            bookingId = repairId,
-                            user = currentUser,
-                            serviceName = serviceName ?: "Electronic Repair",
-                            appointmentDate = calendar.time,
-                            estimatedCost = servicePrice
-                        )
-                        Log.d("BookingActivity", "Email notifications sent successfully")
+                        if (imageUrl.isNullOrEmpty()) {
+                            Log.w(TAG, "Image upload failed, continuing without image")
+                        }
                     } catch (e: Exception) {
-                        Log.e("BookingActivity", "Error sending email notifications", e)
+                        Log.e(TAG, "Error uploading image", e)
+                        // Continue without image
                     }
                 }
 
-                runOnUiThread {
-                    Toast.makeText(this@BookingActivity, "Booking submitted successfully!", Toast.LENGTH_SHORT).show()
+                // Create repair request data
+                val repairData = hashMapOf<String, Any?>(
+                    "issueDescription" to issueDescription,
+                    "serviceId" to serviceId,
+                    "status" to "pending",
+                    "estimatedCost" to servicePrice,
+                    "appointmentTimestamp" to calendar.time,
+                    "location" to "ElektroniCare Service Center",
+                    "technicianEmail" to "satriawiangga200@gmail.com",
+                    "deviceType" to (serviceName ?: "Electronic Device"),
+                    "deviceModel" to (serviceName ?: "Electronic Repair Service"),
+                    "createdAt" to Date()
+                )
+
+                // Add image URL if available
+                if (!imageUrl.isNullOrEmpty()) {
+                    repairData["deviceImageUrl"] = imageUrl
                 }
 
-                showSuccessDialog(repairId, currentUser)
-            } else {
-                Log.e("BookingActivity", "Failed to create repair request - repairId is null")
-                runOnUiThread {
-                    Toast.makeText(this@BookingActivity, "Failed to submit booking. Please check your connection and try again.", Toast.LENGTH_LONG).show()
-                    submitButton.isEnabled = true
+                Log.d(TAG, "Creating repair request with data: $repairData")
+
+                // Submit repair request
+                val repairId = FirebaseManager.createRepairRequest(repairData)
+                Log.d(TAG, "Firebase response - Repair ID: $repairId")
+
+                if (repairId != null) {
+                    Log.d(TAG, "Repair request created successfully with ID: $repairId")
+
+                    // Get user data for notifications
+                    val currentUser = FirebaseManager.getCurrentUser()
+                    if (currentUser != null) {
+                        Log.d(TAG, "Sending notifications for booking: $repairId")
+                        sendNotifications(repairId, currentUser, issueDescription, imageUrl)
+                    }
+
+                    runOnUiThread {
+                        Toast.makeText(this@BookingActivity, "Booking submitted successfully!", Toast.LENGTH_SHORT).show()
+                        showSuccessDialog(repairId, currentUser)
+                    }
+                } else {
+                    Log.e(TAG, "Failed to create repair request - repairId is null")
+                    runOnUiThread {
+                        Toast.makeText(this@BookingActivity, "Failed to submit booking. Please try again.", Toast.LENGTH_LONG).show()
+                        resetSubmitButton()
+                    }
                 }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error submitting booking", e)
+                runOnUiThread {
+                    Toast.makeText(this@BookingActivity, "Error submitting booking: ${e.message}", Toast.LENGTH_SHORT).show()
+                    resetSubmitButton()
+                }
+            }
+        }
+    }
+
+    private fun resetSubmitButton() {
+        submitButton.isEnabled = true
+        submitButton.text = "Submit Request"
+    }
+
+    private fun sendNotifications(repairId: String, user: User, issueDescription: String, imageUrl: String?) {
+        lifecycleScope.launch {
+            try {
+                // Send automatic emails via SMTP
+                val emailSent = EmailService.sendBookingNotification(
+                    context = this@BookingActivity,
+                    bookingId = repairId,
+                    user = user,
+                    serviceName = serviceName ?: "Electronic Repair",
+                    issueDescription = issueDescription,
+                    appointmentDate = calendar.time,
+                    estimatedCost = servicePrice,
+                    deviceImageUrl = imageUrl
+                )
+
+                val confirmationSent = EmailService.sendCustomerConfirmation(
+                    context = this@BookingActivity,
+                    bookingId = repairId,
+                    user = user,
+                    serviceName = serviceName ?: "Electronic Repair",
+                    appointmentDate = calendar.time,
+                    estimatedCost = servicePrice
+                )
+
+                if (emailSent && confirmationSent) {
+                    Log.d(TAG, "Email notifications sent successfully")
+                    runOnUiThread {
+                        Toast.makeText(this@BookingActivity, "Email notifications sent!", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Log.w(TAG, "Some email notifications failed to send")
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error sending email notifications", e)
             }
         }
     }
@@ -435,7 +459,7 @@ class BookingActivity : AppCompatActivity() {
             dialog.setCancelable(false)
 
             whatsappButton.setOnClickListener {
-                Log.d("BookingActivity", "WhatsApp button clicked for booking: $repairId")
+                Log.d(TAG, "WhatsApp button clicked for booking: $repairId")
                 try {
                     if (user != null) {
                         WhatsAppManager.sendBookingToTechnician(
@@ -448,23 +472,13 @@ class BookingActivity : AppCompatActivity() {
                             estimatedCost = servicePrice,
                             customerPhone = user.phone
                         )
-                        Log.d("BookingActivity", "WhatsApp message sent to technician")
+                        Log.d(TAG, "WhatsApp message sent to technician")
                     } else {
-                        Log.w("BookingActivity", "User data is null, sending WhatsApp to technician with placeholder info.")
-                        WhatsAppManager.sendBookingToTechnician(
-                            context = this@BookingActivity,
-                            bookingId = repairId,
-                            customerName = "Customer (Details N/A)", // Placeholder
-                            serviceName = serviceName ?: "Electronic Repair",
-                            issueDescription = issueDescriptionEdit.text.toString(),
-                            appointmentDate = calendar.time,
-                            estimatedCost = servicePrice,
-                            customerPhone = "N/A" // Placeholder
-                        )
-                        Log.d("BookingActivity", "WhatsApp message sent to technician (user data was null).")
+                        Log.w(TAG, "User data is null, cannot send WhatsApp message")
+                        Toast.makeText(this@BookingActivity, "Unable to send WhatsApp message", Toast.LENGTH_SHORT).show()
                     }
                 } catch (e: Exception) {
-                    Log.e("BookingActivity", "Error opening WhatsApp", e)
+                    Log.e(TAG, "Error opening WhatsApp", e)
                     Toast.makeText(this@BookingActivity, "Failed to open WhatsApp", Toast.LENGTH_SHORT).show()
                 }
 
@@ -484,6 +498,15 @@ class BookingActivity : AppCompatActivity() {
     private fun navigateToDashboard() {
         val intent = Intent(this, DashboardActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        finish()
+    }
+
+    private fun redirectToLogin() {
+        val intent = Intent(this, LoginActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
         startActivity(intent)
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         finish()

@@ -4,8 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -14,42 +12,40 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.elektronicarebeta1.firebase.FirebaseManager
 import com.example.elektronicarebeta1.models.Service
 import kotlinx.coroutines.launch
-import java.text.NumberFormat
-import java.util.Locale
 
 class ServicesActivity : AppCompatActivity(), ServiceAdapter.OnItemClickListener {
-    
+
     private lateinit var servicesRecyclerView: RecyclerView
     private lateinit var serviceAdapter: ServiceAdapter
     private lateinit var noServicesView: View
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_services)
-        
+
         // Initialize views
         servicesRecyclerView = findViewById(R.id.services_recycler_view)
         noServicesView = findViewById(R.id.no_services_view)
-        
+
         // Set up RecyclerView
         servicesRecyclerView.layoutManager = LinearLayoutManager(this)
         serviceAdapter = ServiceAdapter(emptyList())
         serviceAdapter.setOnItemClickListener(this)
         servicesRecyclerView.adapter = serviceAdapter
-        
+
         // Set up back button
         val backButton = findViewById<ImageView>(R.id.back_button)
         backButton.setOnClickListener {
             finish()
         }
-        
+
         // Set up bottom navigation
         setupBottomNavigation()
-        
+
         // Load services
         loadServices()
     }
-    
+
     override fun onResume() {
         super.onResume()
         // Check if user is still authenticated
@@ -62,51 +58,47 @@ class ServicesActivity : AppCompatActivity(), ServiceAdapter.OnItemClickListener
             finish()
             return
         }
-        
+
         // Reload services when returning to this activity
         loadServices()
     }
-    
+
     private fun setupBottomNavigation() {
         val homeNav = findViewById<View>(R.id.nav_home)
         val historyNav = findViewById<View>(R.id.nav_history)
         val servicesNav = findViewById<View>(R.id.nav_services)
         val profileNav = findViewById<View>(R.id.nav_profile)
-        
+
         homeNav.setOnClickListener {
             startActivity(Intent(this, DashboardActivity::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         }
-        
+
         historyNav.setOnClickListener {
             startActivity(Intent(this, HistoryActivity::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         }
-        
+
         profileNav.setOnClickListener {
             startActivity(Intent(this, ProfileActivity::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         }
     }
-    
+
     private fun loadServices() {
         lifecycleScope.launch {
-            // Force data sync first to ensure we get latest data
-            val forceSyncSuccess = FirebaseManager.forceDataSync()
-            android.util.Log.d("ServicesActivity", "Force data sync completed: $forceSyncSuccess")
-            
             val servicesSnapshot = FirebaseManager.getAllServices()
-            
+
             if (servicesSnapshot == null || servicesSnapshot.isEmpty) {
                 noServicesView.visibility = View.VISIBLE
                 servicesRecyclerView.visibility = View.GONE
             } else {
                 noServicesView.visibility = View.GONE
                 servicesRecyclerView.visibility = View.VISIBLE
-                
+
                 val servicesList = servicesSnapshot.documents.mapNotNull { document ->
                     Service.fromDocument(document)
                 }

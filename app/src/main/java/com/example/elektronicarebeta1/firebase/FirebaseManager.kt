@@ -1,36 +1,25 @@
 package com.example.elektronicarebeta1.firebase
 
-import android.net.Uri
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
-// Removed Firebase Storage import - now using Cloudinary
 import com.example.elektronicarebeta1.models.User
 import kotlinx.coroutines.tasks.await
 import java.util.Date
-import java.util.UUID
 
-/**
- * Singleton class to manage all Firebase operations
- */
 object FirebaseManager {
     private const val TAG = "FirebaseManager"
 
-    // Firebase instances
     private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
-    // Removed Firebase Storage - now using Cloudinary
 
-    // Collection references
     private const val USERS_COLLECTION = "users"
     private const val REPAIRS_COLLECTION = "repairs"
     private const val TECHNICIANS_COLLECTION = "technicians"
     private const val SERVICES_COLLECTION = "services"
-
-    // Removed storage references - now using Cloudinary
 
     // User operations
     fun getCurrentFirebaseUser(): FirebaseUser? = auth.currentUser
@@ -58,9 +47,6 @@ object FirebaseManager {
         return try {
             val document = db.collection(USERS_COLLECTION).document(userId).get().await()
             Log.d(TAG, "getUserData: userId=$userId, exists=${document.exists()}")
-            if (document.exists()) {
-                Log.d(TAG, "User data: ${document.data}")
-            }
             document
         } catch (e: Exception) {
             Log.e(TAG, "Error getting user data", e)
@@ -68,20 +54,47 @@ object FirebaseManager {
         }
     }
 
+    // Create or update user data
+    suspend fun createOrUpdateUserData(userData: Map<String, Any>): Boolean {
+        val userId = getUserId() ?: return false
+        return try {
+            Log.d(TAG, "Creating/updating user data for userId: $userId")
+
+            val dataWithTimestamp = userData.toMutableMap()
+
+            // Check if user document exists
+            val userDoc = db.collection(USERS_COLLECTION).document(userId).get().await()
+
+            if (!userDoc.exists()) {
+                // New user - add createdAt
+                dataWithTimestamp["createdAt"] = Date()
+                Log.d(TAG, "Creating new user document")
+            } else {
+                // Existing user - add updatedAt
+                dataWithTimestamp["updatedAt"] = Date()
+                Log.d(TAG, "Updating existing user document")
+            }
+
+            db.collection(USERS_COLLECTION).document(userId).set(dataWithTimestamp).await()
+            Log.d(TAG, "User data saved successfully")
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "Error creating/updating user data", e)
+            false
+        }
+    }
+
     suspend fun updateUserData(userData: Map<String, Any>): Boolean {
         val userId = getUserId() ?: return false
         return try {
             Log.d(TAG, "Updating user data for userId: $userId")
-            Log.d(TAG, "Update data: $userData")
 
-            // Add timestamp for tracking
             val dataWithTimestamp = userData.toMutableMap()
             dataWithTimestamp["updatedAt"] = Date()
 
             db.collection(USERS_COLLECTION).document(userId).update(dataWithTimestamp).await()
-
             Log.d(TAG, "User data updated successfully")
-            return true
+            true
         } catch (e: Exception) {
             Log.e(TAG, "Error updating user data", e)
             false
@@ -98,9 +111,6 @@ object FirebaseManager {
                 .get()
                 .await()
             Log.d(TAG, "getUserRepairs: userId=$userId, count=${querySnapshot.size()}")
-            for (doc in querySnapshot.documents) {
-                Log.d(TAG, "Repair: ${doc.id} -> ${doc.data}")
-            }
             querySnapshot
         } catch (e: Exception) {
             Log.e(TAG, "Error getting user repairs", e)
@@ -120,18 +130,18 @@ object FirebaseManager {
     suspend fun createRepairRequest(repairData: Map<String, Any?>): String? {
         val userId = getUserId() ?: return null
         val repairWithUser = repairData.toMutableMap()
-        repairWithUser.putIfAbsent("createdAt", Date()) // Default if not provided
-        // Don't override status if it's already provided in repairData
-        repairWithUser["userId"] = userId // Current user's ID always takes precedence
+
+        // Ensure required fields
+        repairWithUser["userId"] = userId
+        repairWithUser["createdAt"] = Date()
 
         return try {
             Log.d(TAG, "Creating repair request for userId: $userId")
             Log.d(TAG, "Repair data: $repairWithUser")
 
             val docRef = db.collection(REPAIRS_COLLECTION).add(repairWithUser).await()
-
             Log.d(TAG, "Repair request created successfully with ID: ${docRef.id}")
-            return docRef.id
+            docRef.id
         } catch (e: Exception) {
             Log.e(TAG, "Error creating repair request", e)
             null
@@ -199,125 +209,4 @@ object FirebaseManager {
     fun isUserAuthenticated(): Boolean {
         return auth.currentUser != null
     }
-
-    suspend fun refreshAuthToken(): Boolean {
-        return try {
-            val user = auth.currentUser
-            if (user != null) {
-                // Force refresh the token
-                val tokenResult = user.getIdToken(true).await()
-                Log.d(TAG, "Auth token refreshed successfully. Token: ${tokenResult.token?.take(20)}...")
-
-                // Verify the user is still valid
-                val userDoc = getUserData()
-                if (userDoc?.exists() == true) {
-                    Log.d(TAG, "User document verified after token refresh")
-                    true
-                } else {
-                    Log.w(TAG, "User document not found after token refresh")
-                    false
-                }
-            } else {
-                Log.w(TAG, "Cannot refresh token: user is null")
-                false
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "Error refreshing auth token", e)
-            false
-        }
-    }
-
-    suspend fun forceSyncUserData(): Boolean {
-        return try {
-            val currentUser = auth.currentUser
-            if (currentUser != null) {
-                Log.d(TAG, "Force syncing user data for: ${currentUser.uid}")
-
-                // Force reload user from Firebase Auth
-                currentUser.reload().await()
-                Log.d(TAG, "User reloaded successfully")
-
-                // Refresh auth token
-                val tokenRefreshed = refreshAuthToken()
-                if (tokenRefreshed) {
-                    Log.d(TAG, "Force sync completed successfully")
-                    true
-                } else {
-                    Log.w(TAG, "Force sync failed: token refresh failed")
-                    false
-                }
-            } else {
-                Log.w(TAG, "No current user to sync")
-                false
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "Error force syncing user data", e)
-            false
-        }
-    }
-
-    suspend fun ensureDataPersistence(): Boolean {
-        return try {
-            Log.d(TAG, "Ensuring data persistence")
-
-            // Force sync first
-            val syncSuccess = forceSyncUserData()
-            if (!syncSuccess) {
-                Log.w(TAG, "Data persistence check failed: sync failed")
-                return false
-            }
-
-            // Wait for any pending writes to complete
-            db.waitForPendingWrites().await()
-            Log.d(TAG, "All pending writes completed")
-
-            // Add additional delay to ensure data propagation
-            kotlinx.coroutines.delay(1500)
-
-            // Verify user document exists and is accessible
-            val userDoc = getUserData()
-            if (userDoc?.exists() == true) {
-                Log.d(TAG, "Data persistence verified successfully")
-                true
-            } else {
-                Log.w(TAG, "Data persistence check failed: user document not found")
-                false
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "Error ensuring data persistence", e)
-            false
-        }
-    }
-
-    /**
-     * Forces a synchronization of data with the Firestore backend.
-     * Removed db.clearPersistence() to prevent accidental data loss and rely on Firestore's standard caching mechanisms.
-     */
-    suspend fun forceDataSync(): Boolean {
-        return try {
-            Log.d(TAG, "Starting force data sync")
-
-            // Force sync user data
-            val syncSuccess = forceSyncUserData()
-            if (!syncSuccess) {
-                Log.w(TAG, "Force data sync failed: user sync failed")
-                return false
-            }
-
-            // Wait for pending writes
-            db.waitForPendingWrites().await()
-
-            // Enable network to ensure fresh data
-            db.enableNetwork().await()
-
-            Log.d(TAG, "Force data sync completed successfully")
-            true
-        } catch (e: Exception) {
-            Log.e(TAG, "Error during force data sync", e)
-            false
-        }
-    }
-
-    // Storage operations moved to CloudinaryManager
-    // These methods are kept for backward compatibility but now use Cloudinary
 }

@@ -6,7 +6,7 @@ import kotlinx.coroutines.delay
 
 object DataPersistenceHelper {
     private const val TAG = "DataPersistenceHelper"
-    
+
     /**
      * Verify that user data was saved correctly
      */
@@ -14,13 +14,13 @@ object DataPersistenceHelper {
         return try {
             // Wait a bit for data to propagate
             delay(1000)
-            
+
             val currentUser = FirebaseManager.getCurrentUser()
             if (currentUser == null) {
                 Log.e(TAG, "User data verification failed: currentUser is null")
                 return false
             }
-            
+
             var allFieldsMatch = true
             for ((key, expectedValue) in expectedData) {
                 val actualValue = when (key) {
@@ -33,24 +33,24 @@ object DataPersistenceHelper {
                         continue
                     }
                 }
-                
+
                 if (actualValue != expectedValue) {
                     Log.e(TAG, "Field $key mismatch: expected '$expectedValue', got '$actualValue'")
                     allFieldsMatch = false
                 }
             }
-            
+
             if (allFieldsMatch) {
                 Log.d(TAG, "User data verification successful")
             }
-            
+
             allFieldsMatch
         } catch (e: Exception) {
             Log.e(TAG, "Error verifying user data", e)
             false
         }
     }
-    
+
     /**
      * Verify that repair request was saved correctly
      */
@@ -58,7 +58,7 @@ object DataPersistenceHelper {
         return try {
             // Wait a bit for data to propagate
             delay(1000)
-            
+
             val repairDoc = FirebaseManager.getRepairById(repairId)
             if (repairDoc?.exists() == true) {
                 Log.d(TAG, "Repair request verification successful: $repairId")
@@ -73,19 +73,12 @@ object DataPersistenceHelper {
             false
         }
     }
-    
+
     /**
      * Force refresh user data from server
      */
     suspend fun forceRefreshUserData(): Boolean {
         return try {
-            // Force data sync first
-            val forceSyncSuccess = FirebaseManager.forceDataSync()
-            Log.d(TAG, "Force data sync in refresh user data: $forceSyncSuccess")
-            
-            // Force refresh auth token
-            FirebaseManager.refreshAuthToken()
-            
             // Get fresh user data
             val user = FirebaseManager.getCurrentUser()
             if (user != null) {
@@ -100,7 +93,7 @@ object DataPersistenceHelper {
             false
         }
     }
-    
+
     /**
      * Force refresh repair history from server
      */
@@ -115,28 +108,17 @@ object DataPersistenceHelper {
             -1
         }
     }
-    
+
     /**
-     * Force refresh repair data with auth token refresh
+     * Force refresh repair data
      */
     suspend fun forceRefreshRepairData(): Boolean {
         return try {
             Log.d(TAG, "Forcing refresh of repair data")
-            
-            // Force data sync first
-            val forceSyncSuccess = FirebaseManager.forceDataSync()
-            Log.d(TAG, "Force data sync in refresh repair data: $forceSyncSuccess")
-            
-            // Refresh auth token
-            val tokenRefreshed = FirebaseManager.refreshAuthToken()
-            if (!tokenRefreshed) {
-                Log.w(TAG, "Failed to refresh auth token")
-                return false
-            }
-            
+
             // Add a small delay to ensure token is properly refreshed
-            kotlinx.coroutines.delay(1000)
-            
+            delay(1000)
+
             Log.d(TAG, "Force refresh of repair data completed")
             true
         } catch (e: Exception) {
