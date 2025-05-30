@@ -1,0 +1,20 @@
+{
+  "migration": {
+    "repairs_per_user_min": 8,
+    "repairs_per_user_max": 12,
+    "months_back": 6,
+    "min_cost": 50000.0,
+    "max_cost": 2000000.0
+  },
+  "firebase": {
+    "project_id": "elektronicare-4a4dc",
+    "collections": {
+      "users": "users",
+      "repairs": "repairs"
+    }
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "migration.log"
+  }
+}

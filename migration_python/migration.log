@@ -1,0 +1,1400 @@
+2025-05-30 11:01:14,605 - INFO - Firebase initialized with default credentials
+2025-05-30 11:01:14,891 - ERROR - Failed to initialize Firebase: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information.
+2025-05-30 11:02:18,692 - INFO - Firebase initialized with service account: ../elektronicare-4a4dc-firebase-adminsdk-fbsvc-a812d80a88.json
+2025-05-30 11:02:18,693 - INFO - Firestore client initialized successfully
+2025-05-30 11:02:34,127 - INFO - Starting full migration for all users...
+2025-05-30 11:02:40,713 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:02:40,979 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:02:41,184 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:02:41,388 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:02:41,699 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:02:41,900 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:02:42,105 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:02:42,351 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:02:42,861 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:02:43,026 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:02:43,949 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:02:45,074 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:02:45,997 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:02:47,737 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:02:49,478 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:02:50,651 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:02:52,912 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:02:53,676 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:02:54,032 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:03:00,848 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:03:11,293 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:03:16,824 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:03:25,484 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:03:31,872 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:03:40,167 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:03:46,318 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:04:01,158 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x76be1cb7ca40>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:06:20,862 - INFO - Firebase initialized with service account: service-account.json
+2025-05-30 11:06:20,863 - INFO - Firestore client initialized successfully
+2025-05-30 11:06:33,330 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:06:33,534 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:06:33,740 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:06:33,946 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:06:34,251 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:06:34,412 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:06:34,603 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:06:35,174 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:06:35,992 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:06:36,714 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:06:36,812 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:06:38,245 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:06:39,781 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:06:41,318 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:06:41,726 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:06:45,620 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:06:49,743 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:06:53,098 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:06:56,678 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:07:00,979 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:07:15,578 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:07:23,611 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:07:42,760 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:07:56,397 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:08:28,227 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:08:36,044 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:09:05,105 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:09:42,036 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:10:10,835 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:10:45,586 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:10:51,736 - ERROR - AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x79957537cbf0>" raised exception!
+Traceback (most recent call last):
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 239, in before_request
+    self._blocking_refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/auth/credentials.py", line 202, in _blocking_refresh
+    self.refresh(request)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/service_account.py", line 448, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+                              ^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 299, in jwt_grant
+    response_data = _token_endpoint_request(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 270, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/home/neonnex/clone-temp/jules/ElektroniCareBeta1/venv/lib/python3.12/site-packages/google/oauth2/_client.py", line 69, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+2025-05-30 11:10:51,736 - ERROR - Error getting migration stats: Timeout of 300.0s exceeded, last exception: 503 Getting metadata from plugin failed with error: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})

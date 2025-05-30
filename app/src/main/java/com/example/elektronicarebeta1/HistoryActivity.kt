@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -45,8 +46,34 @@ class HistoryActivity : AppCompatActivity() {
             finish()
         }
 
+        // Add debug refresh button (temporary)
+        try {
+            val refreshButton = findViewById<ImageView>(R.id.refresh_button)
+            refreshButton?.setOnClickListener {
+                forceRefresh()
+            }
+            Log.d("HistoryActivity", "✅ Refresh button found and configured")
+        } catch (e: Exception) {
+            Log.w("HistoryActivity", "⚠️ Refresh button not found: ${e.message}")
+        }
+
+        // Alternative: Long press on title to refresh (backup method)
+        try {
+            val titleText = findViewById<TextView>(R.id.title_text)
+            titleText?.setOnLongClickListener {
+                Toast.makeText(this, "🔄 Force refreshing...", Toast.LENGTH_SHORT).show()
+                forceRefresh()
+                true
+            }
+        } catch (e: Exception) {
+            Log.w("HistoryActivity", "⚠️ Title text not found for long press: ${e.message}")
+        }
+
         // Set up bottom navigation
         setupBottomNavigation()
+
+        // Debug authentication
+        debugAuthentication()
 
         // Load repair history
         loadRepairHistory()
@@ -156,31 +183,84 @@ class HistoryActivity : AppCompatActivity() {
 
     private fun loadRepairHistory() {
         lifecycleScope.launch {
-            Log.d("HistoryActivity", "Loading repair history...")
+            try {
+                Log.d("HistoryActivity", "=== LOADING REPAIR HISTORY ===")
 
-            var repairsSnapshot = FirebaseManager.getUserRepairs()
-
-            if (repairsSnapshot == null || repairsSnapshot.isEmpty()) {
-                Log.d("HistoryActivity", "No repairs found or snapshot is null on first attempt")
-
-                // Add delay before retry
-                kotlinx.coroutines.delay(1000)
-
-                repairsSnapshot = FirebaseManager.getUserRepairs()
-                if (repairsSnapshot != null && !repairsSnapshot.isEmpty()) {
-                    Log.d("HistoryActivity", "Retry successful, found ${repairsSnapshot.size()} repairs")
-                } else {
-                    Log.d("HistoryActivity", "Retry also failed to fetch repairs.")
+                // Check if user is authenticated
+                val userId = FirebaseManager.getUserId()
+                if (userId == null) {
+                    Log.e("HistoryActivity", "❌ User not authenticated")
+                    runOnUiThread {
+                        Toast.makeText(this@HistoryActivity, "User not authenticated", Toast.LENGTH_SHORT).show()
+                    }
+                    return@launch
                 }
-            }
 
-            // Process the snapshot if it's valid, otherwise handle empty state
-            if (repairsSnapshot != null && !repairsSnapshot.isEmpty()) {
-                processRepairSnapshot(repairsSnapshot)
-            } else {
-                Log.d("HistoryActivity", "Ultimately no repairs found, displaying empty state.")
-                allRepairs = emptyList()
-                displayRepairs(allRepairs)
+                Log.d("HistoryActivity", "✅ User authenticated - ID: $userId")
+
+                // Check if user is still authenticated with Firebase
+                val currentUser = FirebaseManager.getCurrentFirebaseUser()
+                if (currentUser == null) {
+                    Log.e("HistoryActivity", "❌ Firebase user is null")
+                    runOnUiThread {
+                        Toast.makeText(this@HistoryActivity, "Firebase authentication failed", Toast.LENGTH_SHORT).show()
+                    }
+                    return@launch
+                }
+
+                Log.d("HistoryActivity", "✅ Firebase user: ${currentUser.email}")
+
+                Log.d("HistoryActivity", "🔍 Calling FirebaseManager.getUserRepairs()...")
+                var repairsSnapshot = FirebaseManager.getUserRepairs()
+
+                if (repairsSnapshot == null) {
+                    Log.e("HistoryActivity", "❌ repairsSnapshot is NULL on first attempt")
+                } else if (repairsSnapshot.isEmpty) {
+                    Log.w("HistoryActivity", "⚠️ repairsSnapshot is EMPTY on first attempt (${repairsSnapshot.size()} documents)")
+                } else {
+                    Log.d("HistoryActivity", "✅ repairsSnapshot SUCCESS on first attempt (${repairsSnapshot.size()} documents)")
+                }
+
+                if (repairsSnapshot == null || repairsSnapshot.isEmpty) {
+                    Log.d("HistoryActivity", "🔄 Retrying after 2 seconds...")
+
+                    // Add delay before retry
+                    kotlinx.coroutines.delay(2000)
+
+                    Log.d("HistoryActivity", "🔍 Second attempt - calling FirebaseManager.getUserRepairs()...")
+                    repairsSnapshot = FirebaseManager.getUserRepairs()
+
+                    if (repairsSnapshot != null && !repairsSnapshot.isEmpty) {
+                        Log.d("HistoryActivity", "✅ Retry successful, found ${repairsSnapshot.size()} repairs")
+                    } else {
+                        Log.e("HistoryActivity", "❌ Retry also failed - repairsSnapshot: $repairsSnapshot")
+                        if (repairsSnapshot != null) {
+                            Log.e("HistoryActivity", "❌ Snapshot exists but empty: ${repairsSnapshot.size()} documents")
+                        }
+                    }
+                }
+
+                // Process the snapshot if it's valid, otherwise handle empty state
+                if (repairsSnapshot != null && !repairsSnapshot.isEmpty) {
+                    Log.d("HistoryActivity", "📝 Processing ${repairsSnapshot.size()} repairs...")
+                    processRepairSnapshot(repairsSnapshot)
+                } else {
+                    Log.e("HistoryActivity", "❌ No repairs found after all attempts - displaying empty state")
+                    runOnUiThread {
+                        allRepairs = emptyList()
+                        displayRepairs(allRepairs)
+                        Toast.makeText(this@HistoryActivity, "No repair history found. Try the migration tool to add sample data.", Toast.LENGTH_LONG).show()
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("HistoryActivity", "💥 CRITICAL ERROR loading repair history", e)
+                Log.e("HistoryActivity", "Error details: ${e.javaClass.simpleName}: ${e.message}")
+                e.printStackTrace()
+                runOnUiThread {
+                    Toast.makeText(this@HistoryActivity, "Error loading repair history: ${e.message}", Toast.LENGTH_LONG).show()
+                    allRepairs = emptyList()
+                    displayRepairs(allRepairs)
+                }
             }
         }
     }
@@ -190,18 +270,24 @@ class HistoryActivity : AppCompatActivity() {
         val repairs = mutableListOf<Repair>()
 
         for (document in repairsSnapshot.documents) {
+            Log.d("HistoryActivity", "Processing document: ${document.id}, data: ${document.data}")
             val repair = Repair.fromDocument(document)
             if (repair != null) {
-                Log.d("HistoryActivity", "Adding repair: ${repair.deviceModel} - ${repair.status}")
+                Log.d("HistoryActivity", "Successfully parsed repair: ${repair.deviceModel} - ${repair.status} - ${repair.createdAt}")
                 repairs.add(repair)
             } else {
                 Log.e("HistoryActivity", "Failed to parse repair from document: ${document.id}")
             }
         }
 
-        // Sort by date (newest first)
-        allRepairs = repairs.sortedByDescending { it.appointmentTimestamp }
-        filterRepairs()
+        Log.d("HistoryActivity", "Total repairs parsed: ${repairs.size}")
+
+        runOnUiThread {
+            // Sort by date (newest first) - use createdAt if appointmentTimestamp is null
+            allRepairs = repairs.sortedByDescending { it.createdAt ?: it.appointmentTimestamp }
+            Log.d("HistoryActivity", "Sorted repairs, displaying ${allRepairs.size} repairs")
+            filterRepairs()
+        }
     }
 
     private fun addRepairToView(repair: Repair) {
@@ -225,24 +311,64 @@ class HistoryActivity : AppCompatActivity() {
 
         locationText.text = repair.location ?: "Not specified"
 
-        // Set status with appropriate color
-        statusText.text = when (repair.status) {
-            "completed" -> "Completed"
-            "in_progress" -> "In Progress"
-            "cancelled" -> "Cancelled"
-            "pending_confirmation" -> "Pending Confirmation"
-            else -> "Pending"
-        }
-
-        statusText.setBackgroundResource(
-            when (repair.status) {
-                "completed" -> R.drawable.status_completed_bg
-                "in_progress" -> R.drawable.status_inprogress_bg
-                "cancelled" -> R.drawable.status_cancelled_bg
-                "pending_confirmation" -> R.drawable.status_inprogress_bg
-                else -> R.drawable.status_inprogress_bg
+        // Set status dengan styling yang lebih baik dan kontras tinggi
+        when (repair.status) {
+            "completed" -> {
+                statusText.text = "✓ Completed"
+                statusText.setTextColor(ContextCompat.getColor(this, android.R.color.white))
+                statusText.setBackgroundResource(R.drawable.status_completed_bg)
+                statusText.setPadding(
+                    resources.getDimensionPixelSize(R.dimen.status_padding_horizontal),
+                    resources.getDimensionPixelSize(R.dimen.status_padding_vertical),
+                    resources.getDimensionPixelSize(R.dimen.status_padding_horizontal),
+                    resources.getDimensionPixelSize(R.dimen.status_padding_vertical)
+                )
             }
-        )
+            "in_progress" -> {
+                statusText.text = "⚡ In Progress"
+                statusText.setTextColor(ContextCompat.getColor(this, android.R.color.white))
+                statusText.setBackgroundResource(R.drawable.status_inprogress_bg)
+                statusText.setPadding(
+                    resources.getDimensionPixelSize(R.dimen.status_padding_horizontal),
+                    resources.getDimensionPixelSize(R.dimen.status_padding_vertical),
+                    resources.getDimensionPixelSize(R.dimen.status_padding_horizontal),
+                    resources.getDimensionPixelSize(R.dimen.status_padding_vertical)
+                )
+            }
+            "cancelled" -> {
+                statusText.text = "✗ Cancelled"
+                statusText.setTextColor(ContextCompat.getColor(this, android.R.color.white))
+                statusText.setBackgroundResource(R.drawable.status_cancelled_bg)
+                statusText.setPadding(
+                    resources.getDimensionPixelSize(R.dimen.status_padding_horizontal),
+                    resources.getDimensionPixelSize(R.dimen.status_padding_vertical),
+                    resources.getDimensionPixelSize(R.dimen.status_padding_horizontal),
+                    resources.getDimensionPixelSize(R.dimen.status_padding_vertical)
+                )
+            }
+            "pending_confirmation" -> {
+                statusText.text = "⏳ Pending Confirmation"
+                statusText.setTextColor(ContextCompat.getColor(this, android.R.color.white))
+                statusText.setBackgroundResource(R.drawable.status_inprogress_bg)
+                statusText.setPadding(
+                    resources.getDimensionPixelSize(R.dimen.status_padding_horizontal),
+                    resources.getDimensionPixelSize(R.dimen.status_padding_vertical),
+                    resources.getDimensionPixelSize(R.dimen.status_padding_horizontal),
+                    resources.getDimensionPixelSize(R.dimen.status_padding_vertical)
+                )
+            }
+            else -> {
+                statusText.text = "⏰ Pending"
+                statusText.setTextColor(ContextCompat.getColor(this, android.R.color.white))
+                statusText.setBackgroundResource(R.drawable.status_pending_bg)
+                statusText.setPadding(
+                    resources.getDimensionPixelSize(R.dimen.status_padding_horizontal),
+                    resources.getDimensionPixelSize(R.dimen.status_padding_vertical),
+                    resources.getDimensionPixelSize(R.dimen.status_padding_horizontal),
+                    resources.getDimensionPixelSize(R.dimen.status_padding_vertical)
+                )
+            }
+        }
 
         // Set price
         val priceString = repair.estimatedCost?.let { "Rp${String.format("%,.0f", it)}" } ?: "TBD"
@@ -280,6 +406,84 @@ class HistoryActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 Log.e("HistoryActivity", "Error cancelling repair request", e)
                 Toast.makeText(this@HistoryActivity, "Error cancelling repair request", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun debugAuthentication() {
+        Log.d("HistoryActivity", "=== DEBUG AUTHENTICATION ===")
+
+        val firebaseUser = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser
+        if (firebaseUser != null) {
+            Log.d("HistoryActivity", "✅ Firebase User authenticated:")
+            Log.d("HistoryActivity", "  UID: ${firebaseUser.uid}")
+            Log.d("HistoryActivity", "  Email: ${firebaseUser.email}")
+            Log.d("HistoryActivity", "  Display Name: ${firebaseUser.displayName}")
+            Log.d("HistoryActivity", "  Is Anonymous: ${firebaseUser.isAnonymous}")
+
+            // Check if this user ID exists in our test data
+            val knownUsers = mapOf(
+                "1rHqzlFFdId0eaWqBohXIs4ex9u2" to "azka Azka (32 repairs)",
+                "SNTZpfi0QcczNxWIJ8UHklYsYwy1" to "Ahmad Bonchan (27 repairs)",
+                "VXE0EJHcnuV62s1JuD2pPR32BEt1" to "Agus Septiawan asep (23 repairs)",
+                "s1CZ9Sf1fyZ28TA8IkSpxjA3Dhh1" to "Fadli Ahmad Yazid (17 repairs)"
+            )
+
+            val userInfo = knownUsers[firebaseUser.uid]
+            if (userInfo != null) {
+                Log.d("HistoryActivity", "✅ User found in test data: $userInfo")
+            } else {
+                Log.w("HistoryActivity", "⚠️ User NOT found in test data!")
+                Log.w("HistoryActivity", "Known user IDs:")
+                knownUsers.forEach { (uid, info) ->
+                    Log.w("HistoryActivity", "  $uid: $info")
+                }
+            }
+        } else {
+            Log.e("HistoryActivity", "❌ No Firebase user authenticated!")
+        }
+
+        // Also check FirebaseManager
+        val managerUserId = FirebaseManager.getUserId()
+        Log.d("HistoryActivity", "FirebaseManager.getUserId(): $managerUserId")
+
+        val managerUser = FirebaseManager.getCurrentFirebaseUser()
+        Log.d("HistoryActivity", "FirebaseManager.getCurrentFirebaseUser(): ${managerUser?.email}")
+    }
+
+    private fun forceRefresh() {
+        lifecycleScope.launch {
+            try {
+                Log.d("HistoryActivity", "🔄 FORCE REFRESH STARTED")
+
+                runOnUiThread {
+                    Toast.makeText(this@HistoryActivity, "Refreshing data...", Toast.LENGTH_SHORT).show()
+                }
+
+                // Clear Firestore offline cache
+                try {
+                    com.google.firebase.firestore.FirebaseFirestore.getInstance().clearPersistence()
+                    Log.d("HistoryActivity", "✅ Firestore cache cleared")
+                } catch (e: Exception) {
+                    Log.w("HistoryActivity", "⚠️ Failed to clear cache: ${e.message}")
+                }
+
+                // Wait a bit for cache to clear
+                kotlinx.coroutines.delay(1000)
+
+                // Force reload data
+                Log.d("HistoryActivity", "🔄 Reloading repair history...")
+                loadRepairHistory()
+
+                runOnUiThread {
+                    Toast.makeText(this@HistoryActivity, "Data refreshed!", Toast.LENGTH_SHORT).show()
+                }
+
+            } catch (e: Exception) {
+                Log.e("HistoryActivity", "💥 Error during force refresh", e)
+                runOnUiThread {
+                    Toast.makeText(this@HistoryActivity, "Refresh failed: ${e.message}", Toast.LENGTH_LONG).show()
+                }
             }
         }
     }

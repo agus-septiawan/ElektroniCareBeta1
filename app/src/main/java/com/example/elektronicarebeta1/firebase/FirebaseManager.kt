@@ -70,7 +70,11 @@ object FirebaseManager {
                 dataWithTimestamp["createdAt"] = Date()
                 Log.d(TAG, "Creating new user document")
             } else {
-                // Existing user - add updatedAt
+                // Existing user - preserve createdAt, add updatedAt
+                val existingCreatedAt = userDoc.getDate("createdAt") ?: userDoc.getTimestamp("createdAt")?.toDate()
+                if (existingCreatedAt != null) {
+                    dataWithTimestamp["createdAt"] = existingCreatedAt
+                }
                 dataWithTimestamp["updatedAt"] = Date()
                 Log.d(TAG, "Updating existing user document")
             }
@@ -105,15 +109,78 @@ object FirebaseManager {
     suspend fun getUserRepairs(): QuerySnapshot? {
         val userId = getUserId() ?: return null
         return try {
-            val querySnapshot = db.collection(REPAIRS_COLLECTION)
-                .whereEqualTo("userId", userId)
-                .orderBy("createdAt", com.google.firebase.firestore.Query.Direction.DESCENDING)
-                .get()
-                .await()
-            Log.d(TAG, "getUserRepairs: userId=$userId, count=${querySnapshot.size()}")
+            Log.d(TAG, "=== FIREBASE MANAGER: getUserRepairs ===")
+            Log.d(TAG, "🔍 Getting repairs for userId: $userId")
+            Log.d(TAG, "📂 Collection: $REPAIRS_COLLECTION")
+
+            // Check if Firebase is initialized
+            try {
+                // Test if db is accessible
+                db.app
+                Log.d(TAG, "✅ Firestore database is initialized")
+            } catch (e: Exception) {
+                Log.e(TAG, "❌ Firestore database not initialized: ${e.message}")
+                return null
+            }
+
+            // First try with orderBy createdAt
+            var querySnapshot = try {
+                Log.d(TAG, "🔍 Attempting query with orderBy createdAt...")
+                val query = db.collection(REPAIRS_COLLECTION)
+                    .whereEqualTo("userId", userId)
+                    .orderBy("createdAt", com.google.firebase.firestore.Query.Direction.DESCENDING)
+
+                Log.d(TAG, "📝 Query built successfully, executing...")
+                val result = query.get().await()
+                Log.d(TAG, "✅ Query with orderBy successful: ${result.size()} documents")
+                result
+            } catch (e: Exception) {
+                Log.w(TAG, "⚠️ Failed to query with orderBy createdAt: ${e.message}", e)
+                Log.d(TAG, "🔄 Trying without orderBy...")
+
+                // If orderBy fails (missing index), try without orderBy
+                val query = db.collection(REPAIRS_COLLECTION)
+                    .whereEqualTo("userId", userId)
+
+                Log.d(TAG, "📝 Simple query built, executing...")
+                val result = query.get().await()
+                Log.d(TAG, "✅ Query without orderBy successful: ${result.size()} documents")
+                result
+            }
+
+            Log.d(TAG, "📊 FINAL RESULT: userId=$userId, count=${querySnapshot.size()}")
+
+            // Log each document for debugging
+            if (querySnapshot.isEmpty) {
+                Log.w(TAG, "⚠️ No documents found for user $userId")
+
+                // Let's also check if there are ANY documents in the collection
+                try {
+                    val allDocs = db.collection(REPAIRS_COLLECTION).limit(5).get().await()
+                    Log.d(TAG, "🔍 Total documents in repairs collection (sample): ${allDocs.size()}")
+                    allDocs.documents.forEach { doc ->
+                        val docUserId = doc.getString("userId")
+                        Log.d(TAG, "📄 Sample doc ${doc.id}: userId=$docUserId")
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "❌ Failed to check collection contents", e)
+                }
+            } else {
+                Log.d(TAG, "📝 Found ${querySnapshot.size()} documents:")
+                querySnapshot.documents.forEachIndexed { index, doc ->
+                    val docUserId = doc.getString("userId")
+                    val deviceModel = doc.getString("deviceModel")
+                    val status = doc.getString("status")
+                    Log.d(TAG, "  ${index + 1}. ${doc.id}: $deviceModel ($status) - userId: $docUserId")
+                }
+            }
+
             querySnapshot
         } catch (e: Exception) {
-            Log.e(TAG, "Error getting user repairs", e)
+            Log.e(TAG, "💥 CRITICAL ERROR getting user repairs", e)
+            Log.e(TAG, "Error type: ${e.javaClass.simpleName}")
+            Log.e(TAG, "Error message: ${e.message}")
+            e.printStackTrace()
             null
         }
     }

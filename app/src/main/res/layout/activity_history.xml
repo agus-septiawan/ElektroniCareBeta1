@@ -42,6 +42,7 @@
                     android:padding="2dp"/>
 
                 <TextView
+                    android:id="@+id/title_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -50,6 +51,19 @@
                     android:textColor="#FFFFFF"
                     android:textSize="18sp"
                     android:textStyle="bold" />
+
+                <!-- Debug Refresh Button (Temporary) -->
+                <ImageView
+                    android:id="@+id/refresh_button"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_refresh"
+                    android:tint="#FFFFFF"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="2dp"
+                    android:layout_marginStart="8dp"/>
 
             </LinearLayout>
         </com.google.android.material.appbar.AppBarLayout>
@@ -88,9 +102,9 @@
                     android:orientation="vertical"
                     android:paddingHorizontal="16dp"
                     android:paddingTop="8dp">
-                    
+
                     <!-- Repair items will be added here programmatically -->
-                    
+
                 </LinearLayout>
 
                 <!-- No Repairs View -->
